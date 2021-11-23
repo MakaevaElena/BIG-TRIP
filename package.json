@@ -5,13 +5,29 @@
   "description": "Проект «Большое путешествие» от HTML Academy",
   "scripts": {
     "eslint": "eslint src/",
-    "test": "npm run eslint"
+    "test": "npm run eslint",
+    "build": "webpack --mode development",
+    "start": "webpack serve --mode development --open"
   },
   "devDependencies": {
     "eslint": "7.32.0",
-    "eslint-config-htmlacademy": "5.0.0"
+    "eslint-config-htmlacademy": "5.0.0",
+    "webpack": "5.62.1",
+    "webpack-cli": "4.9.1",
+    "webpack-dev-server": "4.4.0"
   },
   "engines": {
     "node": "16"
+  },
+  "dependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/eslint-parser": "^7.16.0",
+    "@babel/plugin-proposal-class-properties": "^7.16.0",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.16.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.16.0",
+    "babel-loader": "^8.2.3",
+    "webpack": "^5.62.1",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.4.0"
   }
 }
