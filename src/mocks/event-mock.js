@@ -74,13 +74,13 @@ const generateDestination = () => getRandomArrayItem(DESTINATIONS);
 // Опции
 const generateOffers = (max) => {
   const offersCount = getRandomInteger(1, max);
+  // type: generateEventType(),
   const offers = [];
 
   for (let i = 1; i < offersCount; i++) {
     const option = {
-      // type: generateEventType(),
-      // id : getRandomInteger(1,20),
-      title: generateTitle(),
+      id: getRandomInteger(1, 20),
+      title: generateTitle(15),
       price: getRandomInteger(20, 200),
     };
     offers.push(option);
@@ -106,7 +106,7 @@ const generatePhotos = (count) => {
 
 // Даты
 const generateDateFrom = () => {
-  const maxHoursGap = 12;
+  const maxHoursGap = 100;
   const hoursGap = getRandomInteger(-maxHoursGap, maxHoursGap);
 
   const maxMinutesGap = 60;
@@ -121,7 +121,7 @@ const generateDateFrom = () => {
 };
 
 const generateDateTo = () => {
-  const maxHoursGap = 12;
+  const maxHoursGap = 100;
   const hoursGap = getRandomInteger(-maxHoursGap, maxHoursGap);
 
   const maxMinutesGap = 60;
@@ -138,15 +138,17 @@ const generateDateTo = () => {
 // Точка маршрута
 const generateEvent = () => ({
   type: generateEventType(),
-  city: generateDestination(),
+
   offers: generateOffers(3),
   destination: {
     description: generateDescription(),
+    name: generateDestination(),
     pictures: generatePhotos(3),
   },
   dateFrom: generateDateFrom(),
   dateTo: generateDateTo(),
   isFavorite: Boolean(getRandomInteger(0, 1)),
+  basePrice: getRandomInteger(100, 1000),
 });
 
 export { generateEvent };

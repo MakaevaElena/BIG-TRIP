@@ -16,7 +16,7 @@ const WAYPOINT_COUNT = 5;
 
 //Генерация моковых обьектов
 const events = Array.from({ length: WAYPOINT_COUNT }, generateEvent);
-console.log(events);
+// console.log(events);
 
 // Отрисовка страницы
 const render = (container, template, place) => {
