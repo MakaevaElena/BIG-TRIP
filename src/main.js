@@ -10,7 +10,8 @@ import { createSortTemplate } from './view/sort-view.js';
 // МОКИ
 import { generateEvent } from './mocks/event-mock.js';
 import { generateNewEvent } from './mocks/new-event-mock.js';
-// import { generateNewEvent } from './mocks/new-event-mock.js';
+import { sortByDate } from './mocks/sort.js';
+import { generateFilter } from './mocks/filter.js';
 
 const tripMainElement = document.querySelector('.trip-main');
 const menuElement = document.querySelector('.trip-controls__navigation');
@@ -22,16 +23,24 @@ const WAYPOINT_COUNT = 5;
 const events = Array.from({ length: WAYPOINT_COUNT }, generateEvent);
 // console.log(events);
 
+// сортировка по Дате
+// пункт 2.18 taskmanager
+const sortedEvents = sortByDate(events);
+
+// ФИЛЬТРЫ
+const filters = generateFilter(events);
+
 // Отрисовка страницы
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
+// render(tripMainElement, createEventTemplate(sortedEvents), 'afterbegin');
 render(tripMainElement, createRouteDateCostTemplate(), 'afterbegin');
 render(menuElement, createMenuTemplate(), 'beforeend');
-render(filterElement, createFilterTemplate(), 'beforeend');
+render(filterElement, createFilterTemplate(filters), 'beforeend');
 
-render(tripEventsElement, createSortTemplate(), 'afterbegin');
+render(tripEventsElement, createSortTemplate(sortedEvents), 'afterbegin');
 render(tripEventsElement, createContentEventListTemplate(), 'beforeend');
 
 // ul для списка точек, ищем после отрисовки блока createContentEventListTemplate
@@ -40,7 +49,7 @@ const tripEventsListElement = document.querySelector('.trip-events__list');
 render(tripEventsListElement, createEditEventTemplate(events[0]), 'afterbegin');
 render(tripEventsListElement, createNewEventTemplate(generateNewEvent()), 'beforeend');
 
-for (let i = 0; i < WAYPOINT_COUNT; i++) {
+for (let i = 1; i < WAYPOINT_COUNT; i++) {
   render(tripEventsListElement, createEventTemplate(events[i]), 'beforeend');
 }
 

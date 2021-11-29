@@ -1,3 +1,5 @@
+// 2.19
+
 export const createFilterTemplate = () => (
   `<form class="trip-filters" action="#" method="get">
   <div class="trip-filters__filter">

@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 // функции из коммита 2.1 taskmanager-16
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -11,4 +12,7 @@ const getRandomArrayItem = (arr) => {
   return arr[randomIndex];
 };
 
-export { getRandomInteger, getRandomArrayItem };
+const isEventAfter = (dateFrom) => dateFrom && dayjs().isSameOrAfter(dateFrom, 'D');
+const isEventBefore = (dateTo) => dateTo && dayjs().isBefore(dateTo, 'D');
+
+export { getRandomInteger, getRandomArrayItem, isEventAfter, isEventBefore };
