@@ -1,5 +1,5 @@
 import { createContentEventListTemplate } from './view/content-view.js';
-import { createEditPointTemplate } from './view/edit-event-view.js';
+import { createEditEventTemplate } from './view/edit-event-view.js';
 import { createEventTemplate } from './view/event-view.js';
 import { createFilterTemplate } from './view/filter-view.js';
 import { createMenuTemplate } from './view/menu-view.js';
@@ -10,7 +10,7 @@ import { createSortTemplate } from './view/sort-view.js';
 // МОКИ
 import { generateEvent } from './mocks/event-mock.js';
 import { generateNewEvent } from './mocks/new-event-mock.js';
-
+// import { generateNewEvent } from './mocks/new-event-mock.js';
 
 const tripMainElement = document.querySelector('.trip-main');
 const menuElement = document.querySelector('.trip-controls__navigation');
@@ -37,7 +37,7 @@ render(tripEventsElement, createContentEventListTemplate(), 'beforeend');
 // ul для списка точек, ищем после отрисовки блока createContentEventListTemplate
 const tripEventsListElement = document.querySelector('.trip-events__list');
 
-render(tripEventsListElement, createEditPointTemplate(), 'afterbegin');
+render(tripEventsListElement, createEditEventTemplate(events[0]), 'afterbegin');
 render(tripEventsListElement, createNewEventTemplate(generateNewEvent()), 'beforeend');
 
 for (let i = 0; i < WAYPOINT_COUNT; i++) {
