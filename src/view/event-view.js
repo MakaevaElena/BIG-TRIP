@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
-
-const createDateTemplate = (dateFrom) => dayjs(dateFrom).format('MMM D');
+import { createDateTemplate, createOffersTemplate } from './utils-view';
 
 const createTypeIconTemplate = (type) =>
   `<div class="event__type">
@@ -24,23 +23,6 @@ const createScheduleTemplate = (dateFrom, dateTo) => {
 </p>
 <p class="event__duration">${duration}M</p>
 </div>`;
-};
-
-const createOffersTemplate = (offers) => {
-  let offersTemplate = '';
-
-  offers.forEach((offer) => {
-    const { title, price } = offer;
-
-    const offerTemplate = `<li class="event__offer">
-        <span class="event__offer-title">${title}</span>
-                    &plus;&euro;&nbsp;
-        <span class="event__offer-price">${price}</span>
-        </li>`;
-
-    offersTemplate += offerTemplate;
-  });
-  return offersTemplate;
 };
 
 const createFavoriteTemplate = (isFavorite) => {
@@ -67,14 +49,15 @@ export const createEventTemplate = (someEvent) => {
   } = someEvent;
 
   // console.log("dateFrom: " + dateFrom, "dateTo: " + dateTo);
+
   return `<li class="trip-events__item">
   <div class="event">
 
-    <time class="event__date" datetime="${dateFrom}">${createDateTemplate(dateFrom)}</time>
+    <time class="event__date" datetime="${dateFrom}">${createDateTemplate(dateFrom, 'MMM D')}</time>
 
     ${createTypeIconTemplate(type)}
 
-    ${createTitleTemplate(type, destination)}
+    ${createTitleTemplate(type, destination.name)}
 
     ${createScheduleTemplate(dateFrom, dateTo)}
 

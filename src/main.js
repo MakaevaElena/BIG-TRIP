@@ -1,9 +1,9 @@
 import { createContentEventListTemplate } from './view/content-view.js';
-import { createEditPointTemplate } from './view/edit-point-view.js';
+import { createEditPointTemplate } from './view/edit-event-view.js';
 import { createEventTemplate } from './view/event-view.js';
 import { createFilterTemplate } from './view/filter-view.js';
 import { createMenuTemplate } from './view/menu-view.js';
-import { createNewPointTemplate } from './view/new-point-view.js';
+import { createNewEventTemplate } from './view/new-event-view.js';
 import { createRouteDateCostTemplate } from './view/route-date-cost-view.js';
 import { createSortTemplate } from './view/sort-view.js';
 import { generateEvent } from './mocks/event-mock.js';
@@ -34,7 +34,7 @@ render(tripEventsElement, createContentEventListTemplate(), 'beforeend');
 const tripEventsListElement = document.querySelector('.trip-events__list');
 
 render(tripEventsListElement, createEditPointTemplate(), 'afterbegin');
-render(tripEventsListElement, createNewPointTemplate(), 'beforeend');
+render(tripEventsListElement, createNewEventTemplate(), 'beforeend');
 
 for (let i = 0; i < WAYPOINT_COUNT; i++) {
   render(tripEventsListElement, createEventTemplate(events[i]), 'beforeend');
