@@ -1,25 +1,22 @@
-import { getRandomInteger, getRandomArrayItem } from '../utils.js';
+import { getRandomInteger } from '../utils.js';
 import { generateDescription, generateEventType, generatePhotos, generateDateFrom, generateDateTo, generateOffers } from './utils-mock.js';
-import { DESTINATIONS } from './data-mock';
 
-// Пункт назначения
-const generateDestination = () => getRandomArrayItem(DESTINATIONS);
 
 // Точка маршрута
-const generateEvent = () => ({
-  basePrice: getRandomInteger(100, 1000),
+const generateNewEvent = () => ({
+  basePrice: 0,
   dateFrom: generateDateFrom(),
   dateTo: generateDateTo(),
   destination: {
     description: generateDescription(),
-    name: generateDestination(),
+    name: '',
     pictures: generatePhotos(3),
   },
   id: getRandomInteger(1, 100),
-  isFavorite: false,
+  isFavorite: Boolean(getRandomInteger(0, 1)),
   offers: generateOffers(3),
   type: generateEventType(),
 });
 
-export { generateEvent };
+export { generateNewEvent };
 
