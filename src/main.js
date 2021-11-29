@@ -54,7 +54,7 @@ for (let i = 1; i < Math.min(events.length, EVENTS_COUNT_PER_STEP); i++) {
   render(tripEventsListElement, createEventTemplate(events[i]), 'beforeend');
 }
 
-// скролл
+// скролл не работает
 if (events.length > EVENTS_COUNT_PER_STEP) {
   let renderedEventCount = EVENTS_COUNT_PER_STEP;
 
