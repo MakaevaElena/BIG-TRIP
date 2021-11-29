@@ -78,11 +78,6 @@ const generateOffers = (max) => {
     };
     offers.push(offer);
   }
-  // как проверить что опции принадлежат типу?
-  // offerWithType = {
-  //   type: generateEventType(),
-  //   offers: offers,
-  // };
   return offers;
 };
 

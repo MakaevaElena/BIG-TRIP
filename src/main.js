@@ -16,8 +16,9 @@ import { generateFilter } from './mocks/filter.js';
 const tripMainElement = document.querySelector('.trip-main');
 const menuElement = document.querySelector('.trip-controls__navigation');
 const filterElement = document.querySelector('.trip-controls__filters');
-const tripEventsElement = document.querySelector('.trip-events'); //для сортировки
-const WAYPOINT_COUNT = 5;
+const tripEventsElement = document.querySelector('.trip-events');
+const WAYPOINT_COUNT = 20;
+const EVENTS_COUNT_PER_STEP = 5;
 
 //Генерация моковых обьектов
 const events = Array.from({ length: WAYPOINT_COUNT }, generateEvent);
@@ -49,8 +50,22 @@ const tripEventsListElement = document.querySelector('.trip-events__list');
 render(tripEventsListElement, createEditEventTemplate(events[0]), 'afterbegin');
 render(tripEventsListElement, createNewEventTemplate(generateNewEvent()), 'beforeend');
 
-for (let i = 1; i < WAYPOINT_COUNT; i++) {
+for (let i = 1; i < Math.min(events.length, EVENTS_COUNT_PER_STEP); i++) {
   render(tripEventsListElement, createEventTemplate(events[i]), 'beforeend');
+}
+
+// скролл не заработал
+if (events.length > EVENTS_COUNT_PER_STEP) {
+  let renderedEventCount = EVENTS_COUNT_PER_STEP;
+
+  window.addEventListener('scroll', (evt) => {
+    evt.preventDefault();
+    events
+      .slice(renderedEventCount, renderedEventCount + EVENTS_COUNT_PER_STEP)
+      .forEach((event) => render(tripEventsListElement, createEventTemplate(event), 'beforeend'));
+
+    renderedEventCount += EVENTS_COUNT_PER_STEP;
+  });
 }
 
 
