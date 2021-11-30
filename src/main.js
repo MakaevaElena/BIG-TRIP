@@ -2,10 +2,12 @@ import { createContentEventListTemplate } from './view/content-view.js';
 import { createEditEventTemplate } from './view/edit-event-view.js';
 import { createEventTemplate } from './view/event-view.js';
 import { createFilterTemplate } from './view/filter-view.js';
-import { createMenuTemplate } from './view/menu-view.js';
+// import { createMenuTemplate } from './view/menu-view.js';
 import { createNewEventTemplate } from './view/new-event-view.js';
 import { createRouteDateCostTemplate } from './view/route-date-cost-view.js';
 import { createSortTemplate } from './view/sort-view.js';
+import { render, RenderPosition } from './utils/render.js';
+import MenuView from './view/menu-view.js';
 
 // МОКИ
 import { generateEvent } from './mocks/event-mock.js';
@@ -38,7 +40,8 @@ const renderTemplate = (container, template, place) => {
 
 // render(tripMainElement, createEventTemplate(sortedEvents), 'afterbegin');
 renderTemplate(tripMainElement, createRouteDateCostTemplate(), 'afterbegin');
-renderTemplate(menuElement, createMenuTemplate(), 'beforeend');
+// renderTemplate(menuElement, createMenuTemplate(), 'beforeend');
+render(menuElement, new MenuView().element, RenderPosition.BEFOREEND);
 renderTemplate(filterElement, createFilterTemplate(filters), 'beforeend');
 
 renderTemplate(tripEventsElement, createSortTemplate(sortedEvents), 'afterbegin');
