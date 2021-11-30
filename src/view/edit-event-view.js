@@ -1,6 +1,22 @@
 import { createDateTemplate, createOffersTemplate } from './utils-view.js';
+import { createElement } from '../utils/render.js';
 
-export const createEditEventTemplate = (someEvent) => {
+const DEFAULT_EVENT = {
+  basePrice: 2000,
+  dateFrom: 'MAR 18',
+  dateTo: 'MAY 7',
+  destination: {
+    description: 'The Best place in the World',
+    name: 'Beijing',
+    pictures: 'http://picsum.photos/248/152?r=100'
+  },
+  id: 80,
+  isFavorite: true,
+  offers: '',
+  type: 'Flight',
+};
+
+const createEditEventTemplate = (someEvent) => {
   const {
     type,
     offers,
@@ -123,3 +139,28 @@ export const createEditEventTemplate = (someEvent) => {
   </form>
 </li>`;
 };
+
+export default class EditEventView {
+  #element = null;
+  #event = null;
+
+  constructor(event = DEFAULT_EVENT) {
+    this.#event = event;
+  }
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createEditEventTemplate(this.#event);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}

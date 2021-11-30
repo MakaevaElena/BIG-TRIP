@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import { createDateTemplate, createOffersTemplate } from './utils-view';
+import { createElement } from '../utils/render.js';
 
 const createTypeIconTemplate = (type) =>
   `<div class="event__type">
@@ -37,7 +38,7 @@ const createFavoriteTemplate = (isFavorite) => {
 </button>`;
 };
 
-export const createEventTemplate = (someEvent) => {
+const createEventTemplate = (someEvent) => {
   const {
     type,
     offers,
@@ -78,3 +79,29 @@ export const createEventTemplate = (someEvent) => {
   </div>
 </li>`;
 };
+
+export default class EventView {
+  #element = null;
+  #event = null;
+
+  constructor(event) {
+    this.#event = event;
+  }
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createEventTemplate(this.#event);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}
+
