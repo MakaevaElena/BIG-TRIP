@@ -1,11 +1,11 @@
 import { createElement } from '../utils/render.js';
 
-const createCostTemplate = () =>
-  `<p class="trip-info__cost">
-        Total: &euro;&nbsp;<span class="trip-info__cost-value">1230</span>
-    </p>`;
+const createBoardTemplate = () => (
+  `<ul class="trip-events__list">
+  </ul`
+);
 
-export default class CostView {
+export default class BoardView {
   #element = null;
 
   get element() {
@@ -17,7 +17,7 @@ export default class CostView {
   }
 
   get template() {
-    return createCostTemplate();
+    return createBoardTemplate();
   }
 
   removeElement() {
