@@ -32,26 +32,26 @@ const sortedEvents = sortByDate(events);
 const filters = generateFilter(events);
 
 // Отрисовка страницы
-const render = (container, template, place) => {
+const renderTemplate = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
 // render(tripMainElement, createEventTemplate(sortedEvents), 'afterbegin');
-render(tripMainElement, createRouteDateCostTemplate(), 'afterbegin');
-render(menuElement, createMenuTemplate(), 'beforeend');
-render(filterElement, createFilterTemplate(filters), 'beforeend');
+renderTemplate(tripMainElement, createRouteDateCostTemplate(), 'afterbegin');
+renderTemplate(menuElement, createMenuTemplate(), 'beforeend');
+renderTemplate(filterElement, createFilterTemplate(filters), 'beforeend');
 
-render(tripEventsElement, createSortTemplate(sortedEvents), 'afterbegin');
-render(tripEventsElement, createContentEventListTemplate(), 'beforeend');
+renderTemplate(tripEventsElement, createSortTemplate(sortedEvents), 'afterbegin');
+renderTemplate(tripEventsElement, createContentEventListTemplate(), 'beforeend');
 
 // ul для списка точек, ищем после отрисовки блока createContentEventListTemplate
 const tripEventsListElement = document.querySelector('.trip-events__list');
 
-render(tripEventsListElement, createEditEventTemplate(events[0]), 'afterbegin');
-render(tripEventsListElement, createNewEventTemplate(generateNewEvent()), 'beforeend');
+renderTemplate(tripEventsListElement, createEditEventTemplate(events[0]), 'afterbegin');
+renderTemplate(tripEventsListElement, createNewEventTemplate(generateNewEvent()), 'beforeend');
 
 for (let i = 1; i < Math.min(events.length, EVENTS_COUNT_PER_STEP); i++) {
-  render(tripEventsListElement, createEventTemplate(events[i]), 'beforeend');
+  renderTemplate(tripEventsListElement, createEventTemplate(events[i]), 'beforeend');
 }
 
 // скролл не работает
@@ -62,7 +62,7 @@ if (events.length > EVENTS_COUNT_PER_STEP) {
     evt.preventDefault();
     events
       .slice(renderedEventCount, renderedEventCount + EVENTS_COUNT_PER_STEP)
-      .forEach((event) => render(tripEventsListElement, createEventTemplate(event), 'beforeend'));
+      .forEach((event) => renderTemplate(tripEventsListElement, createEventTemplate(event), 'beforeend'));
 
     renderedEventCount += EVENTS_COUNT_PER_STEP;
   });

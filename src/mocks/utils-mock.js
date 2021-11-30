@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { getRandomInteger, getRandomArrayItem } from '../utils.js';
+import { getRandomInteger, getRandomArrayItem } from '../utils/utils.js';
 import { DESCRIPTIONS, TITLES, WAYPOINT_TYPES } from './data-mock.js';
 
 // Описание

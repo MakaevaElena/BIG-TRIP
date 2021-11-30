@@ -1,4 +1,4 @@
-import { getRandomInteger, getRandomArrayItem } from '../utils.js';
+import { getRandomInteger, getRandomArrayItem } from '../utils/utils.js';
 import { generateDescription, generateEventType, generatePhotos, generateDateFrom, generateDateTo, generateOffers } from './utils-mock.js';
 import { DESTINATIONS } from './data-mock';
 
