@@ -1,3 +1,5 @@
+import { createElement } from '../utils/render.js';
+
 const createFilterItemTemplate = (filter, isChecked) => {
   const { name, count } = filter;
 
@@ -19,3 +21,28 @@ export const createFilterTemplate = (filterItems) => {
   <button class="visually-hidden" type="submit">Accept filter</button>
 </form > `;
 };
+
+export default class FilterView {
+  #element = null;
+  #filters = null;
+
+  constructor(filters) {
+    this.#filters = filters;
+  }
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createFilterTemplate(this.#filters);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}

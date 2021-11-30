@@ -1,7 +1,8 @@
 // import { createBoardTemplate } from './view/board-view.js';
 import { createEditEventTemplate } from './view/edit-event-view.js';
 import { createEventTemplate } from './view/event-view.js';
-import { createFilterTemplate } from './view/filter-view.js';
+// import { createFilterTemplate } from './view/filter-view.js';
+import FilterView from './view/filter-view.js';
 // import { createMenuTemplate } from './view/menu-view.js';
 import { createNewEventTemplate } from './view/new-event-view.js';
 // import { createRouteDateCostTemplate } from './view/route-date-cost-view.js';
@@ -50,7 +51,8 @@ render(tripInfoElement, new CostView().element, RenderPosition.BEFOREEND);
 
 // renderTemplate(menuElement, createMenuTemplate(), 'beforeend');
 render(menuElement, new MenuView().element, RenderPosition.BEFOREEND);
-renderTemplate(filterElement, createFilterTemplate(filters), 'beforeend');
+// renderTemplate(filterElement, createFilterTemplate(filters), 'beforeend');
+render(filterElement, new FilterView(filters).element, RenderPosition.BEFOREEND);
 
 render(tripEventsElement, new SortView(sortedEvents).element, RenderPosition.AFTERBEGIN);
 // renderTemplate(tripEventsElement, createBoardTemplate(), 'beforeend');
