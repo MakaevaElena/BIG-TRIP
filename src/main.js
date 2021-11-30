@@ -4,10 +4,12 @@ import { createEventTemplate } from './view/event-view.js';
 import { createFilterTemplate } from './view/filter-view.js';
 // import { createMenuTemplate } from './view/menu-view.js';
 import { createNewEventTemplate } from './view/new-event-view.js';
-import { createRouteDateCostTemplate } from './view/route-date-cost-view.js';
+// import { createRouteDateCostTemplate } from './view/route-date-cost-view.js';
 import { createSortTemplate } from './view/sort-view.js';
 import { render, RenderPosition } from './utils/render.js';
 import MenuView from './view/menu-view.js';
+import Route from './view/route.js';
+import Cost from './view/cost.js';
 
 // МОКИ
 import { generateEvent } from './mocks/event-mock.js';
@@ -39,7 +41,11 @@ const renderTemplate = (container, template, place) => {
 };
 
 // render(tripMainElement, createEventTemplate(sortedEvents), 'afterbegin');
-renderTemplate(tripMainElement, createRouteDateCostTemplate(), 'afterbegin');
+// renderTemplate(tripMainElement, createRouteDateCostTemplate(), 'afterbegin');
+render(tripMainElement, new Route().element, RenderPosition.AFTERBEGIN);
+const tripInfoElement = document.querySelector('.trip-info');
+render(tripInfoElement, new Cost().element, RenderPosition.BEFOREEND);
+
 // renderTemplate(menuElement, createMenuTemplate(), 'beforeend');
 render(menuElement, new MenuView().element, RenderPosition.BEFOREEND);
 renderTemplate(filterElement, createFilterTemplate(filters), 'beforeend');
