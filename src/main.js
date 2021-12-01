@@ -8,10 +8,11 @@ import SortView from './view/sort-view.js';
 import EventView from './view/event-view.js';
 import EditEventView from './view/edit-event-view.js';
 import NewEventView from './view/new-event-view.js';
+import NoEventsView from './view/no-events-view.js';
 
 // МОКИ
 import { generateEvent } from './mocks/event-mock.js';
-import { generateNewEvent } from './mocks/new-event-mock.js';
+// import { generateNewEvent } from './mocks/new-event-mock.js';
 import { sortByDate } from './mocks/sort.js';
 import { generateFilter } from './mocks/filter.js';
 
@@ -19,7 +20,9 @@ const tripMainElement = document.querySelector('.trip-main');
 const menuElement = document.querySelector('.trip-controls__navigation');
 const filterElement = document.querySelector('.trip-controls__filters');
 const tripEventsElement = document.querySelector('.trip-events');
-const WAYPOINT_COUNT = 20;
+const newEventButton = document.querySelector('.trip-main__event-add-btn');
+
+const WAYPOINT_COUNT = 0;
 const EVENTS_COUNT_PER_STEP = 5;
 
 //Генерация моковых обьектов
@@ -72,38 +75,75 @@ const renderEvent = (eventsList, event) => {
   render(eventsList, eventComponent.element, RenderPosition.BEFOREEND);
 };
 
-render(tripMainElement, new RouteView().element, RenderPosition.AFTERBEGIN);
-const tripInfoElement = document.querySelector('.trip-info');
-render(tripInfoElement, new CostView().element, RenderPosition.BEFOREEND);
-render(menuElement, new MenuView().element, RenderPosition.BEFOREEND);
-render(filterElement, new FilterView(filters).element, RenderPosition.BEFOREEND);
-render(tripEventsElement, new SortView(sorters).element, RenderPosition.AFTERBEGIN);
-render(tripEventsElement, new EventsListView().element, RenderPosition.BEFOREEND);
+const renderTripInfo = (allEvents) => {
 
-// ul для списка точек, ищем после отрисовки блока createContentEventListTemplate
+  if (allEvents.length > 0) {
+    render(tripMainElement, new RouteView().element, RenderPosition.AFTERBEGIN);
+
+    const tripInfoElement = document.querySelector('.trip-info');
+
+    render(tripInfoElement, new CostView().element, RenderPosition.BEFOREEND);
+  } else {
+    render(tripEventsElement, new NoEventsView().element, RenderPosition.BEFOREEND);
+  }
+};
+
+const createNewEvent = (eventsList) => {
+  const newEventComponent = new NewEventView();
+
+  const closeNewEvent = () => {
+    eventsList.removeChild(newEventComponent.getElement());
+  };
+
+  newEventComponent.element.querySelector('.event__save-btn').addEventListener('click', () => {
+    closeNewEvent();
+  });
+
+  newEventComponent.element.querySelector('.event__reset-btn').addEventListener('click', () => {
+    closeNewEvent();
+  });
+
+  render(eventsList, newEventComponent.element, RenderPosition.AFTERBEGIN);
+};
+
+const renderMenuButtons = () => {
+  render(menuElement, new MenuView().element, RenderPosition.BEFOREEND);
+  render(filterElement, new FilterView(filters).element, RenderPosition.BEFOREEND);
+  render(tripEventsElement, new SortView(sorters).element, RenderPosition.AFTERBEGIN);
+  render(tripEventsElement, new EventsListView().element, RenderPosition.BEFOREEND);
+};
+
+// рендер страницы
+renderMenuButtons();
 const tripEventsListElement = document.querySelector('.trip-events__list');
+// ul для списка точек, ищем после отрисовки блока createContentEventListTemplate
 // const tripEventsListComponent = new EventsListView();
 // когда меняю на tripEventsListComponent -  events не отрисовываются
-
-render(tripEventsListElement, new EditEventView(events[0]).element, RenderPosition.AFTERBEGIN);
-render(tripEventsListElement, new NewEventView(generateNewEvent()).element, RenderPosition.BEFOREEND);
-
 for (let i = 0; i < Math.min(events.length, EVENTS_COUNT_PER_STEP); i++) {
   renderEvent(tripEventsListElement, events[i]);
 }
 
-// // скролл не работает
-// if (events.length > EVENTS_COUNT_PER_STEP) {
-//   let renderedEventCount = EVENTS_COUNT_PER_STEP;
+renderTripInfo(events);
 
-//   window.addEventListener('scroll', (evt) => {
-//     evt.preventDefault();
-//     events
-//       .slice(renderedEventCount, renderedEventCount + EVENTS_COUNT_PER_STEP)
-//       .forEach((event) => renderEvent(tripEventsListElement.element, event));
+newEventButton.addEventListener('click', () => {
+  createNewEvent(tripEventsListElement);
+});
 
-//     renderedEventCount += EVENTS_COUNT_PER_STEP;
-//   });
-// }
+// render(tripEventsListElement, new EditEventView(events[0]).element, RenderPosition.AFTERBEGIN);
+// render(tripEventsListElement, new NewEventView(generateNewEvent()).element, RenderPosition.BEFOREEND);
+
+// скролл не работает
+if (events.length > EVENTS_COUNT_PER_STEP) {
+  let renderedEventCount = EVENTS_COUNT_PER_STEP;
+
+  window.addEventListener('scroll', (evt) => {
+    evt.preventDefault();
+    events
+      .slice(renderedEventCount, renderedEventCount + EVENTS_COUNT_PER_STEP)
+      .forEach((event) => renderEvent(tripEventsListElement, event));
+
+    renderedEventCount += EVENTS_COUNT_PER_STEP;
+  });
+}
 
 
