@@ -1,11 +1,11 @@
 import { createElement } from '../utils/render.js';
 
-const createBoardTemplate = () => (
+const createEventsListTemplate = () => (
   `<ul class="trip-events__list">
   </ul`
 );
 
-export default class BoardView {
+export default class EventsListView {
   #element = null;
 
   get element() {
@@ -17,7 +17,7 @@ export default class BoardView {
   }
 
   get template() {
-    return createBoardTemplate();
+    return createEventsListTemplate();
   }
 
   removeElement() {
