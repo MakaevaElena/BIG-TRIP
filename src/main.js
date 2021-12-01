@@ -40,11 +40,32 @@ const renderEvent = (eventsList, event) => {
     eventsList.replaceChild(eventComponent.element, editEventComponent.element);
   };
 
+  const onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      replaceEditToEvent();
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
+
   eventComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
     replaceEventToEdit();
+    document.addEventListener('keydown', onEscKeyDown);
   });
 
   editEventComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replaceEditToEvent();
+    document.removeEventListener('keydown', onEscKeyDown);
+  });
+
+  editEventComponent.element.querySelector('.event__reset-btn').addEventListener('click', () => {
+    replaceEditToEvent();
+    eventsList.removeChild(eventComponent.element);
+    eventComponent.removeElement();
+    editEventComponent.removeElement();
+  });
+
+  editEventComponent.element.querySelector('.event__save-btn').addEventListener('click', () => {
     replaceEditToEvent();
   });
 
@@ -62,7 +83,7 @@ render(tripEventsElement, new EventsListView().element, RenderPosition.BEFOREEND
 // ul для списка точек, ищем после отрисовки блока createContentEventListTemplate
 const tripEventsListElement = document.querySelector('.trip-events__list');
 // const tripEventsListComponent = new EventsListView();
-// !когда меняю на tripEventsListComponent -  events не отрисовываются
+// когда меняю на tripEventsListComponent -  events не отрисовываются
 
 render(tripEventsListElement, new EditEventView(events[0]).element, RenderPosition.AFTERBEGIN);
 render(tripEventsListElement, new NewEventView(generateNewEvent()).element, RenderPosition.BEFOREEND);
@@ -79,7 +100,7 @@ for (let i = 0; i < Math.min(events.length, EVENTS_COUNT_PER_STEP); i++) {
 //     evt.preventDefault();
 //     events
 //       .slice(renderedEventCount, renderedEventCount + EVENTS_COUNT_PER_STEP)
-//       .forEach((event) => renderEvent(tripEventsListComponent.element, event));
+//       .forEach((event) => renderEvent(tripEventsListElement.element, event));
 
 //     renderedEventCount += EVENTS_COUNT_PER_STEP;
 //   });
