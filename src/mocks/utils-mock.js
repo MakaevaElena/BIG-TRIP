@@ -34,31 +34,34 @@ const generatePhotos = (count) => {
 };
 
 // Даты
+
 const generateDateFrom = () => {
-  const maxHoursGap = 100;
-  const hoursGap = getRandomInteger(-maxHoursGap, maxHoursGap);
+  const maxHoursGap = 5;
+  const daysGap = getRandomInteger(-maxHoursGap, maxHoursGap);
 
   const maxMinutesGap = 60;
   const minutesGap = getRandomInteger(-maxMinutesGap, maxMinutesGap);
 
   const dateFrom = dayjs()
-    .add(hoursGap, 'hours')
+    .add(daysGap, 'day')
     .add(minutesGap, 'minute')
     .toDate();
 
   return dateFrom;
 };
 
-const generateDateTo = () => {
-  const maxHoursGap = 100;
-  const hoursGap = getRandomInteger(-maxHoursGap, maxHoursGap);
+const generateDateTo = (dateFrom) => {
+  const minDurationHours = 1;
+  const maxDurationHours = 100;
+  const durationHours = getRandomInteger(minDurationHours, maxDurationHours);
 
-  const maxMinutesGap = 60;
-  const minutesGap = getRandomInteger(-maxMinutesGap, maxMinutesGap);
+  const minMinutes = 1;
+  const maxMinutes = 59;
+  const durationMinutes = getRandomInteger(minMinutes, maxMinutes);
 
-  const dateTo = dayjs()
-    .add(hoursGap, 'hours')
-    .add(minutesGap, 'minute')
+  const dateTo = dayjs(dateFrom)
+    .add(durationHours, 'h')
+    .add(durationMinutes, 'm')
     .toDate();
 
   return dateTo;

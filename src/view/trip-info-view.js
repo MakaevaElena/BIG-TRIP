@@ -9,7 +9,7 @@ const createRouteTemplate = () => (
   </section>`
 );
 
-export default class RouteView {
+export default class TripInfoView {
   #element = null;
 
   get element() {

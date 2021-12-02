@@ -1,5 +1,8 @@
 import { createDateTemplate, createOffersTemplate } from './utils-view.js';
 import { createElement } from '../utils/render.js';
+import dayjs from 'dayjs';
+import { getRandomInteger } from '../utils/utils.js';
+import { generateDescription, generatePhotos, generateOffers, generateEventType } from '../mocks/utils-mock.js';
 
 const createPhotosTemplate = (photos) => {
   let photosTemplate = '';
@@ -10,6 +13,26 @@ const createPhotosTemplate = (photos) => {
     photosTemplate += photoTemplate;
   });
   return photosTemplate;
+};
+
+const generateNewEvent = () => {
+  const dateFrom = dayjs();
+  const dateTo = '';
+
+  return {
+    basePrice: 0,
+    dateFrom: dateFrom,
+    dateTo: dateTo,
+    destination: {
+      description: generateDescription(30),
+      name: '',
+      pictures: generatePhotos(),
+    },
+    id: getRandomInteger(0, 9999),
+    isFavorite: '',
+    offers: generateOffers(6),
+    type: generateEventType(),
+  };
 };
 
 const createNewEventTemplate = (someEvent) => {
@@ -142,7 +165,7 @@ export default class NewEventView {
   #element = null;
   #event = null;
 
-  constructor(event) {
+  constructor(event = generateNewEvent()) {
     this.#event = event;
   }
 
