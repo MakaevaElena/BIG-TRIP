@@ -1,4 +1,4 @@
-import { isEventAfter, isEventBefore } from '../utils.js';
+import { isEventAfter, isEventBefore } from '../utils/utils.js';
 
 //ф-я фильтра в коммите 2.17 репозитория taskmanager
 const eventToFilterMap = {

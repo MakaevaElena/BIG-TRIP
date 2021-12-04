@@ -1,6 +1,41 @@
 import dayjs from 'dayjs';
-import { getRandomInteger, getRandomArrayItem } from '../utils.js';
+import { getRandomInteger, getRandomArrayItem } from '../utils/utils.js';
 import { DESCRIPTIONS, TITLES, WAYPOINT_TYPES } from './data-mock.js';
+
+const MAX_HOURS_GAP = 5;
+const MAX_MINUTES_GAP = 60;
+const MIN_DURATION_HOURS = 1;
+const MAX_DURATION_HOURS = 100;
+const MIN_DURATION_MINUTES = 1;
+const MAX_DURATION_MINUTES = 59;
+
+// Даты
+
+const generateDateFrom = () => {
+
+  const daysGap = getRandomInteger(-MAX_HOURS_GAP, MAX_HOURS_GAP);
+  const minutesGap = getRandomInteger(-MAX_MINUTES_GAP, MAX_MINUTES_GAP);
+
+  const dateFrom = dayjs()
+    .add(daysGap, 'day')
+    .add(minutesGap, 'minute')
+    .toDate();
+
+  return dateFrom;
+};
+
+const generateDateTo = (dateFrom) => {
+
+  const durationHours = getRandomInteger(MIN_DURATION_HOURS, MAX_DURATION_HOURS);
+  const durationMinutes = getRandomInteger(MIN_DURATION_MINUTES, MAX_DURATION_MINUTES);
+
+  const dateTo = dayjs(dateFrom)
+    .add(durationHours, 'h')
+    .add(durationMinutes, 'm')
+    .toDate();
+
+  return dateTo;
+};
 
 // Описание
 const generateDescription = () => {
@@ -31,37 +66,6 @@ const generatePhotos = (count) => {
   }
 
   return photos;
-};
-
-// Даты
-const generateDateFrom = () => {
-  const maxHoursGap = 100;
-  const hoursGap = getRandomInteger(-maxHoursGap, maxHoursGap);
-
-  const maxMinutesGap = 60;
-  const minutesGap = getRandomInteger(-maxMinutesGap, maxMinutesGap);
-
-  const dateFrom = dayjs()
-    .add(hoursGap, 'hours')
-    .add(minutesGap, 'minute')
-    .toDate();
-
-  return dateFrom;
-};
-
-const generateDateTo = () => {
-  const maxHoursGap = 100;
-  const hoursGap = getRandomInteger(-maxHoursGap, maxHoursGap);
-
-  const maxMinutesGap = 60;
-  const minutesGap = getRandomInteger(-maxMinutesGap, maxMinutesGap);
-
-  const dateTo = dayjs()
-    .add(hoursGap, 'hours')
-    .add(minutesGap, 'minute')
-    .toDate();
-
-  return dateTo;
 };
 
 // Опции
