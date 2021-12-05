@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { createDateTemplate, createOffersTemplate } from './utils-view';
+import { createDateTemplate, createOffersTemplate } from '../utils/event-utils.js';
 import AbstractView from './abstract-view.js';
 
 const createTypeIconTemplate = (type) =>

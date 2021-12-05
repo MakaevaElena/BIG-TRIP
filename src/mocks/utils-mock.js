@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { getRandomInteger, getRandomArrayItem } from '../utils/utils.js';
+import { getRandomInteger, getRandomArrayItem } from '../utils/common.js';
 import { DESCRIPTIONS, TITLES, WAYPOINT_TYPES } from './data-mock.js';
 
 const MAX_HOURS_GAP = 5;

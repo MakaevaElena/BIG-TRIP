@@ -1,4 +1,4 @@
-import { createDateTemplate, createOffersTemplate } from './utils-view.js';
+import { createDateTemplate, createOffersTemplate } from '../utils/event-utils.js';
 import AbstractView from './abstract-view.js';
 
 const DEFAULT_EVENT = {

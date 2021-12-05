@@ -1,7 +1,7 @@
-import { createDateTemplate, createOffersTemplate } from './utils-view.js';
+import { createDateTemplate, createOffersTemplate } from '../utils/event-utils.js';
 import AbstractView from './abstract-view.js';
 import dayjs from 'dayjs';
-import { getRandomInteger } from '../utils/utils.js';
+import { getRandomInteger } from '../utils/common.js';
 import { generateDescription, generatePhotos, generateOffers, generateEventType } from '../mocks/utils-mock.js';
 
 const createPhotosTemplate = (photos) => {
