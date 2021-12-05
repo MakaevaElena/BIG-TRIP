@@ -1,5 +1,5 @@
 import { createDateTemplate, createOffersTemplate } from './utils-view.js';
-import { createElement } from '../utils/render.js';
+import AbstractView from './abstract-view.js';
 
 const DEFAULT_EVENT = {
   basePrice: 2000,
@@ -140,27 +140,15 @@ const createEditEventTemplate = (someEvent) => {
 </li>`;
 };
 
-export default class EditEventView {
-  #element = null;
+export default class EditEventView extends AbstractView {
   #event = null;
 
   constructor(event = DEFAULT_EVENT) {
+    super();
     this.#event = event;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
     return createEditEventTemplate(this.#event);
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
