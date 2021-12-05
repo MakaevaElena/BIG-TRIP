@@ -41,7 +41,7 @@ const renderEvent = (eventsList, event) => {
   const replaceEditToEvent = () => {
     eventsList.replaceChild(eventComponent.element, editEventComponent.element);
   };
-  // 1) Escape
+
   const onEscKeyDown = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
@@ -50,26 +50,26 @@ const renderEvent = (eventsList, event) => {
     }
   };
 
-  eventComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+  eventComponent.setEditClickHandler(() => {
     replaceEventToEdit();
     document.addEventListener('keydown', onEscKeyDown);
   });
-  // 1) клик по стрелке -  закрыть форму редактирования
-  editEventComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+
+  editEventComponent.setFormSubmitHandler(() => {
     replaceEditToEvent();
     document.removeEventListener('keydown', onEscKeyDown);
   });
 
-  editEventComponent.element.querySelector('.event__reset-btn').addEventListener('click', () => {
+  editEventComponent.setFormSubmitHandler(() => {
     replaceEditToEvent();
     eventsList.removeChild(eventComponent.element);
     eventComponent.removeElement();
     editEventComponent.removeElement();
   });
 
-  editEventComponent.element.querySelector('.event__save-btn').addEventListener('click', () => {
-    replaceEditToEvent();
-  });
+  // editEventComponent.element.querySelector('.event__save-btn').addEventListener('click', () => {
+  //   replaceEditToEvent();
+  // });
 
   render(eventsList, eventComponent.element, RenderPosition.BEFOREEND);
 };
@@ -81,7 +81,7 @@ const renderMenuButtons = () => {
 };
 
 const renderTripInfo = (allEvents) => {
-  // 2) приглашение добавить первую точку маршрута, если таковые отсутствуют.
+
   if (allEvents.length === 0) {
     render(tripEventsElement, new NoEventsView().element, RenderPosition.BEFOREEND);
 

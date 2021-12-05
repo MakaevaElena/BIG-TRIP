@@ -49,8 +49,6 @@ const createEventTemplate = (someEvent) => {
     basePrice,
   } = someEvent;
 
-  // console.log("dateFrom: " + dateFrom, "dateTo: " + dateTo);
-
   return `<li class="trip-events__item">
   <div class="event">
 
@@ -90,6 +88,16 @@ export default class EventView extends AbstractView {
 
   get template() {
     return createEventTemplate(this.#event);
+  }
+
+  setEditClickHandler = (callback) => {
+    this._callback.editClick = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+  }
+
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.editClick();
   }
 }
 
