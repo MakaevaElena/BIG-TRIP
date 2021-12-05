@@ -2,7 +2,7 @@ import { render, RenderPosition } from './utils/render.js';
 import FilterView from './view/filter-view.js';
 import MenuView from './view/menu-view.js';
 import TripInfoView from './view/trip-info-view.js';
-import CostView from './view/cost.js';
+import CostView from './view/cost-view.js';
 import EventsListView from './view/events-list-view.js';
 import SortView from './view/sort-view.js';
 import EventView from './view/event-view.js';
