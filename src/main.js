@@ -41,7 +41,7 @@ const renderEvent = (eventsList, event) => {
   const replaceEditToEvent = () => {
     eventsList.replaceChild(eventComponent.element, editEventComponent.element);
   };
-
+  // 1) Escape
   const onEscKeyDown = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
@@ -54,7 +54,7 @@ const renderEvent = (eventsList, event) => {
     replaceEventToEdit();
     document.addEventListener('keydown', onEscKeyDown);
   });
-
+  // 1) клик по стрелке -  закрыть форму редактирования
   editEventComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
     replaceEditToEvent();
     document.removeEventListener('keydown', onEscKeyDown);
@@ -81,7 +81,7 @@ const renderMenuButtons = () => {
 };
 
 const renderTripInfo = (allEvents) => {
-
+  // 2) приглашение добавить первую точку маршрута, если таковые отсутствуют.
   if (allEvents.length === 0) {
     render(tripEventsElement, new NoEventsView().element, RenderPosition.BEFOREEND);
 
