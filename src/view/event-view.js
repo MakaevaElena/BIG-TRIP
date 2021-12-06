@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import { createDateTemplate, createOffersTemplate } from './utils-view';
-import { createElement } from '../utils/render.js';
+import { createDateTemplate, createOffersTemplate } from '../utils/event-utils.js';
+import AbstractView from './abstract-view.js';
 
 const createTypeIconTemplate = (type) =>
   `<div class="event__type">
@@ -49,8 +49,6 @@ const createEventTemplate = (someEvent) => {
     basePrice,
   } = someEvent;
 
-  // console.log("dateFrom: " + dateFrom, "dateTo: " + dateTo);
-
   return `<li class="trip-events__item">
   <div class="event">
 
@@ -80,28 +78,26 @@ const createEventTemplate = (someEvent) => {
 </li>`;
 };
 
-export default class EventView {
-  #element = null;
+export default class EventView extends AbstractView {
   #event = null;
 
   constructor(event) {
+    super();
     this.#event = event;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
     return createEventTemplate(this.#event);
   }
 
-  removeElement() {
-    this.#element = null;
+  setEditClickHandler = (callback) => {
+    this._callback.editClick = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+  }
+
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.editClick();
   }
 }
 

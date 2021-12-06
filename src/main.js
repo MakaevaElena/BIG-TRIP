@@ -1,8 +1,8 @@
-import { render, RenderPosition } from './utils/render.js';
+import { render, RenderPosition, replace, remove } from './utils/render.js';
 import FilterView from './view/filter-view.js';
 import MenuView from './view/menu-view.js';
 import TripInfoView from './view/trip-info-view.js';
-import CostView from './view/cost.js';
+import CostView from './view/cost-view.js';
 import EventsListView from './view/events-list-view.js';
 import SortView from './view/sort-view.js';
 import EventView from './view/event-view.js';
@@ -13,8 +13,8 @@ import NoEventsView from './view/no-events-view.js';
 // МОКИ
 import { generateEvent } from './mocks/event-mock.js';
 import { generateNewEvent } from './mocks/new-event-mock.js';
-import { sortByDate } from './mocks/sort.js';
-import { generateFilter } from './mocks/filter.js';
+import { sortByDate } from './utils/event-utils.js';
+import { generateFilter } from './utils/event-utils.js';
 
 const tripMainElement = document.querySelector('.trip-main');
 const menuElement = document.querySelector('.trip-controls__navigation');
@@ -35,13 +35,13 @@ const renderEvent = (eventsList, event) => {
   const editEventComponent = new EditEventView(event);
 
   const replaceEventToEdit = () => {
-    eventsList.replaceChild(editEventComponent.element, eventComponent.element);
+    replace(editEventComponent, eventComponent);
   };
 
   const replaceEditToEvent = () => {
-    eventsList.replaceChild(eventComponent.element, editEventComponent.element);
+    replace(eventComponent, editEventComponent);
   };
-  // 1) Escape
+
   const onEscKeyDown = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
@@ -50,51 +50,49 @@ const renderEvent = (eventsList, event) => {
     }
   };
 
-  eventComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+  eventComponent.setEditClickHandler(() => {
     replaceEventToEdit();
     document.addEventListener('keydown', onEscKeyDown);
   });
-  // 1) клик по стрелке -  закрыть форму редактирования
-  editEventComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+
+  editEventComponent.setFormSubmitHandler(() => {
     replaceEditToEvent();
     document.removeEventListener('keydown', onEscKeyDown);
   });
 
-  editEventComponent.element.querySelector('.event__reset-btn').addEventListener('click', () => {
+  editEventComponent.setFormSubmitHandler(() => {
     replaceEditToEvent();
-    eventsList.removeChild(eventComponent.element);
-    eventComponent.removeElement();
-    editEventComponent.removeElement();
+    eventsList.removeChild(eventComponent);
+    // eventComponent.removeElement();
+    // editEventComponent.removeElement();
+    remove(eventComponent);
+    remove(editEventComponent);
   });
 
-  editEventComponent.element.querySelector('.event__save-btn').addEventListener('click', () => {
-    replaceEditToEvent();
-  });
-
-  render(eventsList, eventComponent.element, RenderPosition.BEFOREEND);
+  render(eventsList, eventComponent, RenderPosition.BEFOREEND);
 };
 
 const renderMenuButtons = () => {
-  render(menuElement, new MenuView().element, RenderPosition.BEFOREEND);
-  render(filterElement, new FilterView(filters).element, RenderPosition.BEFOREEND);
-  render(tripEventsElement, new SortView(sorters).element, RenderPosition.AFTERBEGIN);
+  render(menuElement, new MenuView(), RenderPosition.BEFOREEND);
+  render(filterElement, new FilterView(filters), RenderPosition.BEFOREEND);
+  render(tripEventsElement, new SortView(sorters), RenderPosition.AFTERBEGIN);
 };
 
 const renderTripInfo = (allEvents) => {
-  // 2) приглашение добавить первую точку маршрута, если таковые отсутствуют.
+
   if (allEvents.length === 0) {
-    render(tripEventsElement, new NoEventsView().element, RenderPosition.BEFOREEND);
+    render(tripEventsElement, new NoEventsView(), RenderPosition.BEFOREEND);
 
   } else {
     // заменили на компонент вместо querySelector('.trip-info')
-    const tripInfoComponent = new TripInfoView().element;
+    const tripInfoComponent = new TripInfoView();
     render(tripMainElement, tripInfoComponent, RenderPosition.AFTERBEGIN);
-    render(tripInfoComponent, new CostView().element, RenderPosition.BEFOREEND);
+    render(tripInfoComponent, new CostView(), RenderPosition.BEFOREEND);
 
     // ul для списка точек,заменили на компонент вместо querySelector('.trip-events__list');
-    const tripEventsListComponent = new EventsListView().element;
+    const tripEventsListComponent = new EventsListView();
     render(tripEventsElement, tripEventsListComponent, RenderPosition.BEFOREEND);
-    render(tripEventsListComponent, new NewEventView(generateNewEvent()).element, RenderPosition.BEFOREEND);
+    render(tripEventsListComponent, new NewEventView(generateNewEvent()), RenderPosition.BEFOREEND);
 
     for (let i = 0; i < Math.min(events.length, EVENTS_COUNT_PER_STEP); i++) {
       renderEvent(tripEventsListComponent, events[i]);

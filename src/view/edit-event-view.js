@@ -1,5 +1,5 @@
-import { createDateTemplate, createOffersTemplate } from './utils-view.js';
-import { createElement } from '../utils/render.js';
+import { createDateTemplate, createOffersTemplate } from '../utils/event-utils.js';
+import AbstractView from './abstract-view.js';
 
 const DEFAULT_EVENT = {
   basePrice: 2000,
@@ -140,27 +140,27 @@ const createEditEventTemplate = (someEvent) => {
 </li>`;
 };
 
-export default class EditEventView {
-  #element = null;
+export default class EditEventView extends AbstractView {
   #event = null;
 
   constructor(event = DEFAULT_EVENT) {
+    super();
     this.#event = event;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
     return createEditEventTemplate(this.#event);
   }
 
-  removeElement() {
-    this.#element = null;
+  setFormSubmitHandler = (callback) => {
+    this._callback.formSubmit = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formSubmitHandler);
+    this.element.querySelector('.event__save-btn').addEventListener('click', this.#formSubmitHandler);
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formSubmitHandler);
+  }
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.formSubmit();
   }
 }

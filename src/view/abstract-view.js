@@ -1,12 +1,14 @@
 import { createElement } from '../utils/render.js';
 
-const createCostTemplate = () =>
-  `<p class="trip-info__cost">
-        Total: &euro;&nbsp;<span class="trip-info__cost-value">1230</span>
-    </p>`;
-
-export default class CostView {
+export default class AbstractView {
   #element = null;
+  _callback = {};
+
+  constructor() {
+    if (new.target === AbstractView) {
+      throw new Error('Can\'t instantiate AbstractView, only concrete one.');
+    }
+  }
 
   get element() {
     if (!this.#element) {
@@ -17,11 +19,10 @@ export default class CostView {
   }
 
   get template() {
-    return createCostTemplate();
+    throw new Error('Abstract method not implemented: get template');
   }
 
   removeElement() {
     this.#element = null;
   }
 }
-

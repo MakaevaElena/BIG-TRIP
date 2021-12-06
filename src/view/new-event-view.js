@@ -1,7 +1,7 @@
-import { createDateTemplate, createOffersTemplate } from './utils-view.js';
-import { createElement } from '../utils/render.js';
+import { createDateTemplate, createOffersTemplate } from '../utils/event-utils.js';
+import AbstractView from './abstract-view.js';
 import dayjs from 'dayjs';
-import { getRandomInteger } from '../utils/utils.js';
+import { getRandomInteger } from '../utils/common.js';
 import { generateDescription, generatePhotos, generateOffers, generateEventType } from '../mocks/utils-mock.js';
 
 const createPhotosTemplate = (photos) => {
@@ -161,27 +161,15 @@ const createNewEventTemplate = (someEvent) => {
             </li>`;
 };
 
-export default class NewEventView {
-  #element = null;
+export default class NewEventView extends AbstractView {
   #event = null;
 
   constructor(event = generateNewEvent()) {
+    super();
     this.#event = event;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
     return createNewEventTemplate(this.#event);
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
