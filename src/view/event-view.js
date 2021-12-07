@@ -2,6 +2,10 @@ import dayjs from 'dayjs';
 import { createDateTemplate, createOffersTemplate } from '../utils/event-utils.js';
 import AbstractView from './abstract-view.js';
 
+// const createDateTemplate = (dateFrom, format) => dayjs(dateFrom).format(format);
+const EVENT_DATE_FORMAT = 'MMM D';
+const TIME_FORMAT = 'HH:mm';
+
 const createTypeIconTemplate = (type) =>
   `<div class="event__type">
     <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Event ${type} icon">
@@ -9,20 +13,27 @@ const createTypeIconTemplate = (type) =>
 
 const createTitleTemplate = (type, destination) => `<h3 class="event__title">${type} ${destination}</h3>`;
 
+const eventDurationFormat = (duration) => {
+  const minutesDifference = duration % 60 > 0 ? `${duration % 60}M` : '';
+  const hoursDifference = Math.floor(duration / 60) % 24 > 0 ? `${Math.floor(duration / 60) % 24}H ` : '';
+  const daysDifference = Math.floor((duration / 60) / 24) > 0 ? `${Math.floor((duration / 60) / 24)}D ` : '';
+  return daysDifference + hoursDifference + minutesDifference;
+};
+
 const createScheduleTemplate = (dateFrom, dateTo) => {
-  const timeFrom = dayjs(dateFrom).format('HH:mm');
-  const timeTo = dayjs(dateTo).format('HH:mm');
+  const startTimeFormat = dayjs(dateFrom).format(TIME_FORMAT);
+  const endTimeFormat = dayjs(dateTo).format(TIME_FORMAT);
   // https://day.js.org/docs/ru/display/difference
   // нужно разделить duration на '01H 35M'
   const duration = dayjs(dateTo).diff(dayjs(dateFrom), 'm');
 
   return ` <div class="event__schedule">
 <p class="event__time">
-  <time class="event__start-time" datetime="${dateFrom}">${timeFrom}</time>
+  <time class="event__start-time" datetime="${dateFrom}">${startTimeFormat}</time>
   &mdash;
-  <time class="event__end-time" datetime="${dateTo}">${timeTo}</time>
+  <time class="event__end-time" datetime="${dateTo}">${endTimeFormat}</time>
 </p>
-<p class="event__duration">${duration}M</p>
+<p class="event__duration">${eventDurationFormat(duration)}M</p>
 </div>`;
 };
 
@@ -52,7 +63,7 @@ const createEventTemplate = (someEvent) => {
   return `<li class="trip-events__item">
   <div class="event">
 
-    <time class="event__date" datetime="${dateFrom}">${createDateTemplate(dateFrom, 'MMM D')}</time>
+    <time class="event__date" datetime="${dateFrom}">${createDateTemplate(dateFrom, EVENT_DATE_FORMAT)}</time>
 
     ${createTypeIconTemplate(type)}
 

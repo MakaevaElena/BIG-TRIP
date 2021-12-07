@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { getRandomInteger, getRandomArrayItem } from '../utils/common.js';
 import { DESCRIPTIONS, TITLES, WAYPOINT_TYPES } from './data-mock.js';
 
-const MAX_HOURS_GAP = 5;
+const MAX_HOURS_GAP = 24;
 const MAX_MINUTES_GAP = 60;
 const MIN_DURATION_HOURS = 1;
 const MAX_DURATION_HOURS = 100;
