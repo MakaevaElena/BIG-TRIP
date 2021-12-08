@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { createDateTemplate, createOffersTemplate } from '../utils/event-utils.js';
+import { createDateTemplate } from '../utils/event-utils.js';
 import AbstractView from './abstract-view.js';
 
 // const createDateTemplate = (dateFrom, format) => dayjs(dateFrom).format(format);
@@ -14,17 +14,15 @@ const createTypeIconTemplate = (type) =>
 const createTitleTemplate = (type, destination) => `<h3 class="event__title">${type} ${destination}</h3>`;
 
 const eventDurationFormat = (duration) => {
-  const minutesDifference = duration % 60 > 0 ? `${duration % 60}M` : '';
-  const hoursDifference = Math.floor(duration / 60) % 24 > 0 ? `${Math.floor(duration / 60) % 24}H ` : '';
-  const daysDifference = Math.floor((duration / 60) / 24) > 0 ? `${Math.floor((duration / 60) / 24)}D ` : '';
-  return daysDifference + hoursDifference + minutesDifference;
+  const minutesDuration = duration % 60 > 0 ? `${duration % 60}M` : '';
+  const hoursDuration = Math.floor(duration / 60) % 24 > 0 ? `${Math.floor(duration / 60) % 24}H ` : '';
+  const daysDuration = Math.floor((duration / 60) / 24) > 0 ? `${Math.floor((duration / 60) / 24)}D ` : '';
+  return daysDuration + hoursDuration + minutesDuration;
 };
 
 const createScheduleTemplate = (dateFrom, dateTo) => {
   const startTimeFormat = dayjs(dateFrom).format(TIME_FORMAT);
   const endTimeFormat = dayjs(dateTo).format(TIME_FORMAT);
-  // https://day.js.org/docs/ru/display/difference
-  // нужно разделить duration на '01H 35M'
   const duration = dayjs(dateTo).diff(dayjs(dateFrom), 'm');
 
   return ` <div class="event__schedule">
@@ -33,8 +31,25 @@ const createScheduleTemplate = (dateFrom, dateTo) => {
   &mdash;
   <time class="event__end-time" datetime="${dateTo}">${endTimeFormat}</time>
 </p>
-<p class="event__duration">${eventDurationFormat(duration)}M</p>
+<p class="event__duration">${eventDurationFormat(duration)}</p>
 </div>`;
+};
+
+const createOffersTemplate = (offers) => {
+  let offersTemplate = '';
+
+  offers.forEach((offer) => {
+    const { title, price } = offer;
+
+    const offerTemplate = `<li class="event__offer">
+        <span class="event__offer-title">${title}</span>
+                    &plus;&euro;&nbsp;
+        <span class="event__offer-price">${price}</span>
+        </li>`;
+
+    offersTemplate += offerTemplate;
+  });
+  return offersTemplate;
 };
 
 const createFavoriteTemplate = (isFavorite) => {
