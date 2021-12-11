@@ -63,8 +63,6 @@ const renderEvent = (eventsList, event) => {
   editEventComponent.setFormSubmitHandler(() => {
     replaceEditToEvent();
     eventsList.removeChild(eventComponent);
-    // eventComponent.removeElement();
-    // editEventComponent.removeElement();
     remove(eventComponent);
     remove(editEventComponent);
   });
