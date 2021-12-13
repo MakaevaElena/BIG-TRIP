@@ -11,7 +11,6 @@ import EventPresenter from './presenter/trip-presenter.js';
 // import NewEventView from './view/new-event-view.js';
 // import NoEventsView from './view/no-events-view.js';
 
-// // МОКИ
 import { generateEvent } from './mocks/event-mock.js';
 // import { generateNewEvent } from './mocks/new-event-mock.js';
 // import { sortByDate } from './utils/event-utils.js';
@@ -25,10 +24,13 @@ const tripEventsElement = document.querySelector('.trip-events');
 const WAYPOINT_COUNT = 10;
 // const EVENTS_COUNT_PER_STEP = 5;
 
-// //Генерация моковых обьектов
+//Генерация моковых обьектов
 const events = Array.from({ length: WAYPOINT_COUNT }, generateEvent);
 // const filters = generateFilter(events);
 // const sorters = sortByDate(events);
+
+const eventPresenter = new EventPresenter(tripMainElement, tripEventsElement, filterElement, menuElement);
+eventPresenter.init(events);
 
 // // Функции рендера
 // const renderEvent = (eventsList, event) => {
@@ -115,5 +117,4 @@ const events = Array.from({ length: WAYPOINT_COUNT }, generateEvent);
 // // рендер страницы
 // renderMenuButtons(events);
 // renderTripInfo(events);
-const eventPresenter = new EventPresenter(tripMainElement, tripEventsElement, filterElement, menuElement);
-eventPresenter.init(events);
+

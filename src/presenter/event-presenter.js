@@ -1,6 +1,6 @@
-import EventView from './view/event-view.js';
-import EditEventView from './view/edit-event-view.js';
-import { render, RenderPosition, replace, remove } from './utils/render.js';
+import EventView from '../view/event-view.js';
+import EditEventView from '../view/edit-event-view.js';
+import { render, RenderPosition, replace, remove } from '../utils/render.js';
 // import NewEventView from './view/new-event-view.js';
 
 const Mode = {

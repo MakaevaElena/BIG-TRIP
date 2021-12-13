@@ -1,7 +1,20 @@
-const SortType = {
-  DEFAULT: 'day-down',
-  PRICE_DOWN: 'price-down',
-  DURATION_DOWN: 'duration-down',
-};
+const FILTERS = [
+  'everything',
+  'future',
+  'past',
+];
 
-export { SortType };
+const MENU_TABS = [
+  'Table',
+  'Stats',
+];
+
+const SORTING = [
+  'day',
+  'event',
+  'time',
+  'price',
+  'offers',
+];
+
+export { FILTERS, MENU_TABS, SORTING };
