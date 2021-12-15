@@ -25,7 +25,6 @@ export default class EventPresenter {
     this.#changeMode = changeMode;
   }
 
-
   init = (event) => {
     this.#event = event;
 
@@ -38,6 +37,7 @@ export default class EventPresenter {
     this.#eventComponent.setEditClickHandler(this.#handleEditClick);//открыть
     this.#eventComponent.setFavoriteClickHandler(this.#handleFavoriteClick);//звезду
     this.#editEventComponent.setFormSubmitHandler(this.#handleFormSubmit);//сохранить и закрыть
+
     // + закрыть без сохранения
     // + удалить
 
@@ -101,5 +101,6 @@ export default class EventPresenter {
     this.#changeDate(event);
     this.#replaceFormToEvent();
   }
+
 }
 

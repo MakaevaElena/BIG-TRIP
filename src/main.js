@@ -1,6 +1,6 @@
-import EventPresenter from './presenter/trip-presenter.js';
-// import { render, RenderPosition, replace, remove } from './utils/render.js';
-// import FilterView from './view/filter-view.js';
+import TripPresenter from './presenter/trip-presenter.js';
+import { render, RenderPosition, } from './utils/render.js';
+import FilterView from './view/filter-view.js';
 // import MenuView from './view/menu-view.js';
 // import TripInfoView from './view/trip-info-view.js';
 // import CostView from './view/cost-view.js';
@@ -14,8 +14,7 @@ import EventPresenter from './presenter/trip-presenter.js';
 import { generateEvent } from './mocks/event-mock.js';
 // import { generateNewEvent } from './mocks/new-event-mock.js';
 // import { sortByDate } from './utils/event-utils.js';
-// import { generateFilter } from './utils/event-utils.js';
-
+import { generateFilter } from './utils/event-utils.js';
 const tripMainElement = document.querySelector('.trip-main');
 const menuElement = document.querySelector('.trip-controls__navigation');
 const filterElement = document.querySelector('.trip-controls__filters');
@@ -26,13 +25,14 @@ const WAYPOINT_COUNT = 10;
 
 //Генерация моковых обьектов
 const events = Array.from({ length: WAYPOINT_COUNT }, generateEvent);
-// const filters = generateFilter(events);
+
+const filters = generateFilter(events);
 // const sorters = sortByDate(events);
+// console.log('new TripPresenter', {tripMainElement, tripEventsElement, menuElement, filterElement});
+const tripPresenter = new TripPresenter(tripMainElement, tripEventsElement, menuElement);
+// console.log(events);
 
-const eventPresenter = new EventPresenter(tripMainElement, tripEventsElement, filterElement, menuElement);
-eventPresenter.init(events);
 
-// // Функции рендера
 // const renderEvent = (eventsList, event) => {
 //   const eventComponent = new EventView(event);
 //   const editEventComponent = new EditEventView(event);
@@ -74,9 +74,9 @@ eventPresenter.init(events);
 // };
 
 // const renderMenuButtons = () => {
-//   render(menuElement, new MenuView(), RenderPosition.BEFOREEND);
-//   render(filterElement, new FilterView(filters), RenderPosition.BEFOREEND);
-//   render(tripEventsElement, new SortView(sorters), RenderPosition.AFTERBEGIN);
+// render(menuElement, new MenuView(), RenderPosition.BEFOREEND);
+render(filterElement, new FilterView(filters), RenderPosition.BEFOREEND);
+//   // render(tripEventsElement, new SortView(sorters), RenderPosition.AFTERBEGIN);
 // };
 
 // const renderTripInfo = (allEvents) => {
@@ -117,4 +117,4 @@ eventPresenter.init(events);
 // // рендер страницы
 // renderMenuButtons(events);
 // renderTripInfo(events);
-
+tripPresenter.init(events);

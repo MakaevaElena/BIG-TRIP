@@ -8,10 +8,10 @@ const TIME_FORMAT = 'HH:mm';
 
 const createTypeIconTemplate = (type) =>
   `<div class="event__type">
-    <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Event ${type} icon">
+    <img class="event__type-icon" width="42" height="42" src="img/icons/${String(type).toLowerCase()}.png" alt="Event ${type} icon">
   </div>`;
 
-const createTitleTemplate = (type, destination) => `<h3 class="event__title">${type} ${destination}</h3>`;
+const createTitleTemplate = (type, destination) => `<h3 class="event__title">${type} ${destination.name}</h3>`;
 
 const eventDurationFormat = (duration) => {
   const minutesDuration = duration % 60 > 0 ? `${duration % 60}M` : '';
@@ -82,7 +82,7 @@ const createEventTemplate = (someEvent) => {
 
     ${createTypeIconTemplate(type)}
 
-    ${createTitleTemplate(type, destination.name)}
+    ${createTitleTemplate(type, destination)}
 
     ${createScheduleTemplate(dateFrom, dateTo)}
 

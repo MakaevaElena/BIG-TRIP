@@ -1,49 +1,60 @@
 import { render, RenderPosition } from '../utils/render.js';
 import { updateItem } from '../utils/common.js';
-import { FILTERS, SORTING } from '../const.js';
-import FilterView from '../view/filter-view.js';
+import { sortDateDown, sortDurationDown, sortPriceDown } from '../utils/event-utils.js';
+import { SortType } from '../const.js';
+// import FilterView from '../view/filter-view.js';
 import EventsListView from '../view/events-list-view.js';
 import SortView from '../view/sort-view.js';
 import NoEventsView from '../view/new-event-view.js';
 import MenuView from '../view/menu-view.js';
 import TripInfoView from '../view/trip-info-view.js';
 import CostView from '../view/cost-view.js';
-
 import EventPresenter from './event-presenter.js';
 
+// import { sortByDate } from '../utils/event-utils.js';
+// import { generateFilter } from '../utils/event-utils.js';
+// const filters = generateFilter(events);
+// const sorters = sortByDate(events);
+
 const WAYPOINT_COUNT = 10;
-// const EVENTS_COUNT_PER_STEP = 5;
 
 export default class TripPresenter {
   #tripMainContainer = null; //'.trip-main'
-  #tripEventsContainer = null;//'.trip-events'
-  #tripFiltersContainer = null;//'.trip-controls__filters'
   #tripMenuContainer = null; //'.trip-controls__navigation'
+  // #tripFiltersContainer = null;//'.trip-controls__filters'
+  #tripEventsContainer = null;//'.trip-events'
 
-  #menuComponent = new MenuView();
-  #filterComponent = new FilterView(FILTERS[0]);
-  #sortComponent = new SortView(SORTING[0]);
-  #eventsListComponent = new EventsListView(); //Board
-  #noEventsComponent = new NoEventsView();
   #tripInfoComponent = new TripInfoView();
   #costComponent = new CostView();
+  #menuComponent = new MenuView();
+  // #filterComponent = new FilterView();
+  #sortComponent = new SortView();
+  #eventsListComponent = new EventsListView(); //Board
+  #noEventsComponent = new NoEventsView();
 
   #events = [];
   #eventPresenter = new Map();
-  // #currentSortType = SORTING[0];
-  // #sourcedEvents = [];
+  #currentSortType = SortType.DEFAULT;
+  #sourcedEvents = [];
 
-  constuctor(tripMainContainer, tripEventsContainer, tripFiltersContainer, tripMenuContainer) {
+  constructor(tripMainContainer, tripEventsContainer, tripMenuContainer) {
     this.#tripMainContainer = tripMainContainer;
     this.#tripEventsContainer = tripEventsContainer;
-    this.#tripFiltersContainer = tripFiltersContainer;
+    // this.#tripFiltersContainer = tripFiltersContainer;
     this.#tripMenuContainer = tripMenuContainer;
   }
 
   init = (events) => {
+    // console.log(events);
     this.#events = [...events];
-    // this.#sourcedEvents = [...events];
-    this.#renderBoard();
+    this.#sourcedEvents = [...events];
+    this.#events.sort(sortDateDown);
+
+    // const filters = generateFilter(events);
+    // console.log(filters);
+
+    this.#renderListEvent();
+    this.#renderPage(events);
   }
 
   #handleModeChange = () => {
@@ -52,27 +63,56 @@ export default class TripPresenter {
 
   #handleEventChange = (updatedEvent) => {
     this.#events = updateItem(this.#events, updatedEvent);
-    // this.#sourcedEvents = updateItem(this.#sourcedEvents, updatedEvent);
+    this.#sourcedEvents = updateItem(this.#sourcedEvents, updatedEvent);
     this.#eventPresenter.get(updatedEvent.id).init(updatedEvent);
   }
 
-  // #clearEvents = () => {
-  //   this.#eventPresenter.forEach((presenter) => presenter.destroy());
-  //   this.#eventPresenter.clear();
-  // }
-  // #sortTasks = (sortType) => { }
-  // #handleSortTypeChange = (sortType) => { }
+  #clearEvents = () => {
+    this.#eventPresenter.forEach((presenter) => presenter.destroy());
+    this.#eventPresenter.clear();
+  }
+
+  #sortEvents = (sortType) => {
+    switch (sortType) {
+      case SortType.DEFAULT:
+        this.#events.sort(sortDateDown);
+        break;
+      case SortType.DURATION_DOWN:
+        this.#events.sort(sortDurationDown);
+        break;
+      case SortType.PRICE_DOWN:
+        this.#events.sort(sortPriceDown);
+        break;
+      default:
+        this.#events = [...this.#sourcedEvents];
+    }
+
+    this.#currentSortType = sortType;
+
+  }
+
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+    this.#sortEvents(sortType);
+    this.#clearEvents();
+    this.#renderEvents();
+  }
 
   #renderMenuButtons = () => {
+    // const menuElement = this.#tripMainContainer.querySelector('.trip-controls__navigation');
     render(this.#tripMenuContainer, this.#menuComponent, RenderPosition.BEFOREEND);
   };
 
-  #renderFilters = () => {
-    render(this.#tripFiltersContainer, this.#filterComponent, RenderPosition.BEFOREEND);
-  }
+  // #renderFilters = () => {
+  //   const filterElement = this.#tripMainContainer.querySelector('.trip-controls__filters');
+  //   render(filterElement, this.#filterComponent, RenderPosition.BEFOREEND);
+  // }
 
   #renderSort = () => {
     render(this.#tripEventsContainer, this.#sortComponent, RenderPosition.AFTERBEGIN);
+    this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
   }
 
   #renderNoEvents = () => {
@@ -81,14 +121,12 @@ export default class TripPresenter {
 
   #renderPriceAndRoute = () => {
     // const tripInfoComponent = new TripInfoView();
-    this.#tripInfoComponent = new TripInfoView();
     render(this.#tripMainContainer, this.#tripInfoComponent, RenderPosition.AFTERBEGIN);
     render(this.#tripInfoComponent, this.#costComponent, RenderPosition.BEFOREEND);
   }
 
   #renderListEvent = () => {
     // const tripEventsListComponent = new EventsListView();
-    this.#eventsListComponent = new EventsListView();
     render(this.#tripEventsContainer, this.#eventsListComponent, RenderPosition.BEFOREEND);
   }
 
@@ -104,15 +142,16 @@ export default class TripPresenter {
     }
   }
 
-  #renderBoard = () => {
-    this.#renderMenuButtons();
-    this.#renderFilters();
+  #renderPage = (events) => {
+    this.#renderPriceAndRoute();
+    this.#renderMenuButtons(events);
     this.#renderSort();
+    // this.#renderFilters(filters);
+
     if (this.#events.length === 0) {
       this.#renderNoEvents();
     } else {
-      this.#renderPriceAndRoute();
-      this.#renderListEvent();
+      // this.#renderListEvent();
       this.#renderEvents();
     }
   }
