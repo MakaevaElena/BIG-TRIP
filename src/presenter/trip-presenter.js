@@ -13,9 +13,8 @@ import EventPresenter from './event-presenter.js';
 
 // import { generateFilter } from '../utils/event-utils.js';
 // const filters = generateFilter(events);
-// const sorters = sortByDate(events);
 
-const WAYPOINT_COUNT = 10;
+// const WAYPOINT_COUNT = 10;
 
 export default class TripPresenter {
   #tripMainContainer = null; //'.trip-main'
@@ -28,7 +27,7 @@ export default class TripPresenter {
   #menuComponent = new MenuView();
   // #filterComponent = new FilterView();
   #sortComponent = new SortView(SortType.DEFAULT);
-  #eventsListComponent = new EventsListView(); //Board
+  #eventsListComponent = new EventsListView();
   #noEventsComponent = new NoEventsView();
 
   #events = [];
@@ -49,10 +48,7 @@ export default class TripPresenter {
     this.#events.sort(sortDateDown);
 
     // const filters = generateFilter(events);
-    // console.log(this.#sourcedEvents);
-
-    this.#renderListEvent();
-    this.#renderPage(this.#events);
+    this.#renderPage();
   }
 
   #handleModeChange = () => {
@@ -84,9 +80,7 @@ export default class TripPresenter {
       default:
         this.#events = [...this.#sourcedEvents];
     }
-
     this.#currentSortType = sortType;
-
   }
 
   #handleSortTypeChange = (sortType) => {
@@ -99,7 +93,6 @@ export default class TripPresenter {
   }
 
   #renderMenuButtons = () => {
-    // const menuElement = this.#tripMainContainer.querySelector('.trip-controls__navigation');
     render(this.#tripMenuContainer, this.#menuComponent, RenderPosition.BEFOREEND);
   };
 
@@ -118,13 +111,11 @@ export default class TripPresenter {
   }
 
   #renderPriceAndRoute = () => {
-    // const tripInfoComponent = new TripInfoView();
     render(this.#tripMainContainer, this.#tripInfoComponent, RenderPosition.AFTERBEGIN);
     render(this.#tripInfoComponent, this.#costComponent, RenderPosition.BEFOREEND);
   }
 
   #renderListEvent = () => {
-    // const tripEventsListComponent = new EventsListView();
     render(this.#tripEventsContainer, this.#eventsListComponent, RenderPosition.BEFOREEND);
   }
 
@@ -134,23 +125,21 @@ export default class TripPresenter {
     this.#eventPresenter.set(event.id, eventPresenter);
   }
 
-  #renderEvents = () => {
-    for (let i = 0; i < Math.min(this.#events.length, WAYPOINT_COUNT); i++) {
-      this.#renderEvent(this.#eventsListComponent, this.#events[i]);
-    }
+  #renderEvents = (from, to) => {
+    this.#events
+      .slice(from, to)
+      .forEach((event) => this.#renderEvent(event));
   }
 
-  #renderPage = (events) => {
+  #renderPage = () => {
     this.#renderPriceAndRoute();
     this.#renderMenuButtons();
-    this.#renderSort(events);
-    // this.#renderFilters(filters);
-
     if (this.#events.length === 0) {
       this.#renderNoEvents();
     } else {
-      // this.#renderListEvent();
-      this.#renderEvents(events);
+      this.#renderSort();
+      this.#renderListEvent();
+      this.#renderEvents();
     }
   }
 }
