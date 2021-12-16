@@ -32,6 +32,7 @@ export default class EventPresenter {
     const prevEditEventComponent = this.#editEventComponent;
 
     this.#eventComponent = new EventView(event);
+    // console.log(event);
     this.#editEventComponent = new EditEventView(event);
 
     this.#eventComponent.setEditClickHandler(this.#handleEditClick);//открыть

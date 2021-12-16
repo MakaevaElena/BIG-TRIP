@@ -11,7 +11,6 @@ import TripInfoView from '../view/trip-info-view.js';
 import CostView from '../view/cost-view.js';
 import EventPresenter from './event-presenter.js';
 
-// import { sortByDate } from '../utils/event-utils.js';
 // import { generateFilter } from '../utils/event-utils.js';
 // const filters = generateFilter(events);
 // const sorters = sortByDate(events);
@@ -28,7 +27,7 @@ export default class TripPresenter {
   #costComponent = new CostView();
   #menuComponent = new MenuView();
   // #filterComponent = new FilterView();
-  #sortComponent = new SortView();
+  #sortComponent = new SortView(SortType.DEFAULT);
   #eventsListComponent = new EventsListView(); //Board
   #noEventsComponent = new NoEventsView();
 
@@ -45,16 +44,15 @@ export default class TripPresenter {
   }
 
   init = (events) => {
-    // console.log(events);
     this.#events = [...events];
     this.#sourcedEvents = [...events];
     this.#events.sort(sortDateDown);
 
     // const filters = generateFilter(events);
-    // console.log(filters);
+    // console.log(this.#sourcedEvents);
 
     this.#renderListEvent();
-    this.#renderPage(events);
+    this.#renderPage(this.#events);
   }
 
   #handleModeChange = () => {
@@ -144,15 +142,15 @@ export default class TripPresenter {
 
   #renderPage = (events) => {
     this.#renderPriceAndRoute();
-    this.#renderMenuButtons(events);
-    this.#renderSort();
+    this.#renderMenuButtons();
+    this.#renderSort(events);
     // this.#renderFilters(filters);
 
     if (this.#events.length === 0) {
       this.#renderNoEvents();
     } else {
       // this.#renderListEvent();
-      this.#renderEvents();
+      this.#renderEvents(events);
     }
   }
 }

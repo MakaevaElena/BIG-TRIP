@@ -30,7 +30,7 @@ const filters = generateFilter(events);
 // const sorters = sortByDate(events);
 // console.log('new TripPresenter', {tripMainElement, tripEventsElement, menuElement, filterElement});
 const tripPresenter = new TripPresenter(tripMainElement, tripEventsElement, menuElement);
-// console.log(events);
+// console.log(tripEventsElement);
 
 
 // const renderEvent = (eventsList, event) => {

@@ -11,7 +11,8 @@ const createTypeIconTemplate = (type) =>
     <img class="event__type-icon" width="42" height="42" src="img/icons/${String(type).toLowerCase()}.png" alt="Event ${type} icon">
   </div>`;
 
-const createTitleTemplate = (type, destination) => `<h3 class="event__title">${type} ${destination.name}</h3>`;
+const createTitleTemplate = (type, destination) => `<h3 class="event__title">${type}${destination.name}</h3>`;
+// console.log(destination);
 
 const eventDurationFormat = (duration) => {
   const minutesDuration = duration % 60 > 0 ? `${duration % 60}M` : '';
@@ -129,7 +130,7 @@ export default class EventView extends AbstractView {
 
   setFavoriteClickHandler = (callback) => {
     this._callback.favoriteClick = callback;
-    this.getElement.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteClick);
+    this.element.querySelector('.event__favorite-btn').addEventListener('click', this.#favoriteClick);
   }
 
   #favoriteClick = (evt) => {
