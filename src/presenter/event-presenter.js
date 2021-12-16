@@ -1,7 +1,6 @@
 import EventView from '../view/event-view.js';
 import EditEventView from '../view/edit-event-view.js';
 import { render, RenderPosition, replace, remove } from '../utils/render.js';
-// import NewEventView from './view/new-event-view.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -35,13 +34,10 @@ export default class EventPresenter {
 
     this.#editEventComponent = new EditEventView(event);
 
-    this.#eventComponent.setEditClickHandler(this.#handleEditClick);//открыть
-    this.#eventComponent.setFavoriteClickHandler(this.#handleFavoriteClick);//звезду
-    this.#editEventComponent.setFormSubmitHandler(this.#handleFormSubmit);//сохранить и закрыть
-    this.#editEventComponent.setFormSubmitHandler(this.#deleteEvent);// удалить
-    // + закрыть без сохранения
-
-    // + удалить
+    this.#eventComponent.setEditClickHandler(this.#handleEditClick);
+    this.#eventComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
+    this.#editEventComponent.setFormSubmitHandler(this.#handleFormSubmit);
+    this.#editEventComponent.setDeleteHandler(this.#deleteEvent);
 
     if (prevEventComponent === null || prevEditEventComponent === null) {
       render(this.#eventsListContainer, this.#eventComponent, RenderPosition.BEFOREEND);

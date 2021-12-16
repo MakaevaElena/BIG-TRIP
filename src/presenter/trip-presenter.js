@@ -2,7 +2,7 @@ import { render, RenderPosition } from '../utils/render.js';
 import { updateItem } from '../utils/common.js';
 import { sortDateDown, sortDurationDown, sortPriceDown } from '../utils/event-utils.js';
 import { SortType } from '../const.js';
-// import FilterView from '../view/filter-view.js';
+
 import EventsListView from '../view/events-list-view.js';
 import SortView from '../view/sort-view.js';
 import NoEventsView from '../view/new-event-view.js';
@@ -11,21 +11,15 @@ import TripInfoView from '../view/trip-info-view.js';
 import CostView from '../view/cost-view.js';
 import EventPresenter from './event-presenter.js';
 
-// import { generateFilter } from '../utils/event-utils.js';
-// const filters = generateFilter(events);
-
-// const WAYPOINT_COUNT = 10;
-
 export default class TripPresenter {
-  #tripMainContainer = null; //'.trip-main'
-  #tripMenuContainer = null; //'.trip-controls__navigation'
-  // #tripFiltersContainer = null;//'.trip-controls__filters'
-  #tripEventsContainer = null;//'.trip-events'
+  #tripMainContainer = null;
+  #tripMenuContainer = null;
+  #tripEventsContainer = null;
 
   #tripInfoComponent = new TripInfoView();
   #costComponent = new CostView();
   #menuComponent = new MenuView();
-  // #filterComponent = new FilterView();
+
   #sortComponent = new SortView(SortType.DEFAULT);
   #eventsListComponent = new EventsListView();
   #noEventsComponent = new NoEventsView();
@@ -38,7 +32,6 @@ export default class TripPresenter {
   constructor(tripMainContainer, tripEventsContainer, tripMenuContainer) {
     this.#tripMainContainer = tripMainContainer;
     this.#tripEventsContainer = tripEventsContainer;
-    // this.#tripFiltersContainer = tripFiltersContainer;
     this.#tripMenuContainer = tripMenuContainer;
   }
 
@@ -46,8 +39,6 @@ export default class TripPresenter {
     this.#events = [...events];
     this.#sourcedEvents = [...events];
     this.#events.sort(sortDateDown);
-
-    // const filters = generateFilter(events);
     this.#renderPage();
   }
 
@@ -95,11 +86,6 @@ export default class TripPresenter {
   #renderMenuButtons = () => {
     render(this.#tripMenuContainer, this.#menuComponent, RenderPosition.BEFOREEND);
   };
-
-  // #renderFilters = () => {
-  //   const filterElement = this.#tripMainContainer.querySelector('.trip-controls__filters');
-  //   render(filterElement, this.#filterComponent, RenderPosition.BEFOREEND);
-  // }
 
   #renderSort = () => {
     render(this.#tripEventsContainer, this.#sortComponent, RenderPosition.AFTERBEGIN);

@@ -166,23 +166,23 @@ export default class EditEventView extends AbstractView {
 
   setFormSubmitHandler = (callback) => {
     this._callback.formSubmit = callback;
-    // разделить на 3 метода;
-    // заменить класс 'save' на type='submit'
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formSubmitHandler);//open-close
-    this.element.querySelector('.event__save-btn').addEventListener('click', this.#formSubmitHandler);//submit
-    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#formSubmitHandler);//delete
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formSubmitHandler);
+    this.element.querySelector('.event__save-btn').addEventListener('click', this.#formSubmitHandler);
   }
-
-  // setFormSubmitHandler = (callback) => {
-  //   this._callback.formSubmit = callback;
-  //   this.getElement.querySelector('.event--edit').addEventListener('submit', this.#formSubmit);
-  // }
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
     this._callback.formSubmit(this.#event);
   }
 
+  setDeleteHandler = (callback) => {
+    this._callback.eventReset = callback;
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#eventResetHandler);
+  }
 
+  #eventResetHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.eventReset(this.#event);
+  }
 }
 
