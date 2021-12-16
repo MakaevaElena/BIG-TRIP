@@ -38,8 +38,9 @@ export default class EventPresenter {
     this.#eventComponent.setEditClickHandler(this.#handleEditClick);//открыть
     this.#eventComponent.setFavoriteClickHandler(this.#handleFavoriteClick);//звезду
     this.#editEventComponent.setFormSubmitHandler(this.#handleFormSubmit);//сохранить и закрыть
-
+    this.#editEventComponent.setFormSubmitHandler(this.#deleteEvent);// удалить
     // + закрыть без сохранения
+
     // + удалить
 
     if (prevEventComponent === null || prevEditEventComponent === null) {
@@ -68,6 +69,11 @@ export default class EventPresenter {
     if (this.#mode !== Mode.DEFAULT) {
       this.#replaceFormToEvent();
     }
+  }
+
+  #deleteEvent = () => {
+    remove(this.#eventComponent);
+    remove(this.#editEventComponent);
   }
 
   #replaceEventToForm = () => {
