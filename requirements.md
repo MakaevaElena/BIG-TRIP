@@ -31,3 +31,4 @@ npm i eslint@7.32.0 -DE
 - babel-loader@8.2.3
 - css-loader@6.5.1
 - style-loader@3.3.1
+- nanoid@3.1.30

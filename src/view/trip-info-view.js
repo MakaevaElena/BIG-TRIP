@@ -1,6 +1,6 @@
 import AbstractView from './abstract-view.js';
 
-const createRouteTemplate = () => (
+const createTripInfoTemplate = () => (
   `<section class="trip-main__trip-info  trip-info">
     <div class="trip-info__main">
     <h1 class="trip-info__title">Amsterdam &mdash; Chamonix &mdash; Geneva</h1>
@@ -11,6 +11,6 @@ const createRouteTemplate = () => (
 
 export default class TripInfoView extends AbstractView {
   get template() {
-    return createRouteTemplate();
+    return createTripInfoTemplate();
   }
 }

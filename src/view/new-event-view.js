@@ -1,8 +1,43 @@
-import { createDateTemplate, createOffersTemplate } from '../utils/event-utils.js';
+import { createDateTemplate } from '../utils/event-utils.js';
 import AbstractView from './abstract-view.js';
 import dayjs from 'dayjs';
 import { getRandomInteger } from '../utils/common.js';
 import { generateDescription, generatePhotos, generateOffers, generateEventType } from '../mocks/utils-mock.js';
+import { WAYPOINT_TYPES, DESTINATIONS } from '../mocks/data-mock.js';
+
+const createTypeTemplate = (id, type, currentType) => {
+  const isChecked = currentType === type ? 'checked' : '';
+
+  return `<div class="event__type-item">
+    <input id="event-type-${type}-${id}" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${isChecked}>
+    <label class ="event__type-label  event__type-label--${type}" for="event-type-${type}-${id}">${type}</label>
+  </div>`;
+};
+
+const typesInLowerCase = WAYPOINT_TYPES.map((type) => type.toLowerCase());
+const createTypeListTemplate = (id, currentType) => typesInLowerCase.map((type) => createTypeTemplate(id, type, currentType)).join('');
+
+const createCityOptionTemplate = (cityName) => `<option value="${cityName}"></option>`;
+const createCityOptionsTemplate = () => DESTINATIONS.map((cityName) => createCityOptionTemplate(cityName)).join('');
+
+
+const createEditOffersTemplate = (offers) => {
+
+  const offerItems = offers.map((offer) => (
+    `<div class="event__offer-selector">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage">
+      <label class="event__offer-label" for="event-offer-luggage-1">
+      <span class="event__offer-title">${offer.title}</span>
+                          &plus;&euro;&nbsp;
+      <span class="event__offer-price">${offer.price}</span>
+                        </label>
+    </div>`
+  ));
+
+  return `<div class="event__available-offers">
+            ${offerItems.join('\n')}
+          </div>`;
+};
 
 const createPhotosTemplate = (photos) => {
   let photosTemplate = '';
@@ -14,6 +49,14 @@ const createPhotosTemplate = (photos) => {
   });
   return photosTemplate;
 };
+
+const createPhotosContainer = (destination) => (
+  `<div class="event__photos-container">
+<div class="event__photos-tape">
+  ${createPhotosTemplate(destination.pictures)}
+</div>
+</div>`
+);
 
 const generateNewEvent = () => {
   const dateFrom = dayjs();
@@ -37,6 +80,8 @@ const generateNewEvent = () => {
 
 const createNewEventTemplate = (someEvent) => {
   const {
+    id,
+    type,
     dateFrom,
     dateTo,
     basePrice,
@@ -58,50 +103,7 @@ const createNewEventTemplate = (someEvent) => {
                       <fieldset class="event__type-group">
                         <legend class="visually-hidden">Event type</legend>
 
-                        <div class="event__type-item">
-                          <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-                          <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-                          <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-                          <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-                          <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-                          <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
-                          <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
-                          <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-                          <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
-                        </div>
-
-                        <div class="event__type-item">
-                          <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-                          <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
-                        </div>
+                        ${createTypeListTemplate(id, type)}
                       </fieldset>
                     </div>
                   </div>
@@ -112,9 +114,7 @@ const createNewEventTemplate = (someEvent) => {
                     </label>
                     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="Geneva" list="destination-list-1">
                     <datalist id="destination-list-1">
-                      <option value="Amsterdam"></option>
-                      <option value="Geneva"></option>
-                      <option value="Chamonix"></option>
+                    ${createCityOptionsTemplate()}
                     </datalist>
                   </div>
 
@@ -142,7 +142,7 @@ const createNewEventTemplate = (someEvent) => {
                     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
                     <div class="event__available-offers">
-                    ${createOffersTemplate(offers)}
+                    ${createEditOffersTemplate(offers)}
                     </div>
                   </section>
 
@@ -150,11 +150,8 @@ const createNewEventTemplate = (someEvent) => {
                     <h3 class="event__section-title  event__section-title--destination">Destination</h3>
                     <p class="event__destination-description">${destination.description}</p>
 
-                    <div class="event__photos-container">
-                      <div class="event__photos-tape">
-                        ${createPhotosTemplate(destination.pictures)}
-                      </div>
-                    </div>
+                    ${createPhotosContainer(destination)}
+
                   </section>
                 </section>
               </form>
