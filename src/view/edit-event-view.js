@@ -230,25 +230,41 @@ export default class EditEventView extends SmartView {
     }, true);
   }
 
-  // #onPriceInput = (evt) => {
-  //   evt.preventDefault();
-  //   this.updateData({
-  //     basePrice: evt.target.value,
-  //   }, true);
-  // }
+  #onPriceInput = (evt) => {
+    evt.preventDefault();
+    this.updateData({
+      basePrice: evt.target.value,
+    }, true);
+  }
+
+  #onDateToInput = (evt) => {
+    evt.preventDefault();
+    this.updateData({
+      dateTo: evt.target.value,
+    }, true);
+  }
+
+  #onDateFromInput = (evt) => {
+    evt.preventDefault();
+    this.updateData({
+      dateFrom: evt.target.value,
+    }, true);
+  }
 
   restoreHandlers = () => {
     this.#setInnerHandlers();
     this.setDeleteHandler();
     this.setFormSubmitHandler();
-    // this.setCloseHandler();
+    this.setCloseHandler();
   }
 
   #setInnerHandlers = () => {
     this.element.querySelector('.event__type-list').addEventListener('change', this.#typeChangeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('input', this.#onDestinationInput);
-    // this.element.querySelector('.event__input--price').addEventListener('input', this.#onPriceInput);
+    this.element.querySelector('.event__input--price').addEventListener('input', this.#onPriceInput);
+    this.element.querySelector('input[name=event-end-time]').addEventListener('input', this.#onDateToInput);
+    this.element.querySelector('input[name=event-start-time]').addEventListener('input', this.#onDateFromInput);
   }
 
   static parseEventToData = (event) => ({ ...event });
