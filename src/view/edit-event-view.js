@@ -1,6 +1,8 @@
 import { createDateTemplate } from '../utils/event-utils.js';
 import { WAYPOINT_TYPES, DESTINATIONS } from '../mocks/data-mock.js';
 import SmartView from './smart-view.js';
+import flatpickr from 'flatpickr';
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const DATE_TIME_FORMAT = 'YYYY/MM/DD HH:mm';
 
@@ -250,6 +252,10 @@ export default class EditEventView extends SmartView {
       dateFrom: evt.target.value,
     }, true);
   }
+
+  //выбор offers
+
+  
 
   restoreHandlers = () => {
     this.#setInnerHandlers();
