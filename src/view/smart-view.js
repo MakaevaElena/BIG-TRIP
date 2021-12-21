@@ -4,12 +4,16 @@ export default class SmartView extends AbstractView {
   _data = {}
 
   // 6.1.3 Обучит компонент обновлять данные
-  updateData = (update) => {
+  updateData = (update, justDataUpdating) => {
     if (!update) {
       return;
     }
     // "кто последнй тот и прав"
     this._data = { ...this._data, ...update };
+
+    if (justDataUpdating) {
+      return;
+    }
 
     this.updateElement();
   }

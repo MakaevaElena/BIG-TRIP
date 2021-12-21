@@ -219,15 +219,36 @@ export default class EditEventView extends SmartView {
     });
   }
 
+  #onDestinationInput = (evt) => {
+    evt.preventDefault();
+    this.updateData({
+      destination: {
+        name: evt.target.value,
+        description: this._data.destination.description,
+        pictures: this._data.destination.pictures,
+      }
+    }, true);
+  }
+
+  // #onPriceInput = (evt) => {
+  //   evt.preventDefault();
+  //   this.updateData({
+  //     basePrice: evt.target.value,
+  //   }, true);
+  // }
+
   restoreHandlers = () => {
     this.#setInnerHandlers();
     this.setDeleteHandler();
     this.setFormSubmitHandler();
+    // this.setCloseHandler();
   }
 
   #setInnerHandlers = () => {
     this.element.querySelector('.event__type-list').addEventListener('change', this.#typeChangeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('input', this.#onDestinationInput);
+    // this.element.querySelector('.event__input--price').addEventListener('input', this.#onPriceInput);
   }
 
   static parseEventToData = (event) => ({ ...event });
