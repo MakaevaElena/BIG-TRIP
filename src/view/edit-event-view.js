@@ -184,8 +184,8 @@ export default class EditEventView extends SmartView {
 
   #closeHandler = (evt) => {
     evt.preventDefault();
-    // this._callback.closeClick();
-    this._callback.closeClick(EditEventView.parseDataToEvents(this._data));
+    this._callback.closeClick();
+    // this._callback.closeClick(EditEventView.parseDataToEvents(this._data));
   }
 
   setDeleteHandler = (callback) => {
@@ -265,6 +265,12 @@ export default class EditEventView extends SmartView {
     this.element.querySelector('.event__input--price').addEventListener('input', this.#onPriceInput);
     this.element.querySelector('input[name=event-end-time]').addEventListener('input', this.#onDateToInput);
     this.element.querySelector('input[name=event-start-time]').addEventListener('input', this.#onDateFromInput);
+  }
+
+  reset = (event) => {
+    this.updateData(
+      EditEventView.parseEventToData(event),
+    );
   }
 
   static parseEventToData = (event) => ({ ...event });
