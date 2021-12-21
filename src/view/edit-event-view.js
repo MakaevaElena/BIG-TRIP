@@ -155,6 +155,8 @@ const createEditEventTemplate = (someEvent) => {
 
 export default class EditEventView extends SmartView {
   // #event = null;
+  #datepickerStart = null;
+  #datepickerEnd = null;
 
   constructor(event = DEFAULT_EVENT) {
     super();
@@ -166,6 +168,81 @@ export default class EditEventView extends SmartView {
   get template() {
     // return createEditEventTemplate(this.#event);
     return createEditEventTemplate(this._data);
+  }
+
+  #setDatepickerStart = () => {
+    if (this.#datepickerStart) {
+      this.#datepickerStart = flatpickr(
+        this.element.querySelector('input[name=event-start-time]'),
+        {
+          dateFormat: 'd/m/y H:i',
+          ['time_24hr']: true,
+          enableTime: true,
+          // defaultDate: this._data.dateFrom,
+          // onChange: this.#dateChangeHandler,
+        },
+      );
+    }
+  }
+
+  #setDatepickerEnd = () => {
+    if (this.#datepickerEnd) {
+      this.#datepickerStart = flatpickr(
+        this.element.querySelector('input[name=event-end-time]'),
+        {
+          dateFormat: 'd/m/y H:i',
+          ['time_24hr']: true,
+          enableTime: true,
+          defaultDate: this._data.dateFrom,
+          onChange: this.#dateChangeHandler,
+        },
+      );
+    }
+  }
+
+  #dateChangeHandler = ([userDate]) => {
+    this.updateData({
+      dateFrom: userDate,
+    });
+  }
+
+  removeElement = () => {
+    super.removeElement();
+
+    if (this.#datepickerStart) {
+      this.#datepickerStart.destroy();
+      this.#datepickerStart = null;
+    }
+    if (this.#datepickerEnd) {
+      this.#datepickerEnd.destroy();
+      this.#datepickerEnd = null;
+    }
+  }
+
+  restoreHandlers = () => {
+    this.#setInnerHandlers();
+    this.setDeleteHandler();
+    this.setFormSubmitHandler();
+    this.setCloseHandler();
+    this.#setDatepickerStart();
+    this.#setDatepickerEnd();
+  }
+
+  #setInnerHandlers = () => {
+    this.element.querySelector('.event__type-list').addEventListener('change', this.#typeChangeHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('input', this.#onDestinationInput);
+    this.element.querySelector('.event__input--price').addEventListener('input', this.#onPriceInput);
+    this.element.querySelector('input[name=event-end-time]').addEventListener('input', this.#onDateToInput);
+    this.element.querySelector('input[name=event-start-time]').addEventListener('input', this.#onDateFromInput);
+    this.#setDatepickerStart();
+    this.#setDatepickerEnd();
+  }
+
+  reset = (event) => {
+    this.updateData(
+      EditEventView.parseEventToData(event),
+    );
   }
 
   setFormSubmitHandler = (callback) => {
@@ -180,13 +257,13 @@ export default class EditEventView extends SmartView {
   }
 
   setCloseHandler = (callback) => {
-    this._callback.closeClick = callback;
+    this._callback.closeEdit = callback;
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#closeHandler);
   }
 
   #closeHandler = (evt) => {
     evt.preventDefault();
-    this._callback.closeClick();
+    this._callback.closeEdit();
     // this._callback.closeClick(EditEventView.parseDataToEvents(this._data));
   }
 
@@ -255,29 +332,6 @@ export default class EditEventView extends SmartView {
 
   //выбор offers
 
-  
-
-  restoreHandlers = () => {
-    this.#setInnerHandlers();
-    this.setDeleteHandler();
-    this.setFormSubmitHandler();
-    this.setCloseHandler();
-  }
-
-  #setInnerHandlers = () => {
-    this.element.querySelector('.event__type-list').addEventListener('change', this.#typeChangeHandler);
-    this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
-    this.element.querySelector('.event__input--destination').addEventListener('input', this.#onDestinationInput);
-    this.element.querySelector('.event__input--price').addEventListener('input', this.#onPriceInput);
-    this.element.querySelector('input[name=event-end-time]').addEventListener('input', this.#onDateToInput);
-    this.element.querySelector('input[name=event-start-time]').addEventListener('input', this.#onDateFromInput);
-  }
-
-  reset = (event) => {
-    this.updateData(
-      EditEventView.parseEventToData(event),
-    );
-  }
 
   static parseEventToData = (event) => ({ ...event });
   static parseDataToEvents = (data) => ({ ...data });
