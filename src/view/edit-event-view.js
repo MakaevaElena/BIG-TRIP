@@ -159,6 +159,10 @@ export default class EditEventView extends AbstractView {
     super();
     // this.#event = event;
     this._data = EditEventView.parseEventToData(event);
+
+    this.element.querySelector('.event__type-list').addEventListener('change', this.#typeChangeHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
+
   }
 
   get template() {
@@ -187,6 +191,26 @@ export default class EditEventView extends AbstractView {
     evt.preventDefault();
     // this._callback.eventReset(this.#event);
     this._callback.eventReset(EditEventView.parseEventToData(this._data));
+  }
+
+  #typeChangeHandler = (evt) => {
+    evt.preventDefault();
+    this.updateData({
+      type: evt.target.value,
+      offers: this._data.offers,
+    }
+    );
+  }
+
+  #destinationChangeHandler = (evt) => {
+    evt.preventDefault();
+    this.updateData({
+      destination: {
+        name: evt.target.value,
+        description: this._data.destination.description,
+        pictures: this._data.destination.pictures,
+      }
+    });
   }
 
   static parseEventToData = (event) => ({ ...event });

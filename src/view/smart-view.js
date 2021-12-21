@@ -8,7 +8,7 @@ export default class SmartView extends AbstractView {
     if (!update) {
       return;
     }
-
+    // "кто последнй тот и прав"
     this._data = { ...this._data, ...update };
 
     this.updateElement();
@@ -27,4 +27,7 @@ export default class SmartView extends AbstractView {
     this.restoreHandlers();
   }
 
+  restoreHandlers = () => {
+    throw new Error('Abstract method not implemented: restoreHandlers');
+  }
 }
