@@ -1,6 +1,6 @@
 import { createDateTemplate } from '../utils/event-utils.js';
-import AbstractView from './abstract-view.js';
 import { WAYPOINT_TYPES, DESTINATIONS } from '../mocks/data-mock.js';
+import SmartView from './smart-view.js';
 
 const DATE_TIME_FORMAT = 'YYYY/MM/DD HH:mm';
 
@@ -33,7 +33,6 @@ const createTypeListTemplate = (id, currentType) => typesInLowerCase.map((type) 
 
 const createCityOptionTemplate = (cityName) => `<option value="${cityName}"></option>`;
 const createCityOptionsTemplate = () => DESTINATIONS.map((cityName) => createCityOptionTemplate(cityName)).join('');
-// console.log(createCityOptionsTemplate());
 
 const createEditOfferTemplate = (id, offer) => (
   `<div class="event__offer-selector">
@@ -152,17 +151,14 @@ const createEditEventTemplate = (someEvent) => {
 </li>`;
 };
 
-export default class EditEventView extends AbstractView {
+export default class EditEventView extends SmartView {
   // #event = null;
 
   constructor(event = DEFAULT_EVENT) {
     super();
     // this.#event = event;
     this._data = EditEventView.parseEventToData(event);
-
-    this.element.querySelector('.event__type-list').addEventListener('change', this.#typeChangeHandler);
-    this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
-
+    this.#setInnerHandlers();
   }
 
   get template() {
@@ -172,7 +168,6 @@ export default class EditEventView extends AbstractView {
 
   setFormSubmitHandler = (callback) => {
     this._callback.formSubmit = callback;
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#formSubmitHandler);
     this.element.querySelector('.event__save-btn').addEventListener('click', this.#formSubmitHandler);
   }
 
@@ -180,6 +175,17 @@ export default class EditEventView extends AbstractView {
     evt.preventDefault();
     // this._callback.formSubmit(this.#event);
     this._callback.formSubmit(EditEventView.parseDataToEvents(this._data));
+  }
+
+  setCloseHandler = (callback) => {
+    this._callback.closeClick = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#closeHandler);
+  }
+
+  #closeHandler = (evt) => {
+    evt.preventDefault();
+    // this._callback.closeClick();
+    this._callback.closeClick(EditEventView.parseDataToEvents(this._data));
   }
 
   setDeleteHandler = (callback) => {
@@ -211,6 +217,17 @@ export default class EditEventView extends AbstractView {
         pictures: this._data.destination.pictures,
       }
     });
+  }
+
+  restoreHandlers = () => {
+    this.#setInnerHandlers();
+    this.setDeleteHandler();
+    this.setFormSubmitHandler();
+  }
+
+  #setInnerHandlers = () => {
+    this.element.querySelector('.event__type-list').addEventListener('change', this.#typeChangeHandler);
+    this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
   }
 
   static parseEventToData = (event) => ({ ...event });
