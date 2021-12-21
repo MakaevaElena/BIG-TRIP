@@ -4,20 +4,20 @@ import { WAYPOINT_TYPES, DESTINATIONS } from '../mocks/data-mock.js';
 
 const DATE_TIME_FORMAT = 'YYYY/MM/DD HH:mm';
 
-// const DEFAULT_EVENT = {
-//   basePrice: 2000,
-//   dateFrom: 'MAR 18',
-//   dateTo: 'MAY 7',
-//   destination: {
-//     description: 'The Best place in the World',
-//     name: 'Beijing',
-//     pictures: 'http://picsum.photos/248/152?r=100'
-//   },
-//   id: 80,
-//   isFavorite: true,
-//   offers: '',
-//   type: 'Flight',
-// };
+const DEFAULT_EVENT = {
+  basePrice: 2000,
+  dateFrom: 'MAR 18',
+  dateTo: 'MAY 7',
+  destination: {
+    description: 'The Best place in the World',
+    name: 'Beijing',
+    pictures: 'http://picsum.photos/248/152?r=100'
+  },
+  id: 80,
+  isFavorite: true,
+  offers: '',
+  type: 'Flight',
+};
 
 const createTypeTemplate = (id, type, currentType) => {
   const isChecked = currentType === type ? 'checked' : '';
@@ -153,15 +153,17 @@ const createEditEventTemplate = (someEvent) => {
 };
 
 export default class EditEventView extends AbstractView {
-  #event = null;
+  // #event = null;
 
-  constructor(event) {
+  constructor(event = DEFAULT_EVENT) {
     super();
-    this.#event = event;
+    // this.#event = event;
+    this._data = EditEventView.parseEventToData(event);
   }
 
   get template() {
-    return createEditEventTemplate(this.#event);
+    // return createEditEventTemplate(this.#event);
+    return createEditEventTemplate(this._data);
   }
 
   setFormSubmitHandler = (callback) => {
@@ -172,7 +174,8 @@ export default class EditEventView extends AbstractView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this._callback.formSubmit(this.#event);
+    // this._callback.formSubmit(this.#event);
+    this._callback.formSubmit(EditEventView.parseDataToEvents(this._data));
   }
 
   setDeleteHandler = (callback) => {
@@ -182,7 +185,12 @@ export default class EditEventView extends AbstractView {
 
   #eventResetHandler = (evt) => {
     evt.preventDefault();
-    this._callback.eventReset(this.#event);
+    // this._callback.eventReset(this.#event);
+    this._callback.eventReset(EditEventView.parseEventToData(this._data));
   }
+
+  static parseEventToData = (event) => ({ ...event });
+  static parseDataToEvents = (data) => ({ ...data });
+
 }
 
