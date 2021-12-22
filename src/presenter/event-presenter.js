@@ -104,7 +104,7 @@ export default class EventPresenter {
   }
 
   #handleCloseEditClick = () => {
-    // this.#editEventComponent.reset(this.#event);
+    this.#editEventComponent.reset(this.#event);
     this.#replaceFormToEvent();
   }
 

@@ -36,10 +36,10 @@ const createTypeListTemplate = (id, currentType) => typesInLowerCase.map((type) 
 const createCityOptionTemplate = (cityName) => `<option value="${cityName}"></option>`;
 const createCityOptionsTemplate = () => DESTINATIONS.map((cityName) => createCityOptionTemplate(cityName)).join('');
 
-const createEditOfferTemplate = (id, offer) => (
+const createEditOfferTemplate = (offer) => (
   `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${id}" type="checkbox" name="event-offer-luggage">
-      <label class="event__offer-label" for="event-offer-luggage-${id}">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${offer.id}" type="checkbox" name="event-offer-luggage">
+      <label class="event__offer-label" for="event-offer-luggage-${offer.id}">
       <span class="event__offer-title">${offer.title}</span>
                           &plus;&euro;&nbsp;
       <span class="event__offer-price">${offer.price}</span>
@@ -190,7 +190,7 @@ export default class EditEventView extends SmartView {
         ['time_24hr']: true,
         enableTime: true,
         defaultDate: this._data.dateFrom,
-        onChange: this.#dateChangeHandler,
+        onChange: this.#dateStartChangeHandler,
       },
     );
   }
@@ -206,31 +206,37 @@ export default class EditEventView extends SmartView {
         dateFormat: 'd/m/y H:i',
         ['time_24hr']: true,
         enableTime: true,
-        defaultDate: this._data.dateFrom,
-        onChange: this.#dateChangeHandler,
+        defaultDate: this._data.dateTo,
+        onChange: this.#dateEndChangeHandler,
       },
     );
   }
 
-  #dateChangeHandler = ([userDate]) => {
+  #dateStartChangeHandler = ([userDate]) => {
     this.updateData({
       dateFrom: userDate,
     });
   }
 
-  // removeElement = () => {
-  //   super.removeElement();
-  // }
+  #dateEndChangeHandler = ([userDate]) => {
+    this.updateData({
+      dateTo: userDate,
+    });
+  }
 
   #setInnerHandlers = () => {
     this.element.querySelector('.event__type-list').addEventListener('change', this.#typeChangeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
-    // this.element.querySelector('.event__input--destination').addEventListener('input', this.#onDestinationInput);
     this.element.querySelector('.event__input--price').addEventListener('input', this.#onPriceInput);
     this.element.querySelector('input[name=event-end-time]').addEventListener('input', this.#onDateToInput);
     this.element.querySelector('input[name=event-start-time]').addEventListener('input', this.#onDateFromInput);
     this.#setDatepickerStart();
     this.#setDatepickerEnd();
+
+    const availableOffers = this.element.querySelector('.event__available-offers');
+    if (availableOffers) {
+      availableOffers.addEventListener('change', this.#offerChangeHandler);
+    }
   }
 
   reset = (event) => {
@@ -244,7 +250,6 @@ export default class EditEventView extends SmartView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    // this._callback.formSubmit(this.#event);
     this._callback.formSubmit(EditEventView.parseDataToEvents(this._data));
   }
 
@@ -256,7 +261,6 @@ export default class EditEventView extends SmartView {
   #closeHandler = (evt) => {
     evt.preventDefault();
     this._callback.closeEdit();
-    // this._callback.closeEdit(EditEventView.parseDataToEvents(this._data));
   }
 
   setDeleteHandler = (callback) => {
@@ -266,19 +270,28 @@ export default class EditEventView extends SmartView {
 
   #eventResetHandler = (evt) => {
     evt.preventDefault();
-    // this._callback.eventReset(this.#event);
     this._callback.eventReset(EditEventView.parseDataToEvents(this._data));
   }
 
+  // офферы не меняются
   #typeChangeHandler = (evt) => {
     evt.preventDefault();
     this.updateData({
       type: evt.target.value,
       offers: this._data.offers,
+      // offers: [],
     }
     );
   }
 
+  #offerChangeHandler = (evt) => {
+    evt.preventDefault();
+    this.updateData({
+      offers: this._data.offers,
+    }, true);
+  }
+
+  // фото не меняются
   #destinationChangeHandler = (evt) => {
     evt.preventDefault();
     this.updateData({
@@ -289,17 +302,6 @@ export default class EditEventView extends SmartView {
       }
     });
   }
-
-  // #onDestinationInput = (evt) => {
-  //   evt.preventDefault();
-  //   this.updateData({
-  //     destination: {
-  //       name: evt.target.value,
-  //       description: this._data.destination.description,
-  //       pictures: this._data.destination.pictures,
-  //     }
-  //   }, true);
-  // }
 
   #onPriceInput = (evt) => {
     evt.preventDefault();
@@ -321,8 +323,6 @@ export default class EditEventView extends SmartView {
       dateFrom: evt.target.value,
     }, true);
   }
-
-  //выбор offers
 
   static parseEventToData = (event) => ({ ...event });
   static parseDataToEvents = (data) => ({ ...data });
