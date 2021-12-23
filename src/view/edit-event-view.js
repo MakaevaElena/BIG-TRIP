@@ -47,7 +47,7 @@ const createEditOfferTemplate = (offer) => (
     </div>`
 );
 
-const createEditOffersTemplate = (id, offers) => offers.map((offer) => createEditOfferTemplate(id, offer)).join('');
+const createEditOffersTemplate = (offers) => offers.map((offer) => createEditOfferTemplate(offer)).join('');
 
 const createPhotosTemplate = (photos) => {
   let photosTemplate = '';
@@ -137,7 +137,7 @@ const createEditEventTemplate = (someEvent) => {
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
         <div class="event__available-offers">
-        ${createEditOffersTemplate(id, offers)}
+        ${createEditOffersTemplate(offers)}
         </div>
       </section>
 
@@ -250,6 +250,7 @@ export default class EditEventView extends SmartView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
+    // this.#offerChangeHandler();
     this._callback.formSubmit(EditEventView.parseDataToEvents(this._data));
   }
 
@@ -273,13 +274,12 @@ export default class EditEventView extends SmartView {
     this._callback.eventReset(EditEventView.parseDataToEvents(this._data));
   }
 
-  // офферы не меняются
+  // !офферы при изменении типа не меняются
   #typeChangeHandler = (evt) => {
     evt.preventDefault();
     this.updateData({
       type: evt.target.value,
       offers: this._data.offers,
-      // offers: [],
     }
     );
   }
@@ -291,7 +291,7 @@ export default class EditEventView extends SmartView {
     }, true);
   }
 
-  // фото не меняются
+  // !фото при изменении города не меняются
   #destinationChangeHandler = (evt) => {
     evt.preventDefault();
     this.updateData({
