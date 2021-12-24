@@ -13,15 +13,15 @@ const TITLES = [
 ];
 
 const WAYPOINT_TYPES = [
-  'Taxi',
-  'Bus',
-  'Train',
-  'Ship',
-  'Drive',
-  'Flight',
-  'Check-in',
-  'Sightseeing',
-  'Restaurant',
+  'taxi',
+  'bus',
+  'train',
+  'ship',
+  'drive',
+  'flight',
+  'check-in',
+  'sightseeing',
+  'restaurant',
 ];
 
 const DESTINATIONS = [
@@ -39,4 +39,16 @@ const DESTINATIONS = [
   'Honkong',
 ];
 
-export { DESCRIPTIONS, TITLES, WAYPOINT_TYPES, DESTINATIONS };
+const typesWithOffers = {
+  'taxi': ['taxi', 'taxi-2', 'taxi-3'],
+  'bus': ['Bus', 'Bus-2'],
+  'train': ['train', 'train-2'],
+  'ship': ['ship', 'ship-2'],
+  'drive': ['drive', 'drive-2'],
+  'flight': ['flight'],
+  'check-in': ['check-in', 'check-in-2'],
+  'sightseeing': ['sightseeing-1'],
+  'restaurant': ['restaurant-1', 'restaurant-2', 'restaurant-3']
+};
+
+export { DESCRIPTIONS, TITLES, WAYPOINT_TYPES, DESTINATIONS, typesWithOffers };

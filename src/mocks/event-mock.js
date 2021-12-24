@@ -13,6 +13,7 @@ const generateDestination = () => getRandomArrayItem(DESTINATIONS);
 // Точка маршрута
 const generateEvent = () => {
   const dateFrom = generateDateFrom();
+  const generetedType = generateEventType();
   return {
     basePrice: getRandomInteger(PRICE_MIN, PRICE_MAX),
     dateFrom,
@@ -24,8 +25,8 @@ const generateEvent = () => {
     },
     id: nanoid(),
     isFavorite: false,
-    offers: generateOffers(OFFERS_MAX),
-    type: generateEventType(),
+    offers: generateOffers(generetedType, OFFERS_MAX),
+    type: generetedType,
   };
 };
 

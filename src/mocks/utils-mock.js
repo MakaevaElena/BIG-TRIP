@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import { getRandomInteger, getRandomArrayItem } from '../utils/common.js';
-import { DESCRIPTIONS, TITLES, WAYPOINT_TYPES } from './data-mock.js';
+import { DESCRIPTIONS, TITLES, WAYPOINT_TYPES, typesWithOffers } from './data-mock.js';
 
 const MAX_HOURS_GAP = 24;
 const MAX_MINUTES_GAP = 60;
@@ -69,8 +69,13 @@ const generatePhotos = (max) => {
   return photos;
 };
 
+const generateOfferTitle = (type) => {
+  const randomIndex = getRandomInteger(0, typesWithOffers[type].length - 1);
+  return TITLES[randomIndex];
+};
+
 // Опции
-const generateOffers = (max) => {
+const generateOffers = (type, max) => {
   const offersCount = getRandomInteger(0, max);
 
   const offers = [];
@@ -78,7 +83,7 @@ const generateOffers = (max) => {
   for (let i = 1; i < offersCount; i++) {
     const offer = {
       id: getRandomInteger(1, 100),
-      title: generateTitle(15),
+      title: generateOfferTitle(type),
       price: getRandomInteger(20, 200),
     };
     offers.push(offer);

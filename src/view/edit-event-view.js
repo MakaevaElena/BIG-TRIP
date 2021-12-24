@@ -3,8 +3,19 @@ import { WAYPOINT_TYPES, DESTINATIONS } from '../mocks/data-mock.js';
 import SmartView from './smart-view.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+import { generateOffers } from '../mocks/utils-mock.js';
 
 const DATE_TIME_FORMAT = 'YYYY/MM/DD HH:mm';
+
+// const getObjectFromArray = (arr, key) => {
+//   for (let i = 0; i < arr.length; i++) {
+//     if (Object.keys(arr[i]).includes(key)) {
+//       return arr[i];
+//     }
+//   }
+//   return null;
+// };
+
 
 const DEFAULT_EVENT = {
   basePrice: 2000,
@@ -71,7 +82,7 @@ const createPhotosContainer = (destination) => {
 </div>`;
 };
 
-const createEditEventTemplate = (someEvent) => {
+const createEditEventTemplate = (data) => {
   const {
     id,
     type,
@@ -80,7 +91,7 @@ const createEditEventTemplate = (someEvent) => {
     dateFrom,
     dateTo,
     basePrice,
-  } = someEvent;
+  } = data;
 
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -279,7 +290,8 @@ export default class EditEventView extends SmartView {
     evt.preventDefault();
     this.updateData({
       type: evt.target.value,
-      offers: this._data.offers,
+      // offers: this._data.offers,
+      offers: generateOffers(evt.target.value, 5),
     }
     );
   }
