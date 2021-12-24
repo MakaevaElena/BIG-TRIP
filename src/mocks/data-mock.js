@@ -40,13 +40,13 @@ const DESTINATIONS = [
 ];
 
 const typesWithOffers = {
-  'taxi': ['taxi', 'taxi-2', 'taxi-3'],
-  'bus': ['Bus', 'Bus-2'],
-  'train': ['train', 'train-2'],
-  'ship': ['ship', 'ship-2'],
-  'drive': ['drive', 'drive-2'],
-  'flight': ['flight'],
-  'check-in': ['check-in', 'check-in-2'],
+  'taxi': ['taxi-1', 'taxi-2', 'taxi-3'],
+  'bus': ['Bus-1', 'Bus-2'],
+  'train': ['train-1', 'train-2'],
+  'ship': ['ship-1', 'ship-2'],
+  'drive': ['drive-1', 'drive-2'],
+  'flight': ['flight-1'],
+  'check-in': ['check-in-1', 'check-in-2'],
   'sightseeing': ['sightseeing-1'],
   'restaurant': ['restaurant-1', 'restaurant-2', 'restaurant-3'],
 };

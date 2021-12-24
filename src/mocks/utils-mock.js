@@ -86,4 +86,6 @@ const generateOffers = (type, max) => {
   return offers;
 };
 
+// const offersList = WAYPOINT_TYPES.map((type) => generateOffers(type, type.length-1));
+
 export { generateDescription, generateTitle, generateEventType, generatePhotos, generateDateFrom, generateDateTo, generateOffers };

@@ -5,39 +5,33 @@ import { nanoid } from 'nanoid';
 const PRICE_MIN = 100;
 const PRICE_MAX = 1000;
 const PHOTOS_MAX = 5;
-const OFFERS_MAX = 8;
+const OFFERS_MAX = 3;
 
 // Пункт назначения
 const generateDestinationName = () => getRandomArrayItem(DESTINATIONS);
 
-const generateDestination = () => {
+const generateDestination = (cityName) => {
   const destination = {
     description: generateDescription(),
-    name: generateDestinationName(),
+    // name: generateDestinationName(),
+    name: cityName,
     pictures: generatePhotos(PHOTOS_MAX),
   };
   return destination;
 };
 
-const generateDestinations = (max) => {
-  const counts = getRandomInteger(0, max);
-  const destinations = [];
-  for (let i = 1; i <= counts; i++) {
-    const newDest = generateDestination();
-    destinations.push(newDest);
-  }
-  return destinations;
-};
+const generateDestinations = DESTINATIONS.map((cityName) => generateDestination(cityName));
 
 // Точка маршрута
 const generateEvent = () => {
   const dateFrom = generateDateFrom();
   const generetedType = generateEventType();
+  const cityName = generateDestinationName();
   return {
     basePrice: getRandomInteger(PRICE_MIN, PRICE_MAX),
     dateFrom,
     dateTo: generateDateTo(dateFrom),
-    destination: generateDestination(),
+    destination: generateDestination(cityName),
     // destination: {
     //   description: generateDescription(),
     //   name: generateDestinationName(),

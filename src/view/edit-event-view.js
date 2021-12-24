@@ -8,15 +8,7 @@ import { generateDestinations } from '../mocks/event-mock.js';
 
 const DATE_TIME_FORMAT = 'YYYY/MM/DD HH:mm';
 
-const getObjectFromArray = (arr, key) => {
-  for (let i = 0; i < arr.length; i++) {
-    if (Object.keys(arr[i]).includes(key)) {
-      return arr[i];
-    }
-  }
-  return null;
-};
-
+const findObjectfromArray = (arr, value) => arr.find((obj) => obj.name === value);
 
 const DEFAULT_EVENT = {
   basePrice: 2000,
@@ -286,6 +278,7 @@ export default class EditEventView extends SmartView {
     this._callback.eventReset(EditEventView.parseDataToEvents(this._data));
   }
 
+  // !офферы повторяются, не соответствуют словарю
   #typeChangeHandler = (evt) => {
     evt.preventDefault();
     this.updateData({
@@ -302,19 +295,15 @@ export default class EditEventView extends SmartView {
     }, true);
   }
 
-  // destination undefind
   #destinationChangeHandler = (evt) => {
+    // console.log(evt.target.value);
+    // console.log(generateDestinations);
     evt.preventDefault();
     this.updateData({
-      destination: {
-        // name: evt.target.value,
-        // description: this._data.destination.description,
-        // pictures: this._data.destination.pictures,
-        destination: getObjectFromArray(generateDestinations(20), evt.target.value),
-      }
+      destination: findObjectfromArray(generateDestinations, evt.target.value),
     });
-    // console.log(evt.target.value);
-  }
+    console.log(this._data.destination);
+  };
 
   #onPriceInput = (evt) => {
     evt.preventDefault();
