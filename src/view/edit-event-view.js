@@ -302,7 +302,7 @@ export default class EditEventView extends SmartView {
     this.updateData({
       destination: findObjectfromArray(generateDestinations, evt.target.value),
     });
-    console.log(this._data.destination);
+    // console.log(this._data.destination);
   };
 
   #onPriceInput = (evt) => {
