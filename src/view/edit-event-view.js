@@ -4,17 +4,18 @@ import SmartView from './smart-view.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import { generateOffers } from '../mocks/utils-mock.js';
+import { generateDestinations } from '../mocks/event-mock.js';
 
 const DATE_TIME_FORMAT = 'YYYY/MM/DD HH:mm';
 
-// const getObjectFromArray = (arr, key) => {
-//   for (let i = 0; i < arr.length; i++) {
-//     if (Object.keys(arr[i]).includes(key)) {
-//       return arr[i];
-//     }
-//   }
-//   return null;
-// };
+const getObjectFromArray = (arr, key) => {
+  for (let i = 0; i < arr.length; i++) {
+    if (Object.keys(arr[i]).includes(key)) {
+      return arr[i];
+    }
+  }
+  return null;
+};
 
 
 const DEFAULT_EVENT = {
@@ -285,12 +286,11 @@ export default class EditEventView extends SmartView {
     this._callback.eventReset(EditEventView.parseDataToEvents(this._data));
   }
 
-  // !офферы при изменении типа не меняются
+  // новые офферы не из словаря
   #typeChangeHandler = (evt) => {
     evt.preventDefault();
     this.updateData({
       type: evt.target.value,
-      // offers: this._data.offers,
       offers: generateOffers(evt.target.value, 5),
     }
     );
@@ -303,16 +303,18 @@ export default class EditEventView extends SmartView {
     }, true);
   }
 
-  // !фото при изменении города не меняются
+  // destination undefind
   #destinationChangeHandler = (evt) => {
     evt.preventDefault();
     this.updateData({
       destination: {
-        name: evt.target.value,
-        description: this._data.destination.description,
-        pictures: this._data.destination.pictures,
+        // name: evt.target.value,
+        // description: this._data.destination.description,
+        // pictures: this._data.destination.pictures,
+        destination: getObjectFromArray(generateDestinations(20), evt.target.value),
       }
     });
+    // console.log(evt.target.value);
   }
 
   #onPriceInput = (evt) => {

@@ -8,7 +8,26 @@ const PHOTOS_MAX = 5;
 const OFFERS_MAX = 8;
 
 // Пункт назначения
-const generateDestination = () => getRandomArrayItem(DESTINATIONS);
+const generateDestinationName = () => getRandomArrayItem(DESTINATIONS);
+
+const generateDestination = () => {
+  const destination = {
+    description: generateDescription(),
+    name: generateDestinationName(),
+    pictures: generatePhotos(PHOTOS_MAX),
+  };
+  return destination;
+};
+
+const generateDestinations = (max) => {
+  const counts = getRandomInteger(0, max);
+  const destinations = [];
+  for (let i = 1; i <= counts; i++) {
+    const newDest = generateDestination();
+    destinations.push(newDest);
+  }
+  return destinations;
+};
 
 // Точка маршрута
 const generateEvent = () => {
@@ -18,11 +37,12 @@ const generateEvent = () => {
     basePrice: getRandomInteger(PRICE_MIN, PRICE_MAX),
     dateFrom,
     dateTo: generateDateTo(dateFrom),
-    destination: {
-      description: generateDescription(),
-      name: generateDestination(),
-      pictures: generatePhotos(PHOTOS_MAX),
-    },
+    destination: generateDestination(),
+    // destination: {
+    //   description: generateDescription(),
+    //   name: generateDestinationName(),
+    //   pictures: generatePhotos(PHOTOS_MAX),
+    // },
     id: nanoid(),
     isFavorite: false,
     offers: generateOffers(generetedType, OFFERS_MAX),
@@ -30,5 +50,5 @@ const generateEvent = () => {
   };
 };
 
-export { generateEvent };
+export { generateEvent, generateDestinations };
 

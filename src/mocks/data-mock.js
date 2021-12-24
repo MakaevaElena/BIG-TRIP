@@ -48,7 +48,7 @@ const typesWithOffers = {
   'flight': ['flight'],
   'check-in': ['check-in', 'check-in-2'],
   'sightseeing': ['sightseeing-1'],
-  'restaurant': ['restaurant-1', 'restaurant-2', 'restaurant-3']
+  'restaurant': ['restaurant-1', 'restaurant-2', 'restaurant-3'],
 };
 
 export { DESCRIPTIONS, TITLES, WAYPOINT_TYPES, DESTINATIONS, typesWithOffers };
