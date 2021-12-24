@@ -286,7 +286,6 @@ export default class EditEventView extends SmartView {
     this._callback.eventReset(EditEventView.parseDataToEvents(this._data));
   }
 
-  // новые офферы не из словаря
   #typeChangeHandler = (evt) => {
     evt.preventDefault();
     this.updateData({
