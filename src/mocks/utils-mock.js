@@ -69,11 +69,6 @@ const generatePhotos = (max) => {
   return photos;
 };
 
-const generateOfferTitle = (options) => {
-  const randomIndex = getRandomInteger(0, options.length - 1);
-  return TITLES[randomIndex];
-};
-
 // Опции
 const generateOffers = (type, max) => {
   const offersCount = getRandomInteger(0, max);
@@ -83,7 +78,7 @@ const generateOffers = (type, max) => {
   for (let i = 1; i < offersCount; i++) {
     const offer = {
       id: getRandomInteger(1, 100),
-      title: generateOfferTitle(typesWithOffers[type]),
+      title: getRandomArrayItem(typesWithOffers[type]),
       price: getRandomInteger(20, 200),
     };
     offers.push(offer);
