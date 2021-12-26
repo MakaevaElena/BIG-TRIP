@@ -182,6 +182,7 @@ export default class EditEventView extends SmartView {
     this.#setDatepickerEnd();
   }
 
+  // выбор даты с помощью flatpickr
   #setDatepickerStart = () => {
     if (this.#datepickerStart) {
       this.#datepickerStart.destroy();
