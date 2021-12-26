@@ -254,7 +254,6 @@ export default class EditEventView extends SmartView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    // this.#offerChangeHandler();
     this._callback.formSubmit(EditEventView.parseDataToEvents(this._data));
   }
 
@@ -278,7 +277,6 @@ export default class EditEventView extends SmartView {
     this._callback.eventReset(EditEventView.parseDataToEvents(this._data));
   }
 
-  // !офферы повторяются, не соответствуют словарю
   #typeChangeHandler = (evt) => {
     evt.preventDefault();
     this.updateData({
@@ -296,8 +294,6 @@ export default class EditEventView extends SmartView {
   }
 
   #destinationChangeHandler = (evt) => {
-    // console.log(evt.target.value);
-    // console.log(generateDestinations);
     evt.preventDefault();
     this.updateData({
       destination: findObjectfromArray(generateDestinations, evt.target.value),

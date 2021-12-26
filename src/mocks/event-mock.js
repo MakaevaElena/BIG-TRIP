@@ -13,7 +13,6 @@ const generateDestinationName = () => getRandomArrayItem(DESTINATIONS);
 const generateDestination = (cityName) => {
   const destination = {
     description: generateDescription(),
-    // name: generateDestinationName(),
     name: cityName,
     pictures: generatePhotos(PHOTOS_MAX),
   };
@@ -32,11 +31,6 @@ const generateEvent = () => {
     dateFrom,
     dateTo: generateDateTo(dateFrom),
     destination: generateDestination(cityName),
-    // destination: {
-    //   description: generateDescription(),
-    //   name: generateDestinationName(),
-    //   pictures: generatePhotos(PHOTOS_MAX),
-    // },
     id: nanoid(),
     isFavorite: false,
     offers: generateOffers(generetedType, OFFERS_MAX),
