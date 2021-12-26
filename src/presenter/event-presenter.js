@@ -38,6 +38,7 @@ export default class EventPresenter {
     this.#eventComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#editEventComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#editEventComponent.setDeleteHandler(this.#deleteEvent);
+    this.#editEventComponent.setCloseHandler(this.#handleCloseEditClick);
 
     if (prevEventComponent === null || prevEditEventComponent === null) {
       render(this.#eventsListContainer, this.#eventComponent, RenderPosition.BEFOREEND);
@@ -63,6 +64,7 @@ export default class EventPresenter {
 
   resetView = () => {
     if (this.#mode !== Mode.DEFAULT) {
+      this.#editEventComponent.reset(this.#event);
       this.#replaceFormToEvent();
     }
   }
@@ -88,6 +90,7 @@ export default class EventPresenter {
   #onEscKeyDown = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      this.#editEventComponent.reset(this.#event);
       this.#replaceFormToEvent();
     }
   };
@@ -98,6 +101,11 @@ export default class EventPresenter {
 
   #handleEditClick = () => {
     this.#replaceEventToForm();
+  }
+
+  #handleCloseEditClick = () => {
+    this.#editEventComponent.reset(this.#event);
+    this.#replaceFormToEvent();
   }
 
   #handleFormSubmit = (event) => {
