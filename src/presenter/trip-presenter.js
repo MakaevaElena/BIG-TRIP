@@ -1,4 +1,4 @@
-import { render, RenderPosition } from '../utils/render.js';
+import { render, RenderPosition, remove } from '../utils/render.js';
 // import { updateItem } from '../utils/common.js';
 import { sortDateDown, sortDurationDown, sortPriceDown } from '../utils/event-utils.js';
 import { SortType, UpdateType, UserAction } from '../const.js';
@@ -16,12 +16,13 @@ export default class TripPresenter {
   #tripMenuContainer = null;
   #tripEventsContainer = null;
   #eventsModel = null;
+  #sortComponent = null;
 
   #tripInfoComponent = new TripInfoView();
   #costComponent = new CostView();
   #menuComponent = new MenuView();
 
-  #sortComponent = new SortView(SortType.DEFAULT);
+  // #sortComponent = new SortView(SortType.DEFAULT);
   #eventsListComponent = new EventsListView();
   #noEventsComponent = new NoEventsView();
 
@@ -102,9 +103,13 @@ export default class TripPresenter {
         break;
       case UpdateType.MINOR:
         // - обновить список (например, когда задача ушла в архив)
+        this.#clearBoard();
+        this.#renderPage();
         break;
       case UpdateType.MAJOR:
         // - обновить всю доску (например, при переключении фильтра)
+        this.#clearBoard({ resetRenderedEventCount: true, resetSortType: true });
+        this.#renderPage();
         break;
     }
   }
@@ -138,8 +143,10 @@ export default class TripPresenter {
     // this.#sortEvents(sortType);
     this.#currentSortType = sortType;
 
-    this.#clearEvents();
-    this.#renderEvents();
+    // this.#clearEvents();
+    // this.#renderEvents();
+    this.#clearBoard({ resetRenderedEventsCount: true });
+    this.#renderPage();
   }
 
   #renderMenuButtons = () => {
@@ -147,8 +154,10 @@ export default class TripPresenter {
   };
 
   #renderSort = () => {
-    render(this.#tripEventsContainer, this.#sortComponent, RenderPosition.AFTERBEGIN);
+    // render(this.#tripEventsContainer, this.#sortComponent, RenderPosition.AFTERBEGIN);
+    this.#sortComponent = new SortView(this.#currentSortType);
     this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
+    render(this.#tripEventsContainer, this.#sortComponent, RenderPosition.AFTERBEGIN);
   }
 
   #renderNoEvents = () => {
@@ -158,6 +167,18 @@ export default class TripPresenter {
   #renderPriceAndRoute = () => {
     render(this.#tripMainContainer, this.#tripInfoComponent, RenderPosition.AFTERBEGIN);
     render(this.#tripInfoComponent, this.#costComponent, RenderPosition.BEFOREEND);
+  }
+
+  #clearBoard = ({ resetSortType = false } = {}) => {
+    this.#eventPresenter.forEach((presenter) => presenter.destroy());
+    this.#eventPresenter.clear();
+
+    remove(this.#sortComponent);
+    remove(this.#noEventsComponent);
+
+    if (resetSortType) {
+      this.#currentSortType = SortType.DEFAULT;
+    }
   }
 
   #renderListEvent = () => {
@@ -180,16 +201,18 @@ export default class TripPresenter {
     events.forEach((event) => this.#renderEvent(event));
   }
 
-
   #renderPage = () => {
+    const events = this.events;
+    const eventsCount = events.length;
     this.#renderPriceAndRoute();
     this.#renderMenuButtons();
-    if (this.events.length === 0) {
+    if (eventsCount === 0) {
       this.#renderNoEvents();
-    } else {
-      this.#renderSort();
-      this.#renderListEvent();
-      this.#renderEvents();
+      return;
     }
+    this.#renderSort();
+    this.#renderListEvent();
+    this.#renderEvents();
+
   }
 }

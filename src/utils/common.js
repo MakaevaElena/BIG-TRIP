@@ -24,4 +24,4 @@ const getRandomArrayItem = (arr) => {
 //   ];
 // };
 
-export { getRandomInteger, getRandomArrayItem, updateItem };
+export { getRandomInteger, getRandomArrayItem };
