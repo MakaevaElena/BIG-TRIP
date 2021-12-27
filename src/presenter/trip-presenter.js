@@ -15,6 +15,7 @@ export default class TripPresenter {
   #tripMainContainer = null;
   #tripMenuContainer = null;
   #tripEventsContainer = null;
+  #eventsModel = null;
 
   #tripInfoComponent = new TripInfoView();
   #costComponent = new CostView();
@@ -29,10 +30,14 @@ export default class TripPresenter {
   #currentSortType = SortType.DEFAULT;
   #sourcedEvents = [];
 
-  constructor(tripMainContainer, tripEventsContainer, tripMenuContainer) {
+  constructor(tripMainContainer, tripEventsContainer, tripMenuContainer, eventsModel) {
     this.#tripMainContainer = tripMainContainer;
     this.#tripEventsContainer = tripEventsContainer;
     this.#tripMenuContainer = tripMenuContainer;
+  }
+
+  get events() {
+    return this.#eventsModel.tasks;
   }
 
   init = (events) => {
