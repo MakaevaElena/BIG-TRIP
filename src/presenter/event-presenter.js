@@ -1,6 +1,7 @@
 import EventView from '../view/event-view.js';
 import EditEventView from '../view/edit-event-view.js';
 import { render, RenderPosition, replace, remove } from '../utils/render.js';
+import { UserAction, UpdateType } from '../const.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -9,7 +10,7 @@ const Mode = {
 
 export default class EventPresenter {
   #eventsListContainer = null;
-  #changeDate = null;
+  #changeData = null;
   #changeMode = null;
 
   #eventComponent = null;
@@ -18,9 +19,9 @@ export default class EventPresenter {
   #event = null;
   #mode = Mode.DEFAULT;
 
-  constructor(eventsListContainer, changeDate, changeMode) {
+  constructor(eventsListContainer, changeData, changeMode) {
     this.#eventsListContainer = eventsListContainer;
-    this.#changeDate = changeDate;
+    this.#changeData = changeData;
     this.#changeMode = changeMode;
   }
 
@@ -95,8 +96,15 @@ export default class EventPresenter {
     }
   };
 
+  // #handleFavoriteClick = () => {
+  //   this.#changeData({ ...this.#event, isFavorite: !this.#event.isFavorite });
+  // }
   #handleFavoriteClick = () => {
-    this.#changeDate({ ...this.#event, isFavorite: !this.#event.isFavorite });
+    this.#changeData(
+      UserAction.UPDATE_EVENT,
+      UpdateType.MINOR,
+      { ...this.#event, isFavorite: !this.#event.isFavorite },
+    );
   }
 
   #handleEditClick = () => {
@@ -109,7 +117,12 @@ export default class EventPresenter {
   }
 
   #handleFormSubmit = (event) => {
-    this.#changeDate(event);
+    // this.#changeData(event);
+    this.#changeData(
+      UserAction.UPDATE_EVENT,
+      UpdateType.MINOR,
+      event,
+    );
     this.#replaceFormToEvent();
   }
 

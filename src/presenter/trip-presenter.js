@@ -35,6 +35,7 @@ export default class TripPresenter {
     this.#tripEventsContainer = tripEventsContainer;
     this.#tripMenuContainer = tripMenuContainer;
     this.#eventsModel = eventsModel;
+    this.#eventsModel.addObserver(this.#handleModelEvent);
   }
 
   get events() {
@@ -60,11 +61,27 @@ export default class TripPresenter {
     this.#eventPresenter.forEach((presenter) => presenter.resetView());
   }
 
-  #handleEventChange = (updatedEvent) => {
-    // this.#events = updateItem(this.#events, updatedEvent);
-    // this.#sourcedEvents = updateItem(this.#sourcedEvents, updatedEvent);
-    // Здесь будем вызывать обновление модели
-    this.#eventPresenter.get(updatedEvent.id).init(updatedEvent);
+  // #handleEventChange = (updatedEvent) => {
+  // this.#events = updateItem(this.#events, updatedEvent);
+  // this.#sourcedEvents = updateItem(this.#sourcedEvents, updatedEvent);
+  // Здесь будем вызывать обновление модели
+  // this.#eventPresenter.get(updatedEvent.id).init(updatedEvent);
+  // }
+
+  #handleViewAction = (actionType, updateType, update) => {
+    console.log(actionType, updateType, update);
+    // Здесь будем вызывать обновление модели.
+    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
+    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
+    // update - обновленные данные
+  }
+
+  #handleModelEvent = (updateType, data) => {
+    console.log(updateType, data);
+    // В зависимости от типа изменений решаем, что делать:
+    // - обновить часть списка (например, когда поменялось описание)
+    // - обновить список (например, когда задача ушла в архив)
+    // - обновить всю доску (например, при переключении фильтра)
   }
 
   #clearEvents = () => {
@@ -123,7 +140,8 @@ export default class TripPresenter {
   }
 
   #renderEvent = (event) => {
-    const eventPresenter = new EventPresenter(this.#eventsListComponent, this.#handleEventChange, this.#handleModeChange);
+    // const eventPresenter = new EventPresenter(this.#eventsListComponent, this.#handleEventChange, this.#handleModeChange);
+    const eventPresenter = new EventPresenter(this.#eventsListComponent, this.#handleViewAction, this.#handleModeChange);
     eventPresenter.init(event);
     this.#eventPresenter.set(event.id, eventPresenter);
   }
