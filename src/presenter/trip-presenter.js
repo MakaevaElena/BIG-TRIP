@@ -1,5 +1,5 @@
 import { render, RenderPosition } from '../utils/render.js';
-import { updateItem } from '../utils/common.js';
+// import { updateItem } from '../utils/common.js';
 import { sortDateDown, sortDurationDown, sortPriceDown } from '../utils/event-utils.js';
 import { SortType } from '../const.js';
 
@@ -25,25 +25,34 @@ export default class TripPresenter {
   #eventsListComponent = new EventsListView();
   #noEventsComponent = new NoEventsView();
 
-  #events = [];
+  // #events = [];
   #eventPresenter = new Map();
   #currentSortType = SortType.DEFAULT;
-  #sourcedEvents = [];
+  // #sourcedEvents = [];
 
   constructor(tripMainContainer, tripEventsContainer, tripMenuContainer, eventsModel) {
     this.#tripMainContainer = tripMainContainer;
     this.#tripEventsContainer = tripEventsContainer;
     this.#tripMenuContainer = tripMenuContainer;
+    this.#eventsModel = eventsModel;
   }
 
   get events() {
-    return this.#eventsModel.tasks;
+    switch (this.#currentSortType) {
+      case SortType.DEFAULT:
+        return [...this.#eventsModel.events].sort(sortDateDown);
+      case SortType.DURATION_DOWN:
+        return [...this.#eventsModel.events].sort(sortDurationDown);
+      case SortType.PRICE_DOWN:
+        return [...this.#eventsModel.events].sort(sortPriceDown);
+    }
+    return this.#eventsModel.events;
   }
 
-  init = (events) => {
-    this.#events = [...events];
-    this.#sourcedEvents = [...events];
-    this.#events.sort(sortDateDown);
+  init = () => {
+    // this.#events = [...events];
+    // this.#sourcedEvents = [...events];
+    this.events.sort(sortDateDown);
     this.#renderPage();
   }
 
@@ -52,8 +61,9 @@ export default class TripPresenter {
   }
 
   #handleEventChange = (updatedEvent) => {
-    this.#events = updateItem(this.#events, updatedEvent);
-    this.#sourcedEvents = updateItem(this.#sourcedEvents, updatedEvent);
+    // this.#events = updateItem(this.#events, updatedEvent);
+    // this.#sourcedEvents = updateItem(this.#sourcedEvents, updatedEvent);
+    // Здесь будем вызывать обновление модели
     this.#eventPresenter.get(updatedEvent.id).init(updatedEvent);
   }
 
@@ -62,28 +72,30 @@ export default class TripPresenter {
     this.#eventPresenter.clear();
   }
 
-  #sortEvents = (sortType) => {
-    switch (sortType) {
-      case SortType.DEFAULT:
-        this.#events.sort(sortDateDown);
-        break;
-      case SortType.DURATION_DOWN:
-        this.#events.sort(sortDurationDown);
-        break;
-      case SortType.PRICE_DOWN:
-        this.#events.sort(sortPriceDown);
-        break;
-      default:
-        this.#events = [...this.#sourcedEvents];
-    }
-    this.#currentSortType = sortType;
-  }
+  // #sortEvents = (sortType) => {
+  //   switch (sortType) {
+  //     case SortType.DEFAULT:
+  //       this.#events.sort(sortDateDown);
+  //       break;
+  //     case SortType.DURATION_DOWN:
+  //       this.#events.sort(sortDurationDown);
+  //       break;
+  //     case SortType.PRICE_DOWN:
+  //       this.#events.sort(sortPriceDown);
+  //       break;
+  //     default:
+  //       this.#events = [...this.#sourcedEvents];
+  //   }
+  //   this.#currentSortType = sortType;
+  // }
 
   #handleSortTypeChange = (sortType) => {
     if (this.#currentSortType === sortType) {
       return;
     }
-    this.#sortEvents(sortType);
+    // this.#sortEvents(sortType);
+    this.#currentSortType = sortType;
+
     this.#clearEvents();
     this.#renderEvents();
   }
@@ -116,16 +128,20 @@ export default class TripPresenter {
     this.#eventPresenter.set(event.id, eventPresenter);
   }
 
-  #renderEvents = (from, to) => {
-    this.#events
-      .slice(from, to)
-      .forEach((event) => this.#renderEvent(event));
+  // #renderEvents = (from, to) => {
+  //   this.#events
+  //     .slice(from, to)
+  //     .forEach((event) => this.#renderEvent(event));
+  // }
+  #renderEvents = (events) => {
+    events.forEach((event) => this.#renderEvent(event));
   }
+
 
   #renderPage = () => {
     this.#renderPriceAndRoute();
     this.#renderMenuButtons();
-    if (this.#events.length === 0) {
+    if (this.events.length === 0) {
       this.#renderNoEvents();
     } else {
       this.#renderSort();

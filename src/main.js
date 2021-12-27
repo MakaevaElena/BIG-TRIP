@@ -23,4 +23,5 @@ const tripPresenter = new TripPresenter(tripMainElement, tripEventsElement, menu
 
 render(filterElement, new FilterView(filters), RenderPosition.BEFOREEND);
 
-tripPresenter.init(events);
+// tripPresenter.init(events);
+tripPresenter.init();
