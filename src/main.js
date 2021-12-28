@@ -23,7 +23,7 @@ const filterModel = new FilterModel();
 const tasksModel = new EventsModel();
 tasksModel.tasks = events;
 
-const tripPresenter = new TripPresenter(tripMainElement, tripEventsElement, menuElement, EventsModel);
+const tripPresenter = new TripPresenter(tripMainElement, tripEventsElement, menuElement, EventsModel, FilterModel);
 const filterPresenter = new FilterPresenter(filterElement, filterModel, tasksModel);
 
 // render(filterElement, new FilterView(filters, 'all'), RenderPosition.BEFOREEND);

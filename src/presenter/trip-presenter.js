@@ -2,6 +2,7 @@ import { render, RenderPosition, remove } from '../utils/render.js';
 // import { updateItem } from '../utils/common.js';
 import { sortDateDown, sortDurationDown, sortPriceDown } from '../utils/event-utils.js';
 import { SortType, UpdateType, UserAction } from '../const.js';
+import { filter } from '../utils/filter.js';
 
 import EventsListView from '../view/events-list-view.js';
 import SortView from '../view/sort-view.js';
@@ -17,6 +18,7 @@ export default class TripPresenter {
   #tripEventsContainer = null;
   #eventsModel = null;
   #sortComponent = null;
+  #filterModel = null;
 
   #tripInfoComponent = new TripInfoView();
   #costComponent = new CostView();
@@ -31,24 +33,31 @@ export default class TripPresenter {
   #currentSortType = SortType.DEFAULT;
   // #sourcedEvents = [];
 
-  constructor(tripMainContainer, tripEventsContainer, tripMenuContainer, eventsModel) {
+  constructor(tripMainContainer, tripEventsContainer, tripMenuContainer, eventsModel, filterModel) {
     this.#tripMainContainer = tripMainContainer;
     this.#tripEventsContainer = tripEventsContainer;
     this.#tripMenuContainer = tripMenuContainer;
     this.#eventsModel = eventsModel;
+    this.#filterModel = filterModel;
+
+    this.#eventsModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
   get events() {
+    const filterType = this.#filterModel.filter;
+    const events = this.#eventsModel.tasks;
+    const filteredEvents = filter[filterType](events);
 
     switch (this.#currentSortType) {
       case SortType.DEFAULT:
-        return [...this.#eventsModel.events].sort(sortDateDown);
+        return filteredEvents.sort(sortDateDown);
       case SortType.DURATION_DOWN:
-        return [...this.#eventsModel.events].sort(sortDurationDown);
+        return filteredEvents.sort(sortDurationDown);
       case SortType.PRICE_DOWN:
-        return [...this.#eventsModel.events].sort(sortPriceDown);
+        return filteredEvents.sort(sortPriceDown);
     }
-    return this.#eventsModel.events;
+    return filteredEvents;
   }
 
   init = () => {
@@ -57,7 +66,7 @@ export default class TripPresenter {
 
     this.events.sort(sortDateDown);
     this.#renderBoard();
-    this.#eventsModel.addObserver(this.#handleModelEvent);
+
   }
 
   #handleModeChange = () => {
