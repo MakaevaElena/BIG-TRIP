@@ -38,7 +38,7 @@ export default class EventPresenter {
     this.#eventComponent.setEditClickHandler(this.#handleEditClick);
     this.#eventComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#editEventComponent.setFormSubmitHandler(this.#handleFormSubmit);
-    this.#editEventComponent.setDeleteHandler(this.#deleteEvent);
+    this.#editEventComponent.setDeleteHandler(this.#handleDeleteEvent);
     this.#editEventComponent.setCloseHandler(this.#handleCloseEditClick);
 
     if (prevEventComponent === null || prevEditEventComponent === null) {
@@ -70,9 +70,35 @@ export default class EventPresenter {
     }
   }
 
-  #deleteEvent = () => {
-    remove(this.#eventComponent);
-    remove(this.#editEventComponent);
+  // #handleDeleteEvent = () => {
+  //   remove(this.#eventComponent);
+  //   remove(this.#editEventComponent);
+  // }
+
+  // #handleFormSubmit = (event) => {
+  //   this.#changeData(
+  //     UserAction.UPDATE_EVENT,
+  //     UpdateType.MINOR,
+  //     event,
+  //   );
+  //   this.#replaceFormToEvent();
+  // }
+
+  //7.1.6 Реализует удаление и оптимизирует сохранение
+  #handleDeleteEvent = (event) => {
+    this.#changeData(
+      UserAction.DELETE_EVENT,
+      UpdateType.MINOR,
+      event,
+    );
+  }
+
+  #handleFormSubmit = (update) => {
+    this.#changeData(
+      UserAction.UPDATE_EVENT,
+      UpdateType.MINOR,
+      update,
+    );
   }
 
   #replaceEventToForm = () => {
@@ -113,16 +139,6 @@ export default class EventPresenter {
 
   #handleCloseEditClick = () => {
     this.#editEventComponent.reset(this.#event);
-    this.#replaceFormToEvent();
-  }
-
-  #handleFormSubmit = (event) => {
-    // this.#changeData(event);
-    this.#changeData(
-      UserAction.UPDATE_EVENT,
-      UpdateType.MINOR,
-      event,
-    );
     this.#replaceFormToEvent();
   }
 

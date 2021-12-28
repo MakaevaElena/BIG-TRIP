@@ -36,10 +36,10 @@ export default class TripPresenter {
     this.#tripEventsContainer = tripEventsContainer;
     this.#tripMenuContainer = tripMenuContainer;
     this.#eventsModel = eventsModel;
-    this.#eventsModel.addObserver(this.#handleModelEvent);
   }
 
   get events() {
+
     switch (this.#currentSortType) {
       case SortType.DEFAULT:
         return [...this.#eventsModel.events].sort(sortDateDown);
@@ -54,8 +54,10 @@ export default class TripPresenter {
   init = () => {
     // this.#events = [...events];
     // this.#sourcedEvents = [...events];
+
     this.events.sort(sortDateDown);
-    this.#renderPage();
+    this.#renderBoard();
+    this.#eventsModel.addObserver(this.#handleModelEvent);
   }
 
   #handleModeChange = () => {
@@ -104,19 +106,14 @@ export default class TripPresenter {
       case UpdateType.MINOR:
         // - обновить список (например, когда задача ушла в архив)
         this.#clearBoard();
-        this.#renderPage();
+        this.#renderBoard();
         break;
       case UpdateType.MAJOR:
         // - обновить всю доску (например, при переключении фильтра)
         this.#clearBoard({ resetRenderedEventCount: true, resetSortType: true });
-        this.#renderPage();
+        this.#renderBoard();
         break;
     }
-  }
-
-  #clearEvents = () => {
-    this.#eventPresenter.forEach((presenter) => presenter.destroy());
-    this.#eventPresenter.clear();
   }
 
   // #sortEvents = (sortType) => {
@@ -146,7 +143,7 @@ export default class TripPresenter {
     // this.#clearEvents();
     // this.#renderEvents();
     this.#clearBoard({ resetRenderedEventsCount: true });
-    this.#renderPage();
+    this.#renderBoard();
   }
 
   #renderMenuButtons = () => {
@@ -168,6 +165,11 @@ export default class TripPresenter {
     render(this.#tripMainContainer, this.#tripInfoComponent, RenderPosition.AFTERBEGIN);
     render(this.#tripInfoComponent, this.#costComponent, RenderPosition.BEFOREEND);
   }
+
+  // #clearEvents = () => {
+  //   this.#eventPresenter.forEach((presenter) => presenter.destroy());
+  //   this.#eventPresenter.clear();
+  // }
 
   #clearBoard = ({ resetSortType = false } = {}) => {
     this.#eventPresenter.forEach((presenter) => presenter.destroy());
@@ -201,7 +203,7 @@ export default class TripPresenter {
     events.forEach((event) => this.#renderEvent(event));
   }
 
-  #renderPage = () => {
+  #renderBoard = () => {
     const events = this.events;
     const eventsCount = events.length;
     this.#renderPriceAndRoute();
