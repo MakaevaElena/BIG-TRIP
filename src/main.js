@@ -13,7 +13,7 @@ const tripMainElement = document.querySelector('.trip-main');
 const menuElement = document.querySelector('.trip-controls__navigation');
 const filterElement = document.querySelector('.trip-controls__filters');
 const tripEventsElement = document.querySelector('.trip-events');
-const addNewEventButton = document.querySelector('.trip-main__event-add-btn');
+// const addNewEventButton = document.querySelector('.trip-main__event-add-btn');
 const siteMenuComponent = new MenuView();
 
 const WAYPOINT_COUNT = 10;
@@ -33,6 +33,12 @@ render(menuElement, siteMenuComponent, RenderPosition.BEFOREEND);
 const tripPresenter = new TripPresenter(tripMainElement, tripEventsElement, menuElement, EventsModel, FilterModel);
 const filterPresenter = new FilterPresenter(filterElement, filterModel, tasksModel);
 
+const handleEventNewFormClose = () => {
+  siteMenuComponent.element.querySelector(`[aria-label=${MenuItem.TABLE}]`).disabled = false;
+  siteMenuComponent.element.querySelector(`[aria-label=${MenuItem.STATS}]`).disabled = false;
+  siteMenuComponent.setMenuItem(MenuItem.TASKS);
+};
+
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.ADD_NEW_TASK:
@@ -41,6 +47,9 @@ const handleSiteMenuClick = (menuItem) => {
       // Показать доску
       // Показать форму добавления новой задачи
       // Убрать выделение с ADD NEW TASK после сохранения
+      tripPresenter.createEvent(handleEventNewFormClose);
+      siteMenuComponent.element.querySelector(`[value=${MenuItem.TASKS}]`).disabled = true;
+      siteMenuComponent.element.querySelector(`[value=${MenuItem.STATISTICS}]`).disabled = true;
       break;
     case MenuItem.TASKS:
       // Показать фильтры
@@ -57,12 +66,11 @@ const handleSiteMenuClick = (menuItem) => {
 
 siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 
-
 // tripPresenter.init(events);
 filterPresenter.init();
 tripPresenter.init();
 
-addNewEventButton.addEventListener('click', (evt) => {
-  evt.preventDefault();
-  tripPresenter.createEvent();
-});
+// addNewEventButton.addEventListener('click', (evt) => {
+//   evt.preventDefault();
+//   tripPresenter.createEvent();
+// });

@@ -7,13 +7,15 @@ export default class EventNewPresenter {
   #eventListContainer = null;
   #changeData = null;
   #eventEditComponent = null;
+  #destroyCallback = null;
 
   constructor(eventListContainer, changeData) {
     this.#eventListContainer = eventListContainer;
     this.#changeData = changeData;
   }
 
-  init = () => {
+  init = (callback) => {
+    this.#destroyCallback = callback;
     if (this.#eventEditComponent !== null) {
       return;
     }
@@ -31,7 +33,7 @@ export default class EventNewPresenter {
     if (this.#eventEditComponent === null) {
       return;
     }
-
+    this.#destroyCallback?.();
     remove(this.#eventEditComponent);
     this.#eventEditComponent = null;
 
