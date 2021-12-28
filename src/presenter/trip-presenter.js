@@ -1,7 +1,7 @@
 import { render, RenderPosition, remove } from '../utils/render.js';
 // import { updateItem } from '../utils/common.js';
 import { sortDateDown, sortDurationDown, sortPriceDown } from '../utils/event-utils.js';
-import { SortType, UpdateType, UserAction } from '../const.js';
+import { SortType, UpdateType, UserAction, FilterType } from '../const.js';
 import { filter } from '../utils/filter.js';
 
 import EventsListView from '../view/events-list-view.js';
@@ -26,11 +26,12 @@ export default class TripPresenter {
 
   // #sortComponent = new SortView(SortType.DEFAULT);
   #eventsListComponent = new EventsListView();
-  #noEventsComponent = new NoEventsView();
+  #noEventsComponent = null;
 
   // #events = [];
   #eventPresenter = new Map();
   #currentSortType = SortType.DEFAULT;
+  #filterType = FilterType.ALL;
   // #sourcedEvents = [];
 
   constructor(tripMainContainer, tripEventsContainer, tripMenuContainer, eventsModel, filterModel) {
@@ -45,9 +46,9 @@ export default class TripPresenter {
   }
 
   get events() {
-    const filterType = this.#filterModel.filter;
+    this.#filterType = this.#filterModel.filter;
     const events = this.#eventsModel.tasks;
-    const filteredEvents = filter[filterType](events);
+    const filteredEvents = filter[this.#filterType](events);
 
     switch (this.#currentSortType) {
       case SortType.DEFAULT:
@@ -167,6 +168,7 @@ export default class TripPresenter {
   }
 
   #renderNoEvents = () => {
+    this.#noEventsComponent = new NoEventsView(this.#filterType);
     render(this.#tripEventsContainer, this.#noEventsComponent, RenderPosition.BEFOREEND);
   }
 
@@ -185,7 +187,11 @@ export default class TripPresenter {
     this.#eventPresenter.clear();
 
     remove(this.#sortComponent);
-    remove(this.#noEventsComponent);
+    // remove(this.#noEventsComponent);
+
+    if (this.#noEventsComponent) {
+      remove(this.#noEventsComponent);
+    }
 
     if (resetSortType) {
       this.#currentSortType = SortType.DEFAULT;

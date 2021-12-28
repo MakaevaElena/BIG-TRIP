@@ -36,4 +36,6 @@ const sortDurationDown = (eventA, eventB) => getEventDuration(eventA.dateFrom, e
 const sortPriceDown = (eventA, eventB) => eventB.basePrice - eventA.basePrice;
 
 
-export { isEventAfter, isEventBefore, createDateTemplate, generateFilter, sortDateDown, sortDurationDown, sortPriceDown };
+// export { isEventAfter, isEventBefore, createDateTemplate, generateFilter, sortDateDown, sortDurationDown, sortPriceDown };
+
+export { createDateTemplate, sortDateDown, sortDurationDown, sortPriceDown };
