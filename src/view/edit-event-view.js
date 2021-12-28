@@ -5,6 +5,7 @@ import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import { generateOffers } from '../mocks/utils-mock.js';
 import { generateDestinations } from '../mocks/event-mock.js';
+import he from 'he';
 
 const DATE_TIME_FORMAT = 'YYYY/MM/DD HH:mm';
 
@@ -108,7 +109,7 @@ const createEditEventTemplate = (data) => {
         <label class="event__label  event__type-output" for="event-destination-${id}">
           ${type}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${destination.name}" list="destination-list-${id}">
+        <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${he.encode(destination.name)}" list="destination-list-${id}">
         <datalist id="destination-list-${id}">
         ${createCityOptionsTemplate()}
         </datalist>
