@@ -11,6 +11,7 @@ const tripMainElement = document.querySelector('.trip-main');
 const menuElement = document.querySelector('.trip-controls__navigation');
 const filterElement = document.querySelector('.trip-controls__filters');
 const tripEventsElement = document.querySelector('.trip-events');
+const addNewEventButton = document.querySelector('.trip-main__event-add-btn');
 
 const WAYPOINT_COUNT = 10;
 
@@ -31,3 +32,8 @@ const filterPresenter = new FilterPresenter(filterElement, filterModel, tasksMod
 // tripPresenter.init(events);
 filterPresenter.init();
 tripPresenter.init();
+
+addNewEventButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  tripPresenter.createEvent();
+});

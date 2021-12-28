@@ -38,7 +38,7 @@ export default class EventPresenter {
     this.#eventComponent.setEditClickHandler(this.#handleEditClick);
     this.#eventComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#editEventComponent.setFormSubmitHandler(this.#handleFormSubmit);
-    this.#editEventComponent.setDeleteHandler(this.#handleDeleteEvent);
+    this.#editEventComponent.setDeleteCkickHandler(this.#handleDeleteEvent);
     this.#editEventComponent.setCloseHandler(this.#handleCloseEditClick);
 
     if (prevEventComponent === null || prevEditEventComponent === null) {

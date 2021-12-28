@@ -177,7 +177,7 @@ export default class EditEventView extends SmartView {
     this.#setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setCloseHandler(this._callback.closeEdit);
-    this.setDeleteHandler(this._callback.eventReset);
+    this.setDeleteClickHandler(this._callback.eventReset);
     this.#setDatepickerStart();
     this.#setDatepickerEnd();
   }
@@ -268,7 +268,7 @@ export default class EditEventView extends SmartView {
     this._callback.closeEdit();
   }
 
-  setDeleteHandler = (callback) => {
+  setDeleteClickHandler = (callback) => {
     this._callback.eventReset = callback;
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#eventResetHandler);
   }
