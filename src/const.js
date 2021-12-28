@@ -23,4 +23,11 @@ const UpdateType = {
   // INIT: 'INIT',
 };
 
-export { SortType, UserAction, UpdateType, FilterType };
+const MenuItem = {
+  ADD_NEW_EVENT: 'add-new-task',
+  TABLE: 'table',
+  STATS: 'stats',
+};
+
+
+export { SortType, UserAction, UpdateType, FilterType, MenuItem };
