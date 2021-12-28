@@ -47,6 +47,8 @@ const handleSiteMenuClick = (menuItem) => {
       // Показать доску
       // Показать форму добавления новой задачи
       // Убрать выделение с ADD NEW TASK после сохранения
+      tripPresenter.destroy();
+      tripPresenter.init();
       tripPresenter.createEvent(handleEventNewFormClose);
       siteMenuComponent.element.querySelector(`[value=${MenuItem.TASKS}]`).disabled = true;
       siteMenuComponent.element.querySelector(`[value=${MenuItem.STATISTICS}]`).disabled = true;
@@ -54,11 +56,13 @@ const handleSiteMenuClick = (menuItem) => {
     case MenuItem.TASKS:
       // Показать фильтры
       // Показать доску
+      tripPresenter.init();
       // Скрыть статистику
       break;
     case MenuItem.STATISTICS:
       // Скрыть фильтры
       // Скрыть доску
+      tripPresenter.destroy();
       // Показать статистику
       break;
   }
