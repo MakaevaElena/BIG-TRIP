@@ -47,6 +47,8 @@ const handleSiteMenuClick = (menuItem) => {
       // Показать доску
       // Показать форму добавления новой задачи
       // Убрать выделение с ADD NEW TASK после сохранения
+      filterPresenter.destroy();
+      filterPresenter.init();
       tripPresenter.destroy();
       tripPresenter.init();
       tripPresenter.createEvent(handleEventNewFormClose);
@@ -55,12 +57,14 @@ const handleSiteMenuClick = (menuItem) => {
       break;
     case MenuItem.TASKS:
       // Показать фильтры
+      filterPresenter.init();
       // Показать доску
       tripPresenter.init();
       // Скрыть статистику
       break;
     case MenuItem.STATISTICS:
       // Скрыть фильтры
+      filterPresenter.destroy();
       // Скрыть доску
       tripPresenter.destroy();
       // Показать статистику

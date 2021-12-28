@@ -81,7 +81,7 @@ export default class TripPresenter {
 
   createEvent = (callback) => {
     // this.#currentSortType = SortType.DEFAULT;
-    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
+    // this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
     this.#eventNewPresenter.init(callback);
   }
 
