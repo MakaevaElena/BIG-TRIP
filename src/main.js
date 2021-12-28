@@ -8,6 +8,7 @@ import FilterModel from './model/filter-model.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 import MenuView from './view/menu-view.js';
 import { MenuItem } from './const.js';
+import StatisticsView from './view/statistics-view.js';
 
 const tripMainElement = document.querySelector('.trip-main');
 const menuElement = document.querySelector('.trip-controls__navigation');
@@ -24,14 +25,14 @@ const events = Array.from({ length: WAYPOINT_COUNT }, generateEvent);
 
 const filterModel = new FilterModel();
 
-const tasksModel = new EventsModel();
-tasksModel.tasks = events;
+const eventsModel = new EventsModel();
+eventsModel.tasks = events;
 
 render(menuElement, siteMenuComponent, RenderPosition.BEFOREEND);
 // render(filterElement, new FilterView(filters, 'all'), RenderPosition.BEFOREEND);
 
 const tripPresenter = new TripPresenter(tripMainElement, tripEventsElement, menuElement, EventsModel, FilterModel);
-const filterPresenter = new FilterPresenter(filterElement, filterModel, tasksModel);
+const filterPresenter = new FilterPresenter(filterElement, filterModel, eventsModel);
 
 const handleEventNewFormClose = () => {
   siteMenuComponent.element.querySelector(`[aria-label=${MenuItem.TABLE}]`).disabled = false;
@@ -75,8 +76,14 @@ const handleSiteMenuClick = (menuItem) => {
 siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 
 // tripPresenter.init(events);
-filterPresenter.init();
-tripPresenter.init();
+// filterPresenter.init();
+// tripPresenter.init();
+
+// Для удобства отладки скроем Фильтры и доску
+// filterPresenter.init();
+// boardPresenter.init();
+// и отобразим сразу статистику
+render(tripMainElement, new StatisticsView(eventsModel.events), RenderPosition.BEFOREEND);
 
 // addNewEventButton.addEventListener('click', (evt) => {
 //   evt.preventDefault();

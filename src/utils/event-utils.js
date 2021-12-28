@@ -35,7 +35,12 @@ const sortDurationDown = (eventA, eventB) => getEventDuration(eventA.dateFrom, e
 
 const sortPriceDown = (eventA, eventB) => eventB.basePrice - eventA.basePrice;
 
-
+const eventDurationFormat = (duration) => {
+  const minutesDuration = duration % 60 > 0 ? `${duration % 60}M` : '';
+  const hoursDuration = Math.floor(duration / 60) % 24 > 0 ? `${Math.floor(duration / 60) % 24}H ` : '';
+  const daysDuration = Math.floor((duration / 60) / 24) > 0 ? `${Math.floor((duration / 60) / 24)}D ` : '';
+  return daysDuration + hoursDuration + minutesDuration;
+};
 // export { isEventAfter, isEventBefore, createDateTemplate, generateFilter, sortDateDown, sortDurationDown, sortPriceDown };
 
-export { createDateTemplate, sortDateDown, sortDurationDown, sortPriceDown };
+export { createDateTemplate, sortDateDown, sortDurationDown, sortPriceDown, eventDurationFormat };
