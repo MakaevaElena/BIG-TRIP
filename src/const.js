@@ -4,6 +4,12 @@ const SortType = {
   DURATION_DOWN: 'duration-down',
 };
 
+const FilterType = {
+  ALL: 'everything',
+  FUTURE: 'future',
+  PAST: 'past',
+};
+
 const UserAction = {
   UPDATE_EVENT: 'UPDATE_EVENT',
   ADD_EVENT: 'ADD_EVENT',
@@ -17,4 +23,4 @@ const UpdateType = {
   // INIT: 'INIT',
 };
 
-export { SortType, UserAction, UpdateType };
+export { SortType, UserAction, UpdateType, FilterType };

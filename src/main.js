@@ -4,6 +4,7 @@ import FilterView from './view/filter-view.js';
 import { generateEvent } from './mocks/event-mock.js';
 import { generateFilter } from './utils/event-utils.js';
 import EventsModel from './model/events-model.js';
+import FilterModel from './model/filter-model.js';
 
 const tripMainElement = document.querySelector('.trip-main');
 const menuElement = document.querySelector('.trip-controls__navigation');
@@ -15,6 +16,7 @@ const WAYPOINT_COUNT = 10;
 const events = Array.from({ length: WAYPOINT_COUNT }, generateEvent);
 
 const filters = generateFilter(events);
+const filterModel = new FilterModel();
 
 const tasksModel = new EventsModel();
 tasksModel.tasks = events;
