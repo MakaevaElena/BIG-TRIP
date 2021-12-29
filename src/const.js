@@ -29,5 +29,6 @@ const MenuItem = {
   STATS: 'stats',
 };
 
+const TypeColors = ['#158DEB', '#FFD054'];
 
-export { SortType, UserAction, UpdateType, FilterType, MenuItem };
+export { SortType, UserAction, UpdateType, FilterType, MenuItem, TypeColors };

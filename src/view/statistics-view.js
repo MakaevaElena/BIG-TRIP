@@ -1,17 +1,29 @@
-import SmartView from './smart';
+import SmartView from './smart-view.js';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { eventDurationFormat } from '../utils/event-utils.js';
 
-const renderMoneyChart = (moneyCtx, moneyData) => (
-  new Chart(moneyCtx, {
+import { calculateTypeCost, calculateTypeCount, calculateTypeTime } from '../utils/statistics.js';
+import { TypeColors } from '../const.js';
+
+const BAR_HEIGHT = 55;
+
+const renderMoneyChart = (moneyCtx, events) => {
+  moneyCtx.height = BAR_HEIGHT * 5;
+
+  const eventTypesCost = calculateTypeCost(events);
+  const typeLabels = [...eventTypesCost.keys()];
+  const typeValues = [...eventTypesCost.values()];
+  const typeColors = typeLabels.map((item, index) => index % 2 === 0 ? TypeColors[0] : TypeColors[1]);
+
+  const moneyChart = new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
-      labels: Object.keys(moneyData),
+      labels: typeLabels,
       datasets: [{
-        data: Object.values(moneyData),
-        backgroundColor: '#ffffff',
+        data: typeValues,
+        backgroundColor: typeColors,
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
         barThickness: 44,
@@ -67,18 +79,25 @@ const renderMoneyChart = (moneyCtx, moneyData) => (
         enabled: false,
       },
     },
-  })
-);
+  });
+  return moneyChart;
+};
+const renderTypeChart = (typeCtx, events) => {
+  typeCtx.height = BAR_HEIGHT * 5;
 
-const renderTypeChart = (typeCtx, typeData) => (
-  new Chart(typeCtx, {
+  const eventTypesCount = calculateTypeCount(events);
+  const typeLabels = [...eventTypesCount.keys()];
+  const typeValues = [...eventTypesCount.values()];
+  const typeColors = typeLabels.map((item, index) => index % 2 === 0 ? TypeColors[0] : TypeColors[1]);
+
+  const typeChart = new Chart(typeCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
-      labels: Object.keys(typeData),
+      labels: typeLabels,
       datasets: [{
-        data: Object.values(typeData),
-        backgroundColor: '#ffffff',
+        data: typeValues,
+        backgroundColor: typeColors,
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
         barThickness: 44,
@@ -134,18 +153,25 @@ const renderTypeChart = (typeCtx, typeData) => (
         enabled: false,
       },
     },
-  })
-);
+  });
+  return typeChart;
+};
+const renderTimeChart = (timeCtx, events) => {
+  timeCtx.height = BAR_HEIGHT * 5;
 
-const renderDurationChart = (durationCtx, durationData) => (
-  new Chart(durationCtx, {
+  const eventTypesTime = calculateTypeTime(events);
+  const typeLabels = [...eventTypesTime.keys()];
+  const typeValues = [...eventTypesTime.values()];
+  const typeColors = typeLabels.map((item, index) => index % 2 === 0 ? TypeColors[0] : TypeColors[1]);
+
+  const timeChart = new Chart(timeCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
     data: {
-      labels: Object.keys(durationData),
+      labels: typeLabels,
       datasets: [{
-        data: Object.values(durationData),
-        backgroundColor: '#ffffff',
+        data: typeValues,
+        backgroundColor: typeColors,
         hoverBackgroundColor: '#ffffff',
         anchor: 'start',
         barThickness: 44,
@@ -201,80 +227,71 @@ const renderDurationChart = (durationCtx, durationData) => (
         enabled: false,
       },
     },
-  })
-);
+  });
+  return timeChart;
+};
 
 
-const createStatisticsTemplate = () => (
-  `<section class="statistics">
-<h2 class="visually-hidden">Trip statistics</h2>
-<div class="statistics__item">
-  <canvas class="statistics__chart" id="money" width="900"></canvas>
-</div>
-<div class="statistics__item">
-  <canvas class="statistics__chart" id="type" width="900"></canvas>
-</div>
-<div class="statistics__item">
-  <canvas class="statistics__chart" id="time-spend" width="900"></canvas>
-</div>
-</section>`
-);
+const createStatisticsTemplate = () => `<section class="statistics">
+          <h2 class="visually-hidden">Trip statistics</h2>
+
+          <div class="statistics__item">
+            <canvas class="statistics__chart" id="money" width="900"></canvas>
+          </div>
+
+          <div class="statistics__item">
+            <canvas class="statistics__chart" id="type" width="900"></canvas>
+          </div>
+
+          <div class="statistics__item">
+            <canvas class="statistics__chart" id="time-spend" width="900"></canvas>
+          </div>
+        </section>`;
 
 export default class Statistics extends SmartView {
-  #moneyChart = null;
-  #typeChart = null;
-  #durationChart = null;
-
-  constructor(moneyData, typeData, durationData) {
+  constructor(events) {
     super();
 
-    this._data = {
-      tripMoneyData: moneyData,
-      tripTypeData: typeData,
-      tripDurationData: durationData,
-    };
+    this._moneyChart = null;
+    this._typeChart = null;
+    this._timeChart = null;
 
-    this.#setCharts();
+    this._events = events;
+
+    this._setCharts();
   }
 
-  get template() {
-    return createStatisticsTemplate(
-      this._data.tripMoneyData,
-      this._data.tripTypeData,
-      this._data.tripDurationData,
-    );
+  removeElement() {
+    super.removeElement();
+
+    if (this._moneyChart !== null || this._typeChart !== null || this._timeChart !== null) {
+      this._moneyChart = null;
+      this._typeChart = null;
+      this._timeChart = null;
+    }
   }
 
-  #setCharts = () => {
+  getTemplate() {
+    return createStatisticsTemplate(this._data);
+  }
 
-    if (this.#moneyChart) {
-      this.#moneyChart = null;
+  restoreHandlers() {
+    this._setCharts();
+  }
+
+  _setCharts() {
+    if (this._moneyChart !== null || this._typeChart !== null || this._timeChart !== null) {
+      this._moneyCart = null;
+      this._typeChart = null;
+      this._timeChart = null;
     }
 
-    if (this.#typeChart) {
-      this.#typeChart = null;
-    }
+    const moneyCtx = this.getElement().querySelector('#money');
+    const typeCtx = this.getElement().querySelector('#type');
+    const timeCtx = this.getElement().querySelector('#time-spend');
 
-    if (this.#durationChart) {
-      this.#durationChart = null;
-    }
-
-    const moneyCtx = this.element.querySelector('#money');
-    const typeCtx = this.element.querySelector('#type');
-    const durationCtx = this.element.querySelector('#time-spend');
-    const BAR_HEIGHT = 55;
-
-    moneyCtx.height = BAR_HEIGHT * Object.values(this._data.tripMoneyData).length; // Рассчитаем высоту канваса в зависимости от того, сколько данных в него будет передаваться
-    typeCtx.height = BAR_HEIGHT * Object.values(this._data.tripTypeData).length;
-    durationCtx.height = BAR_HEIGHT * Object.values(this._data.tripDurationData).length;
-
-    this.#moneyChart = renderMoneyChart(moneyCtx, this._data.tripMoneyData);
-    this.#typeChart = renderTypeChart(typeCtx, this._data.tripTypeData);
-    this.#durationChart = renderDurationChart(durationCtx, this._data.tripDurationData);
+    this._moneyChart = renderMoneyChart(moneyCtx, this._events);
+    this._typeChart = renderTypeChart(typeCtx, this._events);
+    this._timeChart = renderTimeChart(timeCtx, this._events);
   }
-
-  restoreHandlers = () => {
-    this.#setCharts();
-  }
-
 }
