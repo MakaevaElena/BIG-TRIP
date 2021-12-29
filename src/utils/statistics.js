@@ -1,3 +1,19 @@
+import dayjs from 'dayjs';
+
+const getUniqueTypes = (events) => {
+  const uniqueTypes = new Set();
+  events.map((event) => uniqueTypes.add(event.type));
+  return uniqueTypes;
+};
+
+const getUniqueAmount = (uniqueTypes) => {
+  const uniqueTypesAmount = {};
+  uniqueTypes.forEach((type) => {
+    uniqueTypesAmount[type] = 0;
+  });
+  return uniqueTypesAmount;
+};
+
 const calculateTypeCost = (events) => {
   const uniqueTypes = getUniqueTypes(events);
   const uniqueTypesCost = getUniqueAmount(uniqueTypes);
@@ -36,4 +52,4 @@ const calculateTypeTime = (events) => {
 
   return uniqueTypesTimeOrdered;
 };
-export { calculateTypeCost, calculateTypeCount, calculateTypeTime }
+export { calculateTypeCost, calculateTypeCount, calculateTypeTime };

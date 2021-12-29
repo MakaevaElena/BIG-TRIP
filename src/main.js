@@ -1,5 +1,5 @@
 import TripPresenter from './presenter/trip-presenter.js';
-import { render, RenderPosition, } from './utils/render.js';
+import { remove, render, RenderPosition, } from './utils/render.js';
 // import FilterView from './view/filter-view.js';
 import { generateEvent } from './mocks/event-mock.js';
 // import { generateFilter } from './utils/event-utils.js';
@@ -14,8 +14,9 @@ const tripMainElement = document.querySelector('.trip-main');
 const menuElement = document.querySelector('.trip-controls__navigation');
 const filterElement = document.querySelector('.trip-controls__filters');
 const tripEventsElement = document.querySelector('.trip-events');
-// const addNewEventButton = document.querySelector('.trip-main__event-add-btn');
+const addNewEventButton = document.querySelector('.trip-main__event-add-btn');
 const siteMenuComponent = new MenuView();
+let statisticsComponent = null;
 
 const WAYPOINT_COUNT = 10;
 
@@ -34,58 +35,38 @@ render(menuElement, siteMenuComponent, RenderPosition.BEFOREEND);
 const tripPresenter = new TripPresenter(tripMainElement, tripEventsElement, menuElement, EventsModel, FilterModel);
 const filterPresenter = new FilterPresenter(filterElement, filterModel, eventsModel);
 
-const handleEventNewFormClose = () => {
-  siteMenuComponent.element.querySelector(`[aria-label=${MenuItem.TABLE}]`).disabled = false;
-  siteMenuComponent.element.querySelector(`[aria-label=${MenuItem.STATS}]`).disabled = false;
-  siteMenuComponent.setMenuItem(MenuItem.TASKS);
-};
-
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
-    case MenuItem.ADD_NEW_TASK:
-      // Скрыть статистику
-      // Показать фильтры
-      // Показать доску
-      // Показать форму добавления новой задачи
-      // Убрать выделение с ADD NEW TASK после сохранения
-      filterPresenter.destroy();
-      filterPresenter.init();
-      tripPresenter.destroy();
-      tripPresenter.init();
-      tripPresenter.createEvent(handleEventNewFormClose);
-      siteMenuComponent.element.querySelector(`[value=${MenuItem.TASKS}]`).disabled = true;
-      siteMenuComponent.element.querySelector(`[value=${MenuItem.STATISTICS}]`).disabled = true;
-      break;
-    case MenuItem.TASKS:
+    case MenuItem.TABLE:
       // Показать фильтры
       filterPresenter.init();
       // Показать доску
       tripPresenter.init();
       // Скрыть статистику
+      remove(statisticsComponent);
       break;
-    case MenuItem.STATISTICS:
+
+    case MenuItem.STATS:
       // Скрыть фильтры
       filterPresenter.destroy();
       // Скрыть доску
       tripPresenter.destroy();
       // Показать статистику
+      statisticsComponent = new StatisticsView(eventsModel.events);
+      render(tripEventsElement, statisticsComponent, RenderPosition.BEFOREEND);
       break;
   }
 };
 
 siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 
-// tripPresenter.init(events);
-// filterPresenter.init();
-// tripPresenter.init();
+filterPresenter.init();
+tripPresenter.init();
 
-// Для удобства отладки скроем Фильтры и доску
-// filterPresenter.init();
-// boardPresenter.init();
-// и отобразим сразу статистику
-render(tripMainElement, new StatisticsView(eventsModel.events), RenderPosition.BEFOREEND);
+//отобразим статистику
+// render(tripMainElement, new StatisticsView(eventsModel.events), RenderPosition.BEFOREEND);
 
-// addNewEventButton.addEventListener('click', (evt) => {
-//   evt.preventDefault();
-//   tripPresenter.createEvent();
-// });
+addNewEventButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  tripPresenter.createEvent();
+});
