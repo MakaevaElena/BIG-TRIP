@@ -21,9 +21,9 @@ export default class FilterPresenter {
 
     return [
       {
-        type: FilterType.ALL,
+        type: FilterType.EVERYTHING,
         name: 'everything',
-        count: filter[FilterType.ALL](events).length,
+        count: filter[FilterType.EVERYTHING](events).length,
       },
       {
         type: FilterType.FUTURE,
@@ -64,7 +64,7 @@ export default class FilterPresenter {
     this.#eventsModel.removeObserver(this.#handleModelEvent);
     this.#filterModel.removeObserver(this.#handleModelEvent);
 
-    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
+    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
   }
 
   #handleModelEvent = () => {

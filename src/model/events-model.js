@@ -2,6 +2,8 @@ import AbstractObservable from '../utils/abstract-observable.js';
 
 export default class EventsModel extends AbstractObservable {
   #events = [];
+  // #offers = {};
+  // #destinations = [];
 
   set events(events) {
     this.#events = [...events];
@@ -50,4 +52,20 @@ export default class EventsModel extends AbstractObservable {
 
     this._notify(updateType);
   }
+
+  // set offers(offers) {
+  //   this.#offers = offers;
+  // }
+
+  // get offers() {
+  //   return this.#offers;
+  // }
+
+  // set destinations(destinations) {
+  //   this.#destinations = destinations;
+  // }
+
+  // get destinations() {
+  //   return this.#destinations;
+  // }
 }

@@ -5,7 +5,7 @@ const SortType = {
 };
 
 const FilterType = {
-  ALL: 'everything',
+  EVERYTHING: 'everything',
   FUTURE: 'future',
   PAST: 'past',
 };
@@ -24,7 +24,7 @@ const UpdateType = {
 };
 
 const MenuItem = {
-  ADD_NEW_EVENT: 'add-new-task',
+  ADD_NEW_EVENT: 'add-new-point',
   TABLE: 'table',
   STATS: 'stats',
 };

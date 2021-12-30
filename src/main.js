@@ -10,29 +10,21 @@ import MenuView from './view/menu-view.js';
 import { MenuItem } from './const.js';
 import StatisticsView from './view/statistics-view.js';
 
+const EVENT_COUNT = 10;
+const events = Array.from({ length: EVENT_COUNT }, generateEvent);
+const eventsModel = new EventsModel();
+eventsModel.events = events;
+let statisticsComponent = null;
+const filterModel = new FilterModel();
+const siteMenuComponent = new MenuView();
+
 const tripMainElement = document.querySelector('.trip-main');
 const menuElement = document.querySelector('.trip-controls__navigation');
 const filterElement = document.querySelector('.trip-controls__filters');
 const tripEventsElement = document.querySelector('.trip-events');
 const addNewEventButton = document.querySelector('.trip-main__event-add-btn');
-const siteMenuComponent = new MenuView();
-let statisticsComponent = null;
 
-const WAYPOINT_COUNT = 10;
-
-const events = Array.from({ length: WAYPOINT_COUNT }, generateEvent);
-
-// const filters = generateFilter(events);
-
-const filterModel = new FilterModel();
-
-const eventsModel = new EventsModel();
-eventsModel.tasks = events;
-
-render(menuElement, siteMenuComponent, RenderPosition.BEFOREEND);
-// render(filterElement, new FilterView(filters, 'all'), RenderPosition.BEFOREEND);
-
-const tripPresenter = new TripPresenter(tripMainElement, tripEventsElement, menuElement, EventsModel, FilterModel);
+const tripPresenter = new TripPresenter(tripMainElement, tripEventsElement, menuElement, eventsModel, filterModel);
 const filterPresenter = new FilterPresenter(filterElement, filterModel, eventsModel);
 
 const handleSiteMenuClick = (menuItem) => {
@@ -59,7 +51,7 @@ const handleSiteMenuClick = (menuItem) => {
 };
 
 siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
-
+render(menuElement, siteMenuComponent, RenderPosition.BEFOREEND);
 filterPresenter.init();
 tripPresenter.init();
 

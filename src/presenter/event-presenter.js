@@ -30,15 +30,13 @@ export default class EventPresenter {
 
     const prevEventComponent = this.#eventComponent;
     const prevEditEventComponent = this.#editEventComponent;
-
     this.#eventComponent = new EventView(event);
-
     this.#editEventComponent = new EditEventView(event);
 
     this.#eventComponent.setEditClickHandler(this.#handleEditClick);
     this.#eventComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#editEventComponent.setFormSubmitHandler(this.#handleFormSubmit);
-    this.#editEventComponent.setDeleteCkickHandler(this.#handleDeleteEvent);
+    this.#editEventComponent.setDeleteClickHandler(this.#handleDeleteEvent);
     this.#editEventComponent.setCloseHandler(this.#handleCloseEditClick);
 
     if (prevEventComponent === null || prevEditEventComponent === null) {
@@ -70,21 +68,6 @@ export default class EventPresenter {
     }
   }
 
-  // #handleDeleteEvent = () => {
-  //   remove(this.#eventComponent);
-  //   remove(this.#editEventComponent);
-  // }
-
-  // #handleFormSubmit = (event) => {
-  //   this.#changeData(
-  //     UserAction.UPDATE_EVENT,
-  //     UpdateType.MINOR,
-  //     event,
-  //   );
-  //   this.#replaceFormToEvent();
-  // }
-
-  //7.1.6 Реализует удаление и оптимизирует сохранение
   #handleDeleteEvent = (event) => {
     this.#changeData(
       UserAction.DELETE_EVENT,
@@ -122,9 +105,6 @@ export default class EventPresenter {
     }
   };
 
-  // #handleFavoriteClick = () => {
-  //   this.#changeData({ ...this.#event, isFavorite: !this.#event.isFavorite });
-  // }
   #handleFavoriteClick = () => {
     this.#changeData(
       UserAction.UPDATE_EVENT,
