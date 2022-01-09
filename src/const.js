@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 const SortType = {
   DEFAULT: 'day-down',
   PRICE_DOWN: 'price-down',
@@ -20,15 +22,29 @@ const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
-  // INIT: 'INIT',
+  INIT: 'INIT',
 };
 
 const MenuItem = {
-  ADD_NEW_EVENT: 'add-new-point',
   TABLE: 'table',
   STATS: 'stats',
 };
 
-const TypeColors = ['#158DEB', '#FFD054'];
+// const TypeColors = ['#158DEB', '#FFD054'];
 
-export { SortType, UserAction, UpdateType, FilterType, MenuItem, TypeColors };
+const DEFAULT_EVENT = {
+  basePrice: 2000,
+  dateFrom: dayjs(),
+  dateTo: dayjs().add(3, 'd'),
+  destination: {
+    description: 'Description of New City',
+    name: 'New City',
+    pictures: [],
+  },
+  id: 80,
+  isFavorite: true,
+  offers: [],
+  type: 'Flight',
+};
+
+export { SortType, UserAction, UpdateType, FilterType, MenuItem, DEFAULT_EVENT };

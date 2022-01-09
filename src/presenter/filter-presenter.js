@@ -1,7 +1,7 @@
 import FilterView from '../view/filter-view.js';
 import { render, RenderPosition, replace, remove } from '../utils/render.js';
-import { filter } from '../utils/filter.js';
 import { FilterType, UpdateType } from '../const.js';
+// import dayjs from 'dayjs';
 
 export default class FilterPresenter {
   #filterContainer = null;
@@ -17,26 +17,22 @@ export default class FilterPresenter {
   }
 
   get filters() {
-    const events = this.#eventsModel.events;
-
     return [
       {
         type: FilterType.EVERYTHING,
-        name: 'everything',
-        count: filter[FilterType.EVERYTHING](events).length,
+        name: 'EVERYTHING',
       },
       {
         type: FilterType.FUTURE,
-        name: 'future',
-        count: filter[FilterType.FUTURE](events).length,
+        name: 'FUTURE',
       },
       {
         type: FilterType.PAST,
-        name: 'past',
-        count: filter[FilterType.PAST](events).length,
+        name: 'PAST',
       },
     ];
   }
+
 
   init = () => {
     const filters = this.filters;
@@ -75,7 +71,6 @@ export default class FilterPresenter {
     if (this.#filterModel.filter === filterType) {
       return;
     }
-
-    this.#filterModel.setFilter(UpdateType.MAJOR, filterType);
+    this.#filterModel.setFilter(UpdateType.MINOR, filterType);
   }
 }

@@ -25,13 +25,13 @@ export default class EventPresenter {
     this.#changeMode = changeMode;
   }
 
-  init = (event) => {
+  init = (event, offers, destinations) => {
     this.#event = event;
 
     const prevEventComponent = this.#eventComponent;
     const prevEditEventComponent = this.#editEventComponent;
     this.#eventComponent = new EventView(event);
-    this.#editEventComponent = new EditEventView(event);
+    this.#editEventComponent = new EditEventView(event, offers, destinations);
 
     this.#eventComponent.setEditClickHandler(this.#handleEditClick);
     this.#eventComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
@@ -118,7 +118,7 @@ export default class EventPresenter {
   }
 
   #handleCloseEditClick = () => {
-    this.#editEventComponent.reset(this.#event);
+    // this.#editEventComponent.reset(this.#event);
     this.#replaceFormToEvent();
   }
 

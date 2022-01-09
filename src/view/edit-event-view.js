@@ -11,21 +11,6 @@ const DATE_TIME_FORMAT = 'YYYY/MM/DD HH:mm';
 
 const findObjectfromArray = (arr, value) => arr.find((obj) => obj.name === value);
 
-const DEFAULT_EVENT = {
-  basePrice: 2000,
-  dateFrom: 'MAR 18',
-  dateTo: 'MAY 7',
-  destination: {
-    description: 'The Best place in the World',
-    name: 'Beijing',
-    pictures: 'http://picsum.photos/248/152?r=100'
-  },
-  id: 80,
-  isFavorite: true,
-  offers: '',
-  type: 'Flight',
-};
-
 const createTypeTemplate = (id, type, currentType) => {
   const isChecked = currentType === type ? 'checked' : '';
 
@@ -87,6 +72,9 @@ const createEditEventTemplate = (data) => {
     basePrice,
   } = data;
 
+  // console.log(offers);
+  // console.log(destination.name);
+
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
@@ -128,7 +116,7 @@ const createEditEventTemplate = (data) => {
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-${id}" type="text" name="event-price" value="${basePrice}">
+        <input class="event__input  event__input--price" id="event-price-${id}" type="number" name="event-price" value="${basePrice}">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -161,13 +149,17 @@ const createEditEventTemplate = (data) => {
 export default class EditEventView extends SmartView {
   #datepickerStart = null;
   #datepickerEnd = null;
+  // #possibleOffers = null;
+  // #possibleDestinations = null;
 
-  constructor(event = DEFAULT_EVENT) {
+  constructor(event) {
     super();
     this._data = EditEventView.parseEventToData(event);
     this.#setInnerHandlers();
     this.#setDatepickerStart();
     this.#setDatepickerEnd();
+    // this.#possibleOffers = possibleOffers;
+    // this.#possibleDestinations = possibleDestinations;
   }
 
   get template() {
@@ -183,7 +175,6 @@ export default class EditEventView extends SmartView {
     this.#setDatepickerEnd();
   }
 
-  // выбор даты с помощью flatpickr
   #setDatepickerStart = () => {
     if (this.#datepickerStart) {
       this.#datepickerStart.destroy();
@@ -238,11 +229,7 @@ export default class EditEventView extends SmartView {
     this.element.querySelector('input[name=event-start-time]').addEventListener('input', this.#onDateFromInput);
     this.#setDatepickerStart();
     this.#setDatepickerEnd();
-
-    const availableOffers = this.element.querySelector('.event__available-offers');
-    if (availableOffers) {
-      availableOffers.addEventListener('change', this.#offerChangeHandler);
-    }
+    this.element.querySelector('.event__available-offers').addEventListener('change', this.#offerChangeHandler);
   }
 
   reset = (event) => {
@@ -272,6 +259,7 @@ export default class EditEventView extends SmartView {
   setDeleteClickHandler = (callback) => {
     this._callback.eventReset = callback;
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#eventResetHandler);
+    // this.element.querySelector('.trip-main__event-add-btn').addEventListener('click', this.#eventResetHandler);
   }
 
   #eventResetHandler = (evt) => {
@@ -284,14 +272,18 @@ export default class EditEventView extends SmartView {
     this.updateData({
       type: evt.target.value,
       offers: generateOffers(evt.target.value, 5),
+      // offers: this.#possibleOffers(evt.target.value, 5)
     }
     );
   }
 
   #offerChangeHandler = (evt) => {
     evt.preventDefault();
+    const checkedOffers = Array.from(document.querySelectorAll('.event__offer-checkbox:checked'));
+    // const generatedOffers = generateOffers(this._data.type, 5);
+    // this._data.offers = this._data.offers.filter(checkedOffers);
     this.updateData({
-      offers: this._data.offers,
+      offers: checkedOffers,
     }, true);
   }
 
@@ -299,6 +291,7 @@ export default class EditEventView extends SmartView {
     evt.preventDefault();
     this.updateData({
       destination: findObjectfromArray(generateDestinations, evt.target.value),
+      // destination: #possibleDestinations(generateDestinations, evt.target.value),
     });
     // console.log(this._data.destination);
   };

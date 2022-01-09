@@ -21,11 +21,11 @@ import dayjs from 'dayjs';
 const createDateTemplate = (dateFrom, format) => dayjs(dateFrom).format(format);
 
 //2.17 tasckmanager
-// const sortByDate = (events) => {
-//   const eventsByDay = events.slice().sort((a, b) => a.dateFrom - b.dateFrom);
+const sortByDate = (events) => {
+  const eventsByDay = events.slice().sort((a, b) => a.dateFrom - b.dateFrom);
 
-//   return eventsByDay;
-// };
+  return eventsByDay;
+};
 
 const getEventDuration = (start, end) => dayjs(start).diff(dayjs(end));
 
@@ -43,4 +43,4 @@ const eventDurationFormat = (duration) => {
 };
 // export { isEventAfter, isEventBefore, createDateTemplate, generateFilter, sortDateDown, sortDurationDown, sortPriceDown };
 
-export { createDateTemplate, sortDateDown, sortDurationDown, sortPriceDown, eventDurationFormat };
+export { createDateTemplate, sortDateDown, sortDurationDown, sortPriceDown, eventDurationFormat, sortByDate };

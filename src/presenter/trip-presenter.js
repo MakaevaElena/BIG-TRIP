@@ -1,5 +1,4 @@
 import { render, RenderPosition, remove } from '../utils/render.js';
-// import { updateItem } from '../utils/common.js';
 import { sortDateDown, sortDurationDown, sortPriceDown } from '../utils/event-utils.js';
 import { SortType, UpdateType, UserAction, FilterType } from '../const.js';
 import { filter } from '../utils/filter.js';
@@ -7,22 +6,21 @@ import EventNewPresenter from './event-new-presenter.js';
 import EventsListView from '../view/events-list-view.js';
 import SortView from '../view/sort-view.js';
 import NoEventsView from '../view/no-events-view.js';
-import MenuView from '../view/menu-view.js';
-import TripInfoView from '../view/trip-info-view.js';
-import CostView from '../view/cost-view.js';
+// import TripInfoView from '../view/trip-info-view.js';
+// import CostView from '../view/cost-view.js';
 import EventPresenter from './event-presenter.js';
+import { DEFAULT_EVENT } from '../const.js';
 
 export default class TripPresenter {
   #tripMainContainer = null;
-  #tripMenuContainer = null;
   #tripEventsContainer = null;
   #eventsModel = null;
   #sortComponent = null;
   #filterModel = null;
 
-  #tripInfoComponent = new TripInfoView();
-  #costComponent = new CostView();
-  #menuComponent = new MenuView();
+  // #tripInfoComponent = new TripInfoView(this.events);
+  // #costComponent = new CostView(this.events);
+
   #eventsListComponent = new EventsListView();
   #noEventsComponent = null;
 
@@ -31,10 +29,9 @@ export default class TripPresenter {
   #filterType = FilterType.EVERYTHING;
   #eventNewPresenter = null;
 
-  constructor(tripMainContainer, tripEventsContainer, tripMenuContainer, eventsModel, filterModel) {
+  constructor(tripMainContainer, tripEventsContainer, eventsModel, filterModel) {
     this.#tripMainContainer = tripMainContainer;
     this.#tripEventsContainer = tripEventsContainer;
-    this.#tripMenuContainer = tripMenuContainer;
     this.#eventsModel = eventsModel;
     this.#filterModel = filterModel;
 
@@ -61,9 +58,9 @@ export default class TripPresenter {
       case SortType.PRICE_DOWN:
         return filteredEvents.sort(sortPriceDown);
     }
+
     return filteredEvents;
   }
-
 
   destroy = () => {
     this.#clearBoard();
@@ -74,11 +71,14 @@ export default class TripPresenter {
     this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
-  createEvent = (callback) => {
+  createEvent = () => {
     this.#currentSortType = SortType.DEFAULT;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-
-    this.#eventNewPresenter.init(callback);
+    if (!this.#tripEventsContainer.contains(this.#eventsListComponent.element)) {
+      this.#renderListEvent();
+    }
+    this.#eventNewPresenter.init(DEFAULT_EVENT, this.#eventsModel.offers,
+      this.#eventsModel.destinations);
 
     remove(this.#noEventsComponent);
   }
@@ -106,22 +106,29 @@ export default class TripPresenter {
   }
 
   #handleModelEvent = (updateType, data) => {
-    // console.log(updateType, data);
     switch (updateType) {
       case UpdateType.PATCH:
-        // - обновить часть списка (например, когда поменялось описание)
         this.#eventPresenter.get(data.id).init(data);
         break;
       case UpdateType.MINOR:
-        // - обновить список (например, когда задача ушла в архив)
         this.#clearBoard();
         this.#renderBoard();
         break;
       case UpdateType.MAJOR:
-        // - обновить всю доску (например, при переключении фильтра)
         this.#clearBoard();
         remove(this.#sortComponent);
         remove(this.#noEventsComponent);
+
+        if (!this.events.length) {
+          this.#renderNoEvents();
+        } else {
+          this.#currentSortType = SortType.DEFAULT;
+          this.#renderBoard();
+        }
+        break;
+      case UpdateType.INIT:
+        // this.#isLoading = false;
+        // remove(this.#loadingComponent);
         this.#renderBoard();
         break;
     }
@@ -136,12 +143,7 @@ export default class TripPresenter {
     this.#renderBoard();
   }
 
-  #renderMenuButtons = () => {
-    render(this.#tripMenuContainer, this.#menuComponent, RenderPosition.BEFOREEND);
-  };
-
   #renderSort = () => {
-    // render(this.#tripEventsContainer, this.#sortComponent, RenderPosition.AFTERBEGIN);
     this.#sortComponent = new SortView(this.#currentSortType);
     this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
     render(this.#tripEventsContainer, this.#sortComponent, RenderPosition.AFTERBEGIN);
@@ -153,14 +155,9 @@ export default class TripPresenter {
   }
 
   #renderPriceAndRoute = () => {
-    render(this.#tripMainContainer, this.#tripInfoComponent, RenderPosition.AFTERBEGIN);
-    render(this.#tripInfoComponent, this.#costComponent, RenderPosition.BEFOREEND);
+    // render(this.#tripMainContainer, this.#tripInfoComponent, RenderPosition.AFTERBEGIN);
+    // render(this.#tripInfoComponent, this.#costComponent, RenderPosition.BEFOREEND);
   }
-
-  // #clearEvents = () => {
-  //   this.#eventPresenter.forEach((presenter) => presenter.destroy());
-  //   this.#eventPresenter.clear();
-  // }
 
   #clearBoard = () => {
     this.#eventNewPresenter.destroy();
@@ -179,14 +176,12 @@ export default class TripPresenter {
 
   #renderEvent = (event) => {
     const eventPresenter = new EventPresenter(this.#eventsListComponent, this.#handleViewAction, this.#handleModeChange);
-    eventPresenter.init(event);
+    eventPresenter.init(event, this.#eventsModel.offers, this.#eventsModel.destinations);
     this.#eventPresenter.set(event.id, eventPresenter);
   }
 
   #renderEvents = () => {
-    const events = this.events;
-    // console.log(events);
-    events.forEach((event) => this.#renderEvent(event));
+    this.events.forEach((event) => this.#renderEvent(event));
   }
 
 
@@ -194,14 +189,13 @@ export default class TripPresenter {
     const events = this.events;
     const eventsCount = events.length;
     this.#renderPriceAndRoute();
-    this.#renderMenuButtons();
     if (eventsCount === 0) {
       this.#renderNoEvents();
       return;
     }
     this.#renderSort();
     this.#renderListEvent();
-    this.#renderEvents();
+    this.#renderEvents(events);
 
   }
 }

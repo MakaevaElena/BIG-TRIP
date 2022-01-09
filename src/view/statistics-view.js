@@ -1,12 +1,67 @@
-import SmartView from './smart-view.js';
+import SmartView from '../view/smart-view.js';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+
+import dayjs from 'dayjs';
 import { eventDurationFormat } from '../utils/event-utils.js';
 
-import { calculateTypeCost, calculateTypeCount, calculateTypeTime } from '../utils/statistics.js';
-import { TypeColors } from '../const.js';
+const TypeColors = ['#158DEB', '#FFD054'];
+
+const getUniqueTypes = (events) => {
+  const uniqueTypes = new Set();
+  events.map((event) => uniqueTypes.add(event.type));
+  return uniqueTypes;
+};
+
+const getUniqueAmount = (uniqueTypes) => {
+  const uniqueTypesAmount = {};
+  uniqueTypes.forEach((type) => {
+    uniqueTypesAmount[type] = 0;
+  });
+  return uniqueTypesAmount;
+};
+
+const calculateTypeCost = (events) => {
+  const uniqueTypes = getUniqueTypes(events);
+  const uniqueTypesCost = getUniqueAmount(uniqueTypes);
+
+  events.forEach((event) => {
+    uniqueTypesCost[event.type] += event.basePrice;
+  });
+
+  const uniqueTypesCostOrdered = new Map(Object.entries(uniqueTypesCost).sort((a, b) => b[1] - a[1]));
+
+  return uniqueTypesCostOrdered;
+};
+
+const calculateTypeCount = (events) => {
+  const uniqueTypes = getUniqueTypes(events);
+  const uniqueTypesCount = getUniqueAmount(uniqueTypes);
+
+  events.forEach((event) => {
+    uniqueTypesCount[event.type]++;
+  });
+
+  const uniqueTypesCountOrdered = new Map(Object.entries(uniqueTypesCount).sort((a, b) => b[1] - a[1]));
+  return uniqueTypesCountOrdered;
+};
+
+const calculateTypeTime = (events) => {
+  const uniqueTypes = getUniqueTypes(events);
+  const uniqueTypesTime = getUniqueAmount(uniqueTypes);
+
+  events.forEach((event) => {
+    const eventDuration = dayjs(event.dateTo).diff(dayjs(event.dateFrom), 'm');
+    uniqueTypesTime[event.type] += eventDuration;
+  });
+
+  const uniqueTypesTimeOrdered = new Map(Object.entries(uniqueTypesTime).sort((a, b) => b[1] - a[1]));
+
+  return uniqueTypesTimeOrdered;
+};
 
 const BAR_HEIGHT = 55;
+
 
 const renderMoneyChart = (moneyCtx, events) => {
   moneyCtx.height = BAR_HEIGHT * 5;
@@ -88,7 +143,7 @@ const renderTypeChart = (typeCtx, events) => {
   const eventTypesCount = calculateTypeCount(events);
   const typeLabels = [...eventTypesCount.keys()];
   const typeValues = [...eventTypesCount.values()];
-  const typeColors = typeLabels.map((item, index) => index % 2 === 0 ? TypeColors[0] : TypeColors[1]);
+  const typeColors = typeLabels.map((index) => index % 2 === 0 ? TypeColors[0] : TypeColors[1]);
 
   const typeChart = new Chart(typeCtx, {
     plugins: [ChartDataLabels],
@@ -192,7 +247,7 @@ const renderTimeChart = (timeCtx, events) => {
       },
       title: {
         display: true,
-        text: 'TIME-SPEND',
+        text: 'TIME',
         fontColor: '#000000',
         fontSize: 23,
         position: 'left',
@@ -244,54 +299,55 @@ const createStatisticsTemplate = () => `<section class="statistics">
           </div>
 
           <div class="statistics__item">
-            <canvas class="statistics__chart" id="time-spend" width="900"></canvas>
+            <canvas class="statistics__chart" id="time" width="900"></canvas>
           </div>
         </section>`;
 
-export default class Statistics extends SmartView {
+export default class StatisticsView extends SmartView {
+  #moneyChart = null;
+  #typeChart = null;
+  #timeChart = null;
+  _data = null;
+
   constructor(events) {
     super();
+    this._data = events;
+    this.#setCharts();
+  }
 
-    this._moneyChart = null;
-    this._typeChart = null;
-    this._timeChart = null;
-
-    this._events = events;
-
-    this._setCharts();
+  get template() {
+    return createStatisticsTemplate();
   }
 
   removeElement() {
     super.removeElement();
 
-    if (this._moneyChart !== null || this._typeChart !== null || this._timeChart !== null) {
-      this._moneyChart = null;
-      this._typeChart = null;
-      this._timeChart = null;
+    if (this.#moneyChart) {
+      this.#moneyChart.destroy();
+      this.#moneyChart = null;
+    }
+    if (this.#typeChart) {
+      this.#typeChart.destroy();
+      this.#typeChart = null;
+    }
+    if (this.#timeChart) {
+      this.#timeChart.destroy();
+      this.#timeChart = null;
     }
   }
 
-  getTemplate() {
-    return createStatisticsTemplate(this._data);
+  #setCharts = () => {
+
+    const moneyCtx = this.element.querySelector('#money');
+    const typeCtx = this.element.querySelector('#type');
+    const timeCtx = this.element.querySelector('#time');
+
+    this.#moneyChart = renderMoneyChart(moneyCtx, this._data);
+    this.#typeChart = renderTypeChart(typeCtx, this._data);
+    this.#timeChart = renderTimeChart(timeCtx, this._data);
   }
 
   restoreHandlers() {
-    this._setCharts();
-  }
-
-  _setCharts() {
-    if (this._moneyChart !== null || this._typeChart !== null || this._timeChart !== null) {
-      this._moneyCart = null;
-      this._typeChart = null;
-      this._timeChart = null;
-    }
-
-    const moneyCtx = this.getElement().querySelector('#money');
-    const typeCtx = this.getElement().querySelector('#type');
-    const timeCtx = this.getElement().querySelector('#time-spend');
-
-    this._moneyChart = renderMoneyChart(moneyCtx, this._events);
-    this._typeChart = renderTypeChart(typeCtx, this._events);
-    this._timeChart = renderTimeChart(timeCtx, this._events);
+    this.#setCharts();
   }
 }
