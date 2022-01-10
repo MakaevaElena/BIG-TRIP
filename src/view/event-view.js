@@ -67,7 +67,7 @@ const createEventTemplate = (someEvent) => {
     isFavorite,
     basePrice,
   } = someEvent;
-
+  // console.log(offers);
   return `<li class="trip-events__item">
   <div class="event">
 

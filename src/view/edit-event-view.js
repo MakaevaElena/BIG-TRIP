@@ -28,8 +28,8 @@ const createCityOptionsTemplate = () => DESTINATIONS.map((cityName) => createCit
 
 const createEditOfferTemplate = (offer) => (
   `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${offer.id}" type="checkbox" name="event-offer-luggage">
-      <label class="event__offer-label" for="event-offer-luggage-${offer.id}">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${offer.id}" type="checkbox" name="event-offer-luggage" data-id="${offer.id}">
+      <label class="event__offer-label" for="event-offer-luggage-${offer.id}"></label>
       <span class="event__offer-title">${offer.title}</span>
                           &plus;&euro;&nbsp;
       <span class="event__offer-price">${offer.price}</span>
@@ -149,8 +149,6 @@ const createEditEventTemplate = (data) => {
 export default class EditEventView extends SmartView {
   #datepickerStart = null;
   #datepickerEnd = null;
-  // #possibleOffers = null;
-  // #possibleDestinations = null;
 
   constructor(event) {
     super();
@@ -158,8 +156,6 @@ export default class EditEventView extends SmartView {
     this.#setInnerHandlers();
     this.#setDatepickerStart();
     this.#setDatepickerEnd();
-    // this.#possibleOffers = possibleOffers;
-    // this.#possibleDestinations = possibleDestinations;
   }
 
   get template() {
@@ -272,7 +268,6 @@ export default class EditEventView extends SmartView {
     this.updateData({
       type: evt.target.value,
       offers: generateOffers(evt.target.value, 5),
-      // offers: this.#possibleOffers(evt.target.value, 5)
     }
     );
   }
@@ -280,10 +275,15 @@ export default class EditEventView extends SmartView {
   #offerChangeHandler = (evt) => {
     evt.preventDefault();
     const checkedOffers = Array.from(document.querySelectorAll('.event__offer-checkbox:checked'));
-    // const generatedOffers = generateOffers(this._data.type, 5);
-    // this._data.offers = this._data.offers.filter(checkedOffers);
+    const offerIds = checkedOffers.map((element) => element.dataset.id);
+    console.log(offerIds);
+
+    const offers = offerIds.forEach((offerId) => this._data.offers.filter((offer) => offer.id === offerId));
+
+    console.log(offers);
+
     this.updateData({
-      offers: checkedOffers,
+      offers: offers,
     }, true);
   }
 
@@ -291,9 +291,7 @@ export default class EditEventView extends SmartView {
     evt.preventDefault();
     this.updateData({
       destination: findObjectfromArray(generateDestinations, evt.target.value),
-      // destination: #possibleDestinations(generateDestinations, evt.target.value),
     });
-    // console.log(this._data.destination);
   };
 
   #onPriceInput = (evt) => {
