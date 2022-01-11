@@ -1,7 +1,6 @@
 import FilterView from '../view/filter-view.js';
 import { render, RenderPosition, replace, remove } from '../utils/render.js';
 import { FilterType, UpdateType } from '../const.js';
-// import dayjs from 'dayjs';
 
 export default class FilterPresenter {
   #filterContainer = null;

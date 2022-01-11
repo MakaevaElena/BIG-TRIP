@@ -7,7 +7,6 @@ export default class EventNewPresenter {
   #eventListContainer = null;
   #changeData = null;
   #eventEditComponent = null;
-  // #destroyCallback = null;
 
   constructor(eventListContainer, changeData) {
     this.#eventListContainer = eventListContainer;
@@ -15,7 +14,6 @@ export default class EventNewPresenter {
   }
 
   init = (event) => {
-    // this.#destroyCallback = callback;
     if (this.#eventEditComponent !== null) {
       return;
     }
@@ -23,7 +21,6 @@ export default class EventNewPresenter {
     this.#eventEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#eventEditComponent.setDeleteClickHandler(this.#handleDeleteClick);
     // this.#eventEditComponent.setCloseHandler(this.#handleCloseEditClick);
-
 
     render(this.#eventListContainer, this.#eventEditComponent, RenderPosition.AFTERBEGIN);
 
@@ -44,8 +41,6 @@ export default class EventNewPresenter {
     this.#changeData(
       UserAction.ADD_EVENT,
       UpdateType.MAJOR,
-      // Пока у нас нет сервера, который бы после сохранения
-      // выдывал честный id задачи, нам нужно позаботиться об этом самим
       { id: nanoid(), ...event },
     );
     this.destroy();

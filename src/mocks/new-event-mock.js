@@ -1,7 +1,6 @@
 import { getRandomInteger } from '../utils/common.js';
 import { generateDescription, generateEventType, generatePhotos, generateDateFrom, generateDateTo, generateOffers } from './utils-mock.js';
 
-
 // Точка маршрута
 const generateNewEvent = () => ({
   basePrice: 0,

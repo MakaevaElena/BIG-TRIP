@@ -29,7 +29,7 @@ const createCityOptionsTemplate = () => DESTINATIONS.map((cityName) => createCit
 const createEditOfferTemplate = (offer) => (
   `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${offer.id}" type="checkbox" name="event-offer-luggage" data-id="${offer.id}">
-      <label class="event__offer-label" for="event-offer-luggage-${offer.id}"></label>
+      <label class="event__offer-label" for="event-offer-luggage-${offer.id}">
       <span class="event__offer-title">${offer.title}</span>
                           &plus;&euro;&nbsp;
       <span class="event__offer-price">${offer.price}</span>
@@ -71,9 +71,6 @@ const createEditEventTemplate = (data) => {
     dateTo,
     basePrice,
   } = data;
-
-  // console.log(offers);
-  // console.log(destination.name);
 
   return `<li class="trip-events__item">
   <form class="event event--edit" action="#" method="post">
@@ -276,11 +273,12 @@ export default class EditEventView extends SmartView {
     evt.preventDefault();
     const checkedOffers = Array.from(document.querySelectorAll('.event__offer-checkbox:checked'));
     const offerIds = checkedOffers.map((element) => element.dataset.id);
-    console.log(offerIds);
 
-    const offers = offerIds.forEach((offerId) => this._data.offers.filter((offer) => offer.id === offerId));
+    const offers = this._data.offers.filter((offer) => offerIds.filter((offerId) => offer.id === offerId));
 
-    console.log(offers);
+    // console.log(this._data.offers);
+    // console.log(offerIds);
+    // console.log(offers);
 
     this.updateData({
       offers: offers,
