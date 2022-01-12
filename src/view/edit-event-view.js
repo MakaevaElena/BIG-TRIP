@@ -146,17 +146,24 @@ const createEditEventTemplate = (data) => {
 export default class EditEventView extends SmartView {
   #datepickerStart = null;
   #datepickerEnd = null;
+  #possibleOffers = null;
+  #possibleDestinations = null;
 
-  constructor(event) {
+  constructor(event, possibleOffers, possibleDestinations) {
+    // console.log(event);
+    // console.log(possibleOffers);
+    // console.log(possibleDestinations);
     super();
     this._data = EditEventView.parseEventToData(event);
+    this.#possibleOffers = possibleOffers;
+    this.#possibleDestinations = possibleDestinations;
     this.#setInnerHandlers();
     this.#setDatepickerStart();
     this.#setDatepickerEnd();
   }
 
   get template() {
-    return createEditEventTemplate(this._data);
+    return createEditEventTemplate(this._data, this.#possibleOffers, this.#possibleDestinations);
   }
 
   restoreHandlers = () => {
@@ -264,7 +271,8 @@ export default class EditEventView extends SmartView {
     evt.preventDefault();
     this.updateData({
       type: evt.target.value,
-      offers: generateOffers(evt.target.value, 5),
+      // offers: generateOffers(evt.target.value, 5),
+      offers: this.#possibleOffers(evt.target.value),
     }
     );
   }

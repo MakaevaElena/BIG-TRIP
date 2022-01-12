@@ -1,6 +1,5 @@
 import TripPresenter from './presenter/trip-presenter.js';
 import { remove, render, RenderPosition, } from './utils/render.js';
-// import { generateEvent } from './mocks/event-mock.js';
 import EventsModel from './model/events-model.js';
 import FilterModel from './model/filter-model.js';
 import FilterPresenter from './presenter/filter-presenter.js';
@@ -9,13 +8,9 @@ import { MenuItem } from './const.js';
 import StatisticsView from './view/statistics-view.js';
 import ApiService from './api-service.js';
 
-// const EVENT_COUNT = 10;
 const AUTHORIZATION = 'Basic koshkakartoshka';
 const END_POINT = 'https://16.ecmascript.pages.academy/big-trip';
 
-// const events = Array.from({ length: EVENT_COUNT }, generateEvent);
-// const eventsModel = new EventsModel();
-// eventsModel.events = events;
 const eventsModel = new EventsModel(new ApiService(END_POINT, AUTHORIZATION));
 
 let statisticsComponent = null;
@@ -61,15 +56,10 @@ const handleSiteMenuClick = (menuItem) => {
 filterPresenter.init();
 tripPresenter.init();
 
-// siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
-// render(menuElement, siteMenuComponent, RenderPosition.BEFOREEND);
-
 eventsModel.init().finally(() => {
   render(menuElement, siteMenuComponent, RenderPosition.BEFOREEND);
   siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
 });
-
-render(tripMainElement, new StatisticsView(eventsModel.events), RenderPosition.BEFOREEND);
 
 addNewEventButton.addEventListener('click', (evt) => {
   evt.preventDefault();

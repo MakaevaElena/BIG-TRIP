@@ -18,7 +18,6 @@ export default class EventPresenter {
   #eventsListContainer = null;
   #changeData = null;
   #changeMode = null;
-
   #eventComponent = null;
   #editEventComponent = null;
 

@@ -2,9 +2,32 @@ import AbstractObservable from '../utils/abstract-observable.js';
 import { UpdateType } from '../const.js';
 import dayjs from 'dayjs';
 
+// const BlankPossibleOffers = {
+//   bus: [],
+//   'check-in': [],
+//   drive: [],
+//   flight: [],
+//   restaurant: [],
+//   ship: [],
+//   sightseeing: [],
+//   taxi: [],
+//   train: [],
+// };
+
+// const getDestinationsFromEvents = (events) => {
+//   const destinationsFromEvents = [];
+//   events.forEach((event) => {
+//     destinationsFromEvents.push(event.destination);
+//   });
+
+//   return destinationsFromEvents;
+// };
+
 export default class EventsModel extends AbstractObservable {
   #events = [];
   #apiService = null;
+  #offers = {};
+  #destinations = [];
 
   constructor(apiService) {
     super();
@@ -18,11 +41,34 @@ export default class EventsModel extends AbstractObservable {
     } catch (err) {
       this.#events = [];
     }
+
+    // try {
+    //   const offers = await this.#apiService.offers;
+    //   this.#offers = this.#adaptOffersToClient(offers);
+    // } catch (err) {
+    //   this.#offers = BlankPossibleOffers;
+    // }
+
+    // try {
+    //   const destinations = await this.#apiService.destinations;
+    //   this.#destinations = destinations;
+    // } catch {
+    //   this.#destinations = getDestinationsFromEvents(this.points);
+    // }
+
     this._notify(UpdateType.INIT);
   }
 
   get events() {
     return this.#events;
+  }
+
+  get offers() {
+    return this.#offers;
+  }
+
+  get destinations() {
+    return this.#destinations;
   }
 
   updateEvent = async (updateType, update) => {
@@ -99,4 +145,14 @@ export default class EventsModel extends AbstractObservable {
 
     return adaptedEvent;
   }
+
+  // #adaptOffersToClient = (serverOffers) => {
+  //   const adaptedOffers = {};
+  //   serverOffers.forEach((serverOffer) => {
+  //     adaptedOffers[serverOffer.type] = serverOffer.offers;
+  //   });
+
+  //   return adaptedOffers;
+  // }
+
 }
