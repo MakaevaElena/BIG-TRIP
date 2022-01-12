@@ -3,12 +3,11 @@ import AbstractView from './abstract-view.js';
 export default class SmartView extends AbstractView {
   _data = {}
 
-  // 6.1.3 Обучит компонент обновлять данные
   updateData = (update, justDataUpdating) => {
     if (!update) {
       return;
     }
-    // "кто последнй тот и прав"
+
     this._data = { ...this._data, ...update };
 
     if (justDataUpdating) {
@@ -18,7 +17,6 @@ export default class SmartView extends AbstractView {
     this.updateElement();
   }
 
-  // 6.1.2 Обучит компонент обновлять шаблон
   updateElement = () => {
     const prevElement = this.element;
     const parent = prevElement.parentElement;

@@ -7,7 +7,6 @@ const PRICE_MAX = 1000;
 const PHOTOS_MAX = 5;
 const OFFERS_MAX = 3;
 
-// Пункт назначения
 const generateDestinationName = () => getRandomArrayItem(DESTINATIONS);
 
 const generateDestination = (cityName) => {
@@ -21,7 +20,6 @@ const generateDestination = (cityName) => {
 
 const generateDestinations = DESTINATIONS.map((cityName) => generateDestination(cityName));
 
-// Точка маршрута
 const generateEvent = () => {
   const dateFrom = generateDateFrom();
   const generetedType = generateEventType();

@@ -6,8 +6,6 @@ import EventNewPresenter from './event-new-presenter.js';
 import EventsListView from '../view/events-list-view.js';
 import SortView from '../view/sort-view.js';
 import NoEventsView from '../view/no-events-view.js';
-// import TripInfoView from '../view/trip-info-view.js';
-// import CostView from '../view/cost-view.js';
 import EventPresenter from './event-presenter.js';
 import { DEFAULT_EVENT } from '../const.js';
 
@@ -17,9 +15,6 @@ export default class TripPresenter {
   #eventsModel = null;
   #sortComponent = null;
   #filterModel = null;
-
-  // #tripInfoComponent = new TripInfoView(this.events);
-  // #costComponent = new CostView(this.events);
 
   #eventsListComponent = new EventsListView();
   #noEventsComponent = null;
@@ -89,7 +84,6 @@ export default class TripPresenter {
   }
 
   #handleViewAction = (actionType, updateType, update) => {
-    // console.log(actionType, updateType, update);
     switch (actionType) {
       case UserAction.UPDATE_EVENT:
         this.#eventsModel.updateEvent(updateType, update);
@@ -127,8 +121,6 @@ export default class TripPresenter {
         }
         break;
       case UpdateType.INIT:
-        // this.#isLoading = false;
-        // remove(this.#loadingComponent);
         this.#renderBoard();
         break;
     }
@@ -152,11 +144,6 @@ export default class TripPresenter {
   #renderNoEvents = () => {
     this.#noEventsComponent = new NoEventsView(this.#filterType);
     render(this.#tripEventsContainer, this.#noEventsComponent, RenderPosition.BEFOREEND);
-  }
-
-  #renderPriceAndRoute = () => {
-    // render(this.#tripMainContainer, this.#tripInfoComponent, RenderPosition.AFTERBEGIN);
-    // render(this.#tripInfoComponent, this.#costComponent, RenderPosition.BEFOREEND);
   }
 
   #clearBoard = () => {
@@ -188,7 +175,6 @@ export default class TripPresenter {
   #renderBoard = () => {
     const events = this.events;
     const eventsCount = events.length;
-    this.#renderPriceAndRoute();
     if (eventsCount === 0) {
       this.#renderNoEvents();
       return;
