@@ -8,8 +8,9 @@ import SortView from '../view/sort-view.js';
 import NoEventsView from '../view/no-events-view.js';
 // import TripInfoView from '../view/trip-info-view.js';
 // import CostView from '../view/cost-view.js';
-import EventPresenter from './event-presenter.js';
+import EventPresenter, { State } from './event-presenter.js';
 import { DEFAULT_EVENT } from '../const.js';
+import LoadingView from '../view/loading-view.js';
 
 export default class TripPresenter {
   #tripMainContainer = null;
@@ -23,11 +24,12 @@ export default class TripPresenter {
 
   #eventsListComponent = new EventsListView();
   #noEventsComponent = null;
-
   #eventPresenter = new Map();
   #currentSortType = SortType.DEFAULT;
   #filterType = FilterType.EVERYTHING;
   #eventNewPresenter = null;
+  #isLoading = true;
+  #loadingComponent = new LoadingView();
 
   constructor(tripMainContainer, tripEventsContainer, eventsModel, filterModel) {
     this.#tripMainContainer = tripMainContainer;
@@ -88,19 +90,36 @@ export default class TripPresenter {
     this.#eventPresenter.forEach((presenter) => presenter.resetView());
   }
 
-  #handleViewAction = (actionType, updateType, update) => {
+  #handleViewAction = async (actionType, updateType, update) => {
     // console.log(actionType, updateType, update);
     switch (actionType) {
       case UserAction.UPDATE_EVENT:
-        this.#eventsModel.updateEvent(updateType, update);
+        this.#eventPresenter.get(update.id).setViewState(State.SAVING);
+        try {
+          await this.#eventsModel.updateEvent(updateType, update);
+        } catch (err) {
+          this.#eventPresenter.get(update.id).setViewState(State.ABORTING);
+        }
         break;
 
       case UserAction.ADD_EVENT:
-        this.#eventsModel.addEvent(updateType, update);
+        //добавить метод .setSaving() в eventNewPresenter:
+        this.#eventNewPresenter.setSaving();
+        try {
+          await this.#eventsModel.addEvent(updateType, update);
+        } catch (err) {
+          //добавить метод .setAborting() в eventNewPresenter:
+          this.#eventNewPresenter.setAborting();
+        }
         break;
 
       case UserAction.DELETE_EVENT:
-        this.#eventsModel.deleteEvent(updateType, update);
+        this.#eventPresenter.get(update.id).setViewState(State.DELETING);
+        try {
+          await this.#eventsModel.deleteEvent(updateType, update);
+        } catch (err) {
+          this.#eventPresenter.get(update.id).setViewState(State.ABORTING);
+        }
         break;
     }
   }
@@ -127,8 +146,8 @@ export default class TripPresenter {
         }
         break;
       case UpdateType.INIT:
-        // this.#isLoading = false;
-        // remove(this.#loadingComponent);
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
         this.#renderBoard();
         break;
     }
@@ -189,13 +208,20 @@ export default class TripPresenter {
     const events = this.events;
     const eventsCount = events.length;
     this.#renderPriceAndRoute();
-    if (eventsCount === 0) {
-      this.#renderNoEvents();
-      return;
+    if (this.#isLoading) {
+      this.#renderLoading();
+    } else {
+      if (eventsCount === 0) {
+        this.#renderNoEvents();
+        return;
+      }
+      this.#renderSort();
+      this.#renderListEvent();
+      this.#renderEvents(events);
     }
-    this.#renderSort();
-    this.#renderListEvent();
-    this.#renderEvents(events);
+  }
 
+  #renderLoading = () => {
+    render(this.#tripEventsContainer, this.#loadingComponent, RenderPosition.AFTERBEGIN);
   }
 }
