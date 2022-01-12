@@ -5,8 +5,6 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 import dayjs from 'dayjs';
 import { eventDurationFormat } from '../utils/event-utils.js';
 
-const TypeColors = ['#158DEB', '#FFD054'];
-
 const getUniqueTypes = (events) => {
   const uniqueTypes = new Set();
   events.map((event) => uniqueTypes.add(event.type));
@@ -62,14 +60,12 @@ const calculateTypeTime = (events) => {
 
 const BAR_HEIGHT = 55;
 
-
 const renderMoneyChart = (moneyCtx, events) => {
   moneyCtx.height = BAR_HEIGHT * 5;
 
   const eventTypesCost = calculateTypeCost(events);
   const typeLabels = [...eventTypesCost.keys()];
   const typeValues = [...eventTypesCost.values()];
-  const typeColors = typeLabels.map((item, index) => index % 2 === 0 ? TypeColors[0] : TypeColors[1]);
 
   const moneyChart = new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
@@ -78,8 +74,7 @@ const renderMoneyChart = (moneyCtx, events) => {
       labels: typeLabels,
       datasets: [{
         data: typeValues,
-        backgroundColor: typeColors,
-        hoverBackgroundColor: '#ffffff',
+        backgroundColor: '#ffffff',
         anchor: 'start',
         barThickness: 44,
         minBarLength: 50,
@@ -143,7 +138,6 @@ const renderTypeChart = (typeCtx, events) => {
   const eventTypesCount = calculateTypeCount(events);
   const typeLabels = [...eventTypesCount.keys()];
   const typeValues = [...eventTypesCount.values()];
-  const typeColors = typeLabels.map((index) => index % 2 === 0 ? TypeColors[0] : TypeColors[1]);
 
   const typeChart = new Chart(typeCtx, {
     plugins: [ChartDataLabels],
@@ -152,8 +146,7 @@ const renderTypeChart = (typeCtx, events) => {
       labels: typeLabels,
       datasets: [{
         data: typeValues,
-        backgroundColor: typeColors,
-        hoverBackgroundColor: '#ffffff',
+        backgroundColor: '#ffffff',
         anchor: 'start',
         barThickness: 44,
         minBarLength: 50,
@@ -217,7 +210,6 @@ const renderTimeChart = (timeCtx, events) => {
   const eventTypesTime = calculateTypeTime(events);
   const typeLabels = [...eventTypesTime.keys()];
   const typeValues = [...eventTypesTime.values()];
-  const typeColors = typeLabels.map((item, index) => index % 2 === 0 ? TypeColors[0] : TypeColors[1]);
 
   const timeChart = new Chart(timeCtx, {
     plugins: [ChartDataLabels],
@@ -226,8 +218,7 @@ const renderTimeChart = (timeCtx, events) => {
       labels: typeLabels,
       datasets: [{
         data: typeValues,
-        backgroundColor: typeColors,
-        hoverBackgroundColor: '#ffffff',
+        backgroundColor: '#ffffff',
         anchor: 'start',
         barThickness: 44,
         minBarLength: 50,
