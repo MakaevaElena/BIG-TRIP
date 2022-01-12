@@ -1,6 +1,7 @@
 import EventView from '../view/event-view.js';
 import EditEventView from '../view/edit-event-view.js';
 import { render, RenderPosition, replace, remove } from '../utils/render.js';
+import { UserAction, UpdateType } from '../const.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -9,7 +10,7 @@ const Mode = {
 
 export default class EventPresenter {
   #eventsListContainer = null;
-  #changeDate = null;
+  #changeData = null;
   #changeMode = null;
 
   #eventComponent = null;
@@ -18,26 +19,24 @@ export default class EventPresenter {
   #event = null;
   #mode = Mode.DEFAULT;
 
-  constructor(eventsListContainer, changeDate, changeMode) {
+  constructor(eventsListContainer, changeData, changeMode) {
     this.#eventsListContainer = eventsListContainer;
-    this.#changeDate = changeDate;
+    this.#changeData = changeData;
     this.#changeMode = changeMode;
   }
 
-  init = (event) => {
+  init = (event, offers, destinations) => {
     this.#event = event;
 
     const prevEventComponent = this.#eventComponent;
     const prevEditEventComponent = this.#editEventComponent;
-
     this.#eventComponent = new EventView(event);
-
-    this.#editEventComponent = new EditEventView(event);
+    this.#editEventComponent = new EditEventView(event, offers, destinations);
 
     this.#eventComponent.setEditClickHandler(this.#handleEditClick);
     this.#eventComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#editEventComponent.setFormSubmitHandler(this.#handleFormSubmit);
-    this.#editEventComponent.setDeleteHandler(this.#deleteEvent);
+    this.#editEventComponent.setDeleteClickHandler(this.#handleDeleteEvent);
     this.#editEventComponent.setCloseHandler(this.#handleCloseEditClick);
 
     if (prevEventComponent === null || prevEditEventComponent === null) {
@@ -69,9 +68,20 @@ export default class EventPresenter {
     }
   }
 
-  #deleteEvent = () => {
-    remove(this.#eventComponent);
-    remove(this.#editEventComponent);
+  #handleDeleteEvent = (event) => {
+    this.#changeData(
+      UserAction.DELETE_EVENT,
+      UpdateType.MINOR,
+      event,
+    );
+  }
+
+  #handleFormSubmit = (update) => {
+    this.#changeData(
+      UserAction.UPDATE_EVENT,
+      UpdateType.MINOR,
+      update,
+    );
   }
 
   #replaceEventToForm = () => {
@@ -96,7 +106,11 @@ export default class EventPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#changeDate({ ...this.#event, isFavorite: !this.#event.isFavorite });
+    this.#changeData(
+      UserAction.UPDATE_EVENT,
+      UpdateType.MINOR,
+      { ...this.#event, isFavorite: !this.#event.isFavorite },
+    );
   }
 
   #handleEditClick = () => {
@@ -104,12 +118,6 @@ export default class EventPresenter {
   }
 
   #handleCloseEditClick = () => {
-    this.#editEventComponent.reset(this.#event);
-    this.#replaceFormToEvent();
-  }
-
-  #handleFormSubmit = (event) => {
-    this.#changeDate(event);
     this.#replaceFormToEvent();
   }
 

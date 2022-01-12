@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
-import { createDateTemplate } from '../utils/event-utils.js';
+import { createDateTemplate, eventDurationFormat } from '../utils/event-utils.js';
 import AbstractView from './abstract-view.js';
+import he from 'he';
 
 const EVENT_DATE_FORMAT = 'MMM D';
 const TIME_FORMAT = 'HH:mm';
@@ -10,14 +11,7 @@ const createTypeIconTemplate = (type) =>
     <img class="event__type-icon" width="42" height="42" src="img/icons/${String(type).toLowerCase()}.png" alt="Event ${type} icon">
   </div>`;
 
-const createTitleTemplate = (type, destination) => `<h3 class="event__title">${type} ${destination.name}</h3>`;
-
-const eventDurationFormat = (duration) => {
-  const minutesDuration = duration % 60 > 0 ? `${duration % 60}M` : '';
-  const hoursDuration = Math.floor(duration / 60) % 24 > 0 ? `${Math.floor(duration / 60) % 24}H ` : '';
-  const daysDuration = Math.floor((duration / 60) / 24) > 0 ? `${Math.floor((duration / 60) / 24)}D ` : '';
-  return daysDuration + hoursDuration + minutesDuration;
-};
+const createTitleTemplate = (type, destination) => `<h3 class="event__title">${type} ${he.encode(destination.name)}</h3>`;
 
 const createScheduleTemplate = (dateFrom, dateTo) => {
   const startTimeFormat = dayjs(dateFrom).format(TIME_FORMAT);
