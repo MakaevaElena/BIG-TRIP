@@ -54,8 +54,7 @@ eventsModel.init().finally(() => {
 });
 
 addNewEventButton.addEventListener('click', (evt) => {
-  evt.preventDefault();
-
+  evt.preventDefault(); 
 
   tripPresenter.createEvent();
 });

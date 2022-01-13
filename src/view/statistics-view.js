@@ -1,7 +1,7 @@
 import SmartView from '../view/smart-view.js';
+
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-
 import dayjs from 'dayjs';
 import { eventDurationFormat } from '../utils/event-utils.js';
 

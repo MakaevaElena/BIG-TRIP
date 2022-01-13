@@ -19,9 +19,6 @@ export default class TripPresenter {
   #sortComponent = null;
   #filterModel = null;
 
-  // #tripInfoComponent = new TripInfoView(this.events);
-  // #costComponent = new CostView(this.events);
-
   #eventsListComponent = new EventsListView();
   #noEventsComponent = null;
   #eventPresenter = new Map();
@@ -169,11 +166,6 @@ export default class TripPresenter {
   #renderNoEvents = () => {
     this.#noEventsComponent = new NoEventsView(this.#filterType);
     render(this.#tripEventsContainer, this.#noEventsComponent, RenderPosition.BEFOREEND);
-  }
-
-  #renderPriceAndRoute = () => {
-    // render(this.#tripMainContainer, this.#tripInfoComponent, RenderPosition.AFTERBEGIN);
-    // render(this.#tripInfoComponent, this.#costComponent, RenderPosition.BEFOREEND);
   }
 
   #clearBoard = () => {
