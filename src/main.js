@@ -10,7 +10,6 @@ import ApiService from './api-service.js';
 
 const AUTHORIZATION = 'Basic koshkakartoshka';
 const END_POINT = 'https://16.ecmascript.pages.academy/big-trip';
-
 const eventsModel = new EventsModel(new ApiService(END_POINT, AUTHORIZATION));
 let statisticsComponent = null;
 const filterModel = new FilterModel();
