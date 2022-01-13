@@ -3,13 +3,11 @@ import { WAYPOINT_TYPES, DESTINATIONS } from '../mocks/data-mock.js';
 import SmartView from './smart-view.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
-// import { generateOffers } from '../mocks/utils-mock.js';
 import { generateDestinations } from '../mocks/event-mock.js';
 import he from 'he';
 import { DEFAULT_EVENT } from '../const.js';
 import dayjs from 'dayjs';
 
-// const DATE_TIME_FORMAT = 'YYYY/MM/DD HH:mm';
 const DATE_TIME_FORMAT = 'DD/MM/YY HH:mm';
 
 const findObjectfromArray = (arr, value) => arr.find((obj) => obj.name === value);
@@ -240,8 +238,6 @@ export default class EditEventView extends SmartView {
     this.element.querySelector('.event__type-list').addEventListener('change', this.#typeChangeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
     this.element.querySelector('.event__input--price').addEventListener('input', this.#onPriceInput);
-    // this.element.querySelector('input[name=event-end-time]').addEventListener('input', this.#onDateToInput);
-    // this.element.querySelector('input[name=event-start-time]').addEventListener('input', this.#onDateFromInput);
     this.#setDatepickerStart();
     this.#setDatepickerEnd();
     this.element.querySelector('.event__available-offers').addEventListener('change', this.#offerChangeHandler);
@@ -305,13 +301,10 @@ export default class EditEventView extends SmartView {
   }
 
   #typeChangeHandler = (evt) => {
-    // console.log(this.#possibleOffers);
-
     evt.preventDefault();
 
     this.updateData({
       type: evt.target.value,
-      // offers: generateOffers(evt.target.value, 5),
       offers: findObjectfromArray(this.#possibleOffers, evt.target.value),
     }
     );
@@ -319,14 +312,6 @@ export default class EditEventView extends SmartView {
 
   #offerChangeHandler = (evt) => {
     evt.preventDefault();
-    // const checkedOffers = Array.from(document.querySelectorAll('.event__offer-checkbox:checked'));
-    // const offerIds = checkedOffers.map((element) => element.dataset.id);
-
-    // const offers = this._data.offers.filter((offer) => offerIds.filter((offerId) => offer.id === offerId));
-
-    // console.log(this._data.offers);
-    // console.log(offerIds);
-    // console.log(offers);
 
     const checkedOffers = Array.from(document.querySelectorAll('.event__offer-checkbox:checked'));
     const checkedOffersValues = checkedOffers.map((offer) => ({
@@ -352,20 +337,6 @@ export default class EditEventView extends SmartView {
       basePrice: evt.target.value,
     }, true);
   }
-
-  // #onDateToInput = (evt) => {
-  //   evt.preventDefault();
-  //   this.updateData({
-  //     dateTo: evt.target.value,
-  //   }, true);
-  // }
-
-  // #onDateFromInput = (evt) => {
-  //   evt.preventDefault();
-  //   this.updateData({
-  //     dateFrom: evt.target.value,
-  //   }, true);
-  // }
 
   static parseEventToData = (event) => ({ ...event });
   static parseDataToEvents = (data) => ({ ...data });

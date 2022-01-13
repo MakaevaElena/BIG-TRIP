@@ -9,8 +9,6 @@ const MAX_DURATION_HOURS = 100;
 const MIN_DURATION_MINUTES = 1;
 const MAX_DURATION_MINUTES = 59;
 
-// Даты
-
 const generateDateFrom = () => {
 
   const daysGap = getRandomInteger(-MAX_HOURS_GAP, MAX_HOURS_GAP);
@@ -37,22 +35,18 @@ const generateDateTo = (dateFrom) => {
   return dateTo;
 };
 
-// Описание
 const generateDescription = () => {
   const randomIndex = getRandomInteger(0, DESCRIPTIONS.length - 1);
   return DESCRIPTIONS[randomIndex];
 };
 
-// Название
 const generateTitle = () => {
   const randomIndex = getRandomInteger(0, TITLES.length - 1);
   return TITLES[randomIndex];
 };
 
-// Тип
 const generateEventType = () => getRandomArrayItem(WAYPOINT_TYPES);
 
-// Фото
 const generatePhotos = (max) => {
   const photoCounts = getRandomInteger(0, max);
   const photos = [];
@@ -69,7 +63,6 @@ const generatePhotos = (max) => {
   return photos;
 };
 
-// Опции
 const generateOffers = (type, max) => {
   const offersCount = getRandomInteger(0, max);
 

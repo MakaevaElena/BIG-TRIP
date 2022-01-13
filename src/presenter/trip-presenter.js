@@ -103,12 +103,10 @@ export default class TripPresenter {
         break;
 
       case UserAction.ADD_EVENT:
-        //добавить метод .setSaving() в eventNewPresenter:
         this.#eventNewPresenter.setSaving();
         try {
           await this.#eventsModel.addEvent(updateType, update);
         } catch (err) {
-          //добавить метод .setAborting() в eventNewPresenter:
           this.#eventNewPresenter.setAborting();
         }
         break;
@@ -128,7 +126,6 @@ export default class TripPresenter {
     switch (updateType) {
       case UpdateType.PATCH:
         this.#eventPresenter.get(data.id).init(data, this.#eventsModel.offers, this.#eventsModel.destinations);
-        // console.log(this.#eventsModel.offers);
         break;
       case UpdateType.MINOR:
         this.#clearBoard();

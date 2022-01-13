@@ -6,7 +6,7 @@ const RenderPosition = {
   BEFOREEND: 'beforeend',
   AFTEREND: 'afterend',
 };
-// 4.1.6 Научим метод render вызывать геттер element у компонентов
+
 const render = (container, element, place) => {
   const parent = container instanceof AbstractView ? container.element : container;
   const child = element instanceof AbstractView ? element.element : element;
