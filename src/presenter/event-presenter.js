@@ -35,7 +35,7 @@ export default class EventPresenter {
 
     const prevEventComponent = this.#eventComponent;
     const prevEditEventComponent = this.#editEventComponent;
-    this.#eventComponent = new EventView(event);
+    this.#eventComponent = new EventView(event, offers);
     this.#editEventComponent = new EditEventView(event, offers, destinations);
 
     this.#eventComponent.setEditClickHandler(this.#handleEditClick);
@@ -124,6 +124,7 @@ export default class EventPresenter {
   }
 
   #handleCloseEditClick = () => {
+    this.#editEventComponent.reset(this.#event);
     this.#replaceFormToEvent();
   }
 

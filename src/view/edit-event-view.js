@@ -3,11 +3,14 @@ import { WAYPOINT_TYPES, DESTINATIONS } from '../mocks/data-mock.js';
 import SmartView from './smart-view.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
-import { generateOffers } from '../mocks/utils-mock.js';
+// import { generateOffers } from '../mocks/utils-mock.js';
 import { generateDestinations } from '../mocks/event-mock.js';
 import he from 'he';
+import { DEFAULT_EVENT } from '../const.js';
+import dayjs from 'dayjs';
 
-const DATE_TIME_FORMAT = 'YYYY/MM/DD HH:mm';
+// const DATE_TIME_FORMAT = 'YYYY/MM/DD HH:mm';
+const DATE_TIME_FORMAT = 'DD/MM/YY HH:mm';
 
 const findObjectfromArray = (arr, value) => arr.find((obj) => obj.name === value);
 
@@ -28,7 +31,7 @@ const createCityOptionsTemplate = () => DESTINATIONS.map((cityName) => createCit
 
 const createEditOfferTemplate = (offer) => (
   `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${offer.id}" type="checkbox" name="event-offer-luggage" data-id="${offer.id}">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${offer.id}" type="checkbox" name="event-offer-luggage" data-id="${offer.id}" data-title="${offer.title}" data-price="${offer.price}">
       <label class="event__offer-label" for="event-offer-luggage-${offer.id}">
       <span class="event__offer-title">${offer.title}</span>
                           &plus;&euro;&nbsp;
@@ -72,7 +75,19 @@ const createEditEventTemplate = (data) => {
     basePrice,
   } = data;
 
-  return `<li class="trip-events__item">
+  const isEditForm = {
+    ROLLUP_BUTTON_CLASS: 'event__rollup-btn',
+    RESET_BUTTON_NAME: 'Delete',
+    ADD_FORM_CLASS: '',
+  };
+
+  if (data.id === DEFAULT_EVENT.id) {
+    isEditForm.ROLLUP_BUTTON_CLASS = 'visually-hidden';
+    isEditForm.RESET_BUTTON_NAME = 'Cancel';
+    isEditForm.ADD_FORM_CLASS = '';
+  }
+
+  return `<li class="trip-events__item ${isEditForm.ADD_FORM_CLASS}">
   <form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
@@ -117,8 +132,8 @@ const createEditEventTemplate = (data) => {
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-      <button class="event__reset-btn" type="reset">Delete</button>
-      <button class="event__rollup-btn" type="button">
+      <button class="event__reset-btn" type="reset">${isEditForm.RESET_BUTTON_NAME}</button>
+      <button class="${isEditForm.ROLLUP_BUTTON_CLASS}" type="button">
         <span class="visually-hidden">Open event</span>
       </button>
     </header>
@@ -170,7 +185,7 @@ export default class EditEventView extends SmartView {
     this.#setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setCloseHandler(this._callback.closeEdit);
-    this.setDeleteClickHandler(this._callback.eventReset);
+    // this.setDeleteClickHandler(this._callback.eventReset);
     this.#setDatepickerStart();
     this.#setDatepickerEnd();
   }
@@ -211,13 +226,13 @@ export default class EditEventView extends SmartView {
 
   #dateStartChangeHandler = ([userDate]) => {
     this.updateData({
-      dateFrom: userDate,
+      dateFrom: dayjs(userDate),
     });
   }
 
   #dateEndChangeHandler = ([userDate]) => {
     this.updateData({
-      dateTo: userDate,
+      dateTo: dayjs(userDate),
     });
   }
 
@@ -225,11 +240,12 @@ export default class EditEventView extends SmartView {
     this.element.querySelector('.event__type-list').addEventListener('change', this.#typeChangeHandler);
     this.element.querySelector('.event__input--destination').addEventListener('change', this.#destinationChangeHandler);
     this.element.querySelector('.event__input--price').addEventListener('input', this.#onPriceInput);
-    this.element.querySelector('input[name=event-end-time]').addEventListener('input', this.#onDateToInput);
-    this.element.querySelector('input[name=event-start-time]').addEventListener('input', this.#onDateFromInput);
+    // this.element.querySelector('input[name=event-end-time]').addEventListener('input', this.#onDateToInput);
+    // this.element.querySelector('input[name=event-start-time]').addEventListener('input', this.#onDateFromInput);
     this.#setDatepickerStart();
     this.#setDatepickerEnd();
     this.element.querySelector('.event__available-offers').addEventListener('change', this.#offerChangeHandler);
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#eventResetHandler);
   }
 
   reset = (event) => {
@@ -243,12 +259,20 @@ export default class EditEventView extends SmartView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
+    this.#showSaving();
     this._callback.formSubmit(EditEventView.parseDataToEvents(this._data));
   }
 
   setCloseHandler = (callback) => {
-    this._callback.closeEdit = callback;
-    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#closeHandler);
+    const editRollupButton = this.element.querySelector('.event__rollup-btn');
+    if (editRollupButton !== null) {
+      this._callback.closeEdit = callback;
+      editRollupButton.addEventListener('click', this.#closeHandler);
+    }
+  }
+
+  #showSaving = () => {
+    this.element.querySelector('.event__save-btn').textContent = 'Saving...';
   }
 
   #closeHandler = (evt) => {
@@ -259,37 +283,59 @@ export default class EditEventView extends SmartView {
   setDeleteClickHandler = (callback) => {
     this._callback.eventReset = callback;
     this.element.querySelector('.event__reset-btn').addEventListener('click', this.#eventResetHandler);
-    // this.element.querySelector('.trip-main__event-add-btn').addEventListener('click', this.#eventResetHandler);
   }
 
   #eventResetHandler = (evt) => {
     evt.preventDefault();
+    this.#showDeleting();
+    this.#showDisabled();
     this._callback.eventReset(EditEventView.parseDataToEvents(this._data));
   }
 
+  #showDeleting = () => {
+    this.element.querySelector('.event__reset-btn').textContent = 'Deleting...';
+  }
+
+  #showDisabled = () => {
+    this.element.querySelectorAll(
+      'fieldset, input:not(.visually-hidden), button, .event__offer-checkbox')
+      .forEach((element) => {
+        element.disabled = true;
+      });
+  }
+
   #typeChangeHandler = (evt) => {
+    // console.log(this.#possibleOffers);
+
     evt.preventDefault();
+
     this.updateData({
       type: evt.target.value,
       // offers: generateOffers(evt.target.value, 5),
-      offers: this.#possibleOffers(evt.target.value),
+      offers: findObjectfromArray(this.#possibleOffers, evt.target.value),
     }
     );
   }
 
   #offerChangeHandler = (evt) => {
     evt.preventDefault();
-    const checkedOffers = Array.from(document.querySelectorAll('.event__offer-checkbox:checked'));
-    const offerIds = checkedOffers.map((element) => element.dataset.id);
+    // const checkedOffers = Array.from(document.querySelectorAll('.event__offer-checkbox:checked'));
+    // const offerIds = checkedOffers.map((element) => element.dataset.id);
 
-    const offers = this._data.offers.filter((offer) => offerIds.filter((offerId) => offer.id === offerId));
+    // const offers = this._data.offers.filter((offer) => offerIds.filter((offerId) => offer.id === offerId));
 
     // console.log(this._data.offers);
     // console.log(offerIds);
     // console.log(offers);
 
+    const checkedOffers = Array.from(document.querySelectorAll('.event__offer-checkbox:checked'));
+    const checkedOffersValues = checkedOffers.map((offer) => ({
+      title: offer.dataset.title,
+      price: offer.dataset.price,
+    }));
+
     this.updateData({
-      offers: offers,
+      offers: checkedOffersValues,
     }, true);
   }
 
@@ -307,19 +353,19 @@ export default class EditEventView extends SmartView {
     }, true);
   }
 
-  #onDateToInput = (evt) => {
-    evt.preventDefault();
-    this.updateData({
-      dateTo: evt.target.value,
-    }, true);
-  }
+  // #onDateToInput = (evt) => {
+  //   evt.preventDefault();
+  //   this.updateData({
+  //     dateTo: evt.target.value,
+  //   }, true);
+  // }
 
-  #onDateFromInput = (evt) => {
-    evt.preventDefault();
-    this.updateData({
-      dateFrom: evt.target.value,
-    }, true);
-  }
+  // #onDateFromInput = (evt) => {
+  //   evt.preventDefault();
+  //   this.updateData({
+  //     dateFrom: evt.target.value,
+  //   }, true);
+  // }
 
   static parseEventToData = (event) => ({ ...event });
   static parseDataToEvents = (data) => ({ ...data });

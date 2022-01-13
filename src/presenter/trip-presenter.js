@@ -128,6 +128,7 @@ export default class TripPresenter {
     switch (updateType) {
       case UpdateType.PATCH:
         this.#eventPresenter.get(data.id).init(data, this.#eventsModel.offers, this.#eventsModel.destinations);
+        // console.log(this.#eventsModel.offers);
         break;
       case UpdateType.MINOR:
         this.#clearBoard();

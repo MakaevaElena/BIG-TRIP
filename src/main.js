@@ -29,23 +29,17 @@ const filterPresenter = new FilterPresenter(filterElement, filterModel, eventsMo
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.TABLE:
-      // Показать фильтры
       filterPresenter.destroy();
       filterPresenter.init();
-      // Показать доску
       tripPresenter.destroy();
       tripPresenter.init();
-      // Скрыть статистику
       remove(statisticsComponent);
       siteMenuComponent.setMenuItem(MenuItem.TABLE);
       break;
 
     case MenuItem.STATS:
-      // Скрыть фильтры
       filterPresenter.destroy();
-      // Скрыть доску
       tripPresenter.destroy();
-      // Показать статистику
       statisticsComponent = new StatisticsView(eventsModel.events);
       render(tripEventsElement, statisticsComponent, RenderPosition.BEFOREEND);
       siteMenuComponent.setMenuItem(MenuItem.STATS);

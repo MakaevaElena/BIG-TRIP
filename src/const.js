@@ -36,7 +36,7 @@ const DEFAULT_EVENT = {
   dateTo: dayjs().add(3, 'd'),
   destination: {
     description: 'Description of New City',
-    name: 'New City',
+    name: '',
     pictures: [],
   },
   id: 80,
