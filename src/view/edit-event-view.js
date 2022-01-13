@@ -8,6 +8,7 @@ import he from 'he';
 import { DEFAULT_EVENT } from '../const.js';
 import dayjs from 'dayjs';
 
+// const DATE_TIME_FORMAT = 'YYYY/MM/DD HH:mm';
 const DATE_TIME_FORMAT = 'DD/MM/YY HH:mm';
 
 const findObjectfromArray = (arr, value) => arr.find((obj) => obj.name === value);
