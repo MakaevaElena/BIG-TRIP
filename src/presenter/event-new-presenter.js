@@ -20,7 +20,6 @@ export default class EventNewPresenter {
     this.#eventEditComponent = new EditEventView(event);
     this.#eventEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#eventEditComponent.setDeleteClickHandler(this.#handleDeleteClick);
-    // this.#eventEditComponent.setCloseHandler(this.#handleCloseEditClick);
 
     render(this.#eventListContainer, this.#eventEditComponent, RenderPosition.AFTERBEGIN);
 

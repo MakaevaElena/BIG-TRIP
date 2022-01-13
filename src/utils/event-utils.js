@@ -2,7 +2,6 @@ import dayjs from 'dayjs';
 
 const createDateTemplate = (dateFrom, format) => dayjs(dateFrom).format(format);
 
-//2.17 tasckmanager
 const sortByDate = (events) => {
   const eventsByDay = events.slice().sort((a, b) => a.dateFrom - b.dateFrom);
 

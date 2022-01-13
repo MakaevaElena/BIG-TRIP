@@ -276,10 +276,6 @@ export default class EditEventView extends SmartView {
 
     const offers = this._data.offers.filter((offer) => offerIds.filter((offerId) => offer.id === offerId));
 
-    // console.log(this._data.offers);
-    // console.log(offerIds);
-    // console.log(offers);
-
     this.updateData({
       offers: offers,
     }, true);

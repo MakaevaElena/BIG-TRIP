@@ -30,8 +30,6 @@ const MenuItem = {
   STATS: 'stats',
 };
 
-// const TypeColors = ['#158DEB', '#FFD054'];
-
 const DEFAULT_EVENT = {
   basePrice: 2000,
   dateFrom: dayjs(),
