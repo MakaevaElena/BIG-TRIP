@@ -1,17 +1,13 @@
 import { createDateTemplate } from '../utils/event-utils.js';
 import { WAYPOINT_TYPES } from '../mocks/data-mock.js';
-// import { DESTINATIONS } from '../mocks/data-mock.js';
 import SmartView from './smart-view.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
-// import { generateDestinations } from '../mocks/event-mock.js';
 import he from 'he';
 import { DEFAULT_EVENT } from '../const.js';
 import dayjs from 'dayjs';
 
 const DATE_TIME_FORMAT = 'DD/MM/YY HH:mm';
-
-// const findObjectfromArray = (arr, value) => arr.find((obj) => obj.name === value);
 
 const createTypeTemplate = (id, type, currentType) => {
   const isChecked = currentType === type ? 'checked' : '';
@@ -26,8 +22,6 @@ const typesInLowerCase = WAYPOINT_TYPES.map((type) => type.toLowerCase());
 const createTypeListTemplate = (id, currentType) => typesInLowerCase.map((type) => createTypeTemplate(id, type, currentType)).join('');
 
 const createCityOptionTemplate = (cityName) => `<option value="${cityName}"></option>`;
-//! получить направления с сервера
-// const createCityOptionsTemplate = (serverDestinations) => serverDestinations.map((cityName) => createCityOptionTemplate(cityName)).join('');
 
 const createCityOptionsTemplate = (serverDestinations) => {
   let dataListContentTemplate = '';
@@ -82,8 +76,6 @@ const createEditEventTemplate = (data, possibleOffers, possibleDestinations) => 
     dateTo,
     basePrice,
   } = data;
-
-  // console.log(destination);
 
   const isEditForm = {
     ROLLUP_BUTTON_CLASS: 'event__rollup-btn',
@@ -175,9 +167,6 @@ export default class EditEventView extends SmartView {
   #possibleDestinations = null;
 
   constructor(event, possibleOffers, possibleDestinations) {
-    // console.log(event);
-    // console.log(possibleOffers);
-    // console.log(possibleDestinations);
     super();
     this._data = EditEventView.parseEventToData(event);
     this.#possibleOffers = possibleOffers;
@@ -195,7 +184,6 @@ export default class EditEventView extends SmartView {
     this.#setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setCloseHandler(this._callback.closeEdit);
-    // this.setDeleteClickHandler(this._callback.eventReset);
     this.#setDatepickerStart();
     this.#setDatepickerEnd();
   }
@@ -315,10 +303,6 @@ export default class EditEventView extends SmartView {
 
   #typeChangeHandler = (evt) => {
     evt.preventDefault();
-
-    // console.log(evt.target.value);
-    // console.log(this.#possibleOffers);
-
     this.updateData({
       type: evt.target.value,
       offers: this.#possibleOffers[evt.target.value],
@@ -330,10 +314,6 @@ export default class EditEventView extends SmartView {
     evt.preventDefault();
 
     const checkedOffers = Array.from(this.element.querySelectorAll('.event__offer-checkbox:checked'));
-    // console.log(checkedOffers);
-
-    // const offerIds = checkedOffers.map((offer) => Number(offer.dataset.id));
-    // console.log(offerIds);
 
     const checkedOffersValues = checkedOffers.map((offer) => ({
       id: Number(offer.dataset.id),
@@ -341,38 +321,23 @@ export default class EditEventView extends SmartView {
       price: Number(offer.dataset.price),
     }));
 
-    // console.log(this.#possibleOffers);
-    // const offers = this.#possibleOffers.filter((offer) => checkedOffers.find((item) => offer.id === item.dataset.id));
-    // const currentOffers = this.#possibleOffers.find((offer) => offer.type === this._data.type);
-    // console.log(currentOffers);
-    // console.log(this._data.type);
-    // const offers = this.#possibleOffers.map((offer) => Number(offer.id) === Number(checkedOffers.dataset.id));
-    // console.log(checkedOffersValues);
-
     this.updateData({
       offers: checkedOffersValues,
     }, true);
   }
 
-  //! моковые описания
   #destinationChangeHandler = (evt) => {
     evt.preventDefault();
 
     const newDestination = this.#possibleDestinations.find((destination) => destination.name === evt.target.value);
 
-    if (newDestination) { // Если введёный город есть в datalist, то производит изменение.
-      this.updateData({  // Иначе - выдаёт сообщение setCustomValidity
-        destination: {
-          description: newDestination.description,
-          name: newDestination.name,
-          pictures: newDestination.pictures,
-        },
-      });
-    } else {
-      this.element.querySelector('.event__input--destination')
-        .setCustomValidity('This city is not available');
-      this.element.querySelector('.event__input--destination').reportValidity();
-    }
+    this.updateData({
+      destination: {
+        description: newDestination.description,
+        name: newDestination.name,
+        pictures: newDestination.pictures,
+      },
+    });
 
   };
 

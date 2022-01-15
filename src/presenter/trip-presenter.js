@@ -6,6 +6,7 @@ import EventNewPresenter from './event-new-presenter.js';
 import EventsListView from '../view/events-list-view.js';
 import SortView from '../view/sort-view.js';
 import NoEventsView from '../view/no-events-view.js';
+// эти блоки нарисую в доп задании
 // import TripInfoView from '../view/trip-info-view.js';
 // import CostView from '../view/cost-view.js';
 import EventPresenter, { State } from './event-presenter.js';
@@ -88,7 +89,6 @@ export default class TripPresenter {
   }
 
   #handleViewAction = async (actionType, updateType, update) => {
-    // console.log(actionType, updateType, update);
     switch (actionType) {
       case UserAction.UPDATE_EVENT:
         this.#eventPresenter.get(update.id).setViewState(State.SAVING);

@@ -22,7 +22,6 @@ export default class EventsModel extends AbstractObservable {
     }
 
     try {
-      // this.#offers = await this.#apiService.offers;
       const offers = await this.#apiService.offers;
       this.#offers = this.#adaptOffersToClient(offers);
     } catch (err) {
@@ -31,10 +30,7 @@ export default class EventsModel extends AbstractObservable {
 
     try {
       this.#destinations = await this.#apiService.destinations;
-      // const destinations = await this.#apiService.destinations;
-      // this.#destinations = destinations;
     } catch {
-      // this.#destinations = getDestinationsFromEvents(this.points);
       this.#destinations = [];
     }
 
