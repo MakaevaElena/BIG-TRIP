@@ -1,5 +1,6 @@
 import { createDateTemplate } from '../utils/event-utils.js';
-import { WAYPOINT_TYPES, DESTINATIONS } from '../mocks/data-mock.js';
+import { WAYPOINT_TYPES } from '../mocks/data-mock.js';
+// import { DESTINATIONS } from '../mocks/data-mock.js';
 import SmartView from './smart-view.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
@@ -8,10 +9,9 @@ import he from 'he';
 import { DEFAULT_EVENT } from '../const.js';
 import dayjs from 'dayjs';
 
-// const DATE_TIME_FORMAT = 'YYYY/MM/DD HH:mm';
 const DATE_TIME_FORMAT = 'DD/MM/YY HH:mm';
 
-const findObjectfromArray = (arr, value) => arr.find((obj) => obj.name === value);
+// const findObjectfromArray = (arr, value) => arr.find((obj) => obj.name === value);
 
 const createTypeTemplate = (id, type, currentType) => {
   const isChecked = currentType === type ? 'checked' : '';
@@ -26,7 +26,16 @@ const typesInLowerCase = WAYPOINT_TYPES.map((type) => type.toLowerCase());
 const createTypeListTemplate = (id, currentType) => typesInLowerCase.map((type) => createTypeTemplate(id, type, currentType)).join('');
 
 const createCityOptionTemplate = (cityName) => `<option value="${cityName}"></option>`;
-const createCityOptionsTemplate = () => DESTINATIONS.map((cityName) => createCityOptionTemplate(cityName)).join('');
+//! получить направления с сервера
+// const createCityOptionsTemplate = (serverDestinations) => serverDestinations.map((cityName) => createCityOptionTemplate(cityName)).join('');
+
+const createCityOptionsTemplate = (serverDestinations) => {
+  let dataListContentTemplate = '';
+  serverDestinations.forEach((serverDestination) => {
+    dataListContentTemplate += createCityOptionTemplate(serverDestination.name);
+  });
+  return dataListContentTemplate;
+};
 
 const createEditOfferTemplate = (offer) => (
   `<div class="event__offer-selector">
@@ -63,7 +72,7 @@ const createPhotosContainer = (destination) => {
 </div>`;
 };
 
-const createEditEventTemplate = (data) => {
+const createEditEventTemplate = (data, possibleOffers, possibleDestinations) => {
   const {
     id,
     type,
@@ -73,6 +82,8 @@ const createEditEventTemplate = (data) => {
     dateTo,
     basePrice,
   } = data;
+
+  // console.log(destination);
 
   const isEditForm = {
     ROLLUP_BUTTON_CLASS: 'event__rollup-btn',
@@ -110,7 +121,7 @@ const createEditEventTemplate = (data) => {
         </label>
         <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${he.encode(destination.name)}" list="destination-list-${id}">
         <datalist id="destination-list-${id}">
-        ${createCityOptionsTemplate()}
+        ${createCityOptionsTemplate(possibleDestinations)}
         </datalist>
       </div>
 
@@ -345,21 +356,9 @@ export default class EditEventView extends SmartView {
 
   //! моковые описания
   #destinationChangeHandler = (evt) => {
-    // evt.preventDefault();
+    evt.preventDefault();
 
-    // const checkedDestination = findObjectfromArray(this.#possibleDestinations, evt.target.value);
-    // // console.log(this.#possibleDestinations);
-    // // console.log(evt.target.value);
-    // console.log(checkedDestination);
-
-    // // const getDestinationInfoByName = this.#possibleDestinations.find((destination) => destination.name === destinationName);
-
-    // this.updateData({
-    //   destination: checkedDestination,
-    // });
-
-    const newDestination =
-      this.#possibleDestinations.find((destination) => destination.name === evt.target.value);
+    const newDestination = this.#possibleDestinations.find((destination) => destination.name === evt.target.value);
 
     if (newDestination) { // Если введёный город есть в datalist, то производит изменение.
       this.updateData({  // Иначе - выдаёт сообщение setCustomValidity

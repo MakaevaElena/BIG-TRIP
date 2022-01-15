@@ -24,31 +24,31 @@ const WAYPOINT_TYPES = [
   'restaurant',
 ];
 
-const DESTINATIONS = [
-  'Amsterdam',
-  'Chamonix',
-  'Geneva',
-  'New-York',
-  'Prague',
-  'Rio',
-  'Oslo',
-  'Moscow',
-  'Tokyo',
-  'Kioto',
-  'Berlin',
-  'Honkong',
-];
+// const DESTINATIONS = [
+//   'Amsterdam',
+//   'Chamonix',
+//   'Geneva',
+//   'New-York',
+//   'Prague',
+//   'Rio',
+//   'Oslo',
+//   'Moscow',
+//   'Tokyo',
+//   'Kioto',
+//   'Berlin',
+//   'Honkong',
+// ];
 
-const typesWithOffers = {
-  'taxi': ['taxi-1', 'taxi-2', 'taxi-3'],
-  'bus': ['Bus-1', 'Bus-2'],
-  'train': ['train-1', 'train-2'],
-  'ship': ['ship-1', 'ship-2'],
-  'drive': ['drive-1', 'drive-2'],
-  'flight': ['flight-1'],
-  'check-in': ['check-in-1', 'check-in-2'],
-  'sightseeing': ['sightseeing-1'],
-  'restaurant': ['restaurant-1', 'restaurant-2', 'restaurant-3'],
-};
+// const typesWithOffers = {
+//   'taxi': ['taxi-1', 'taxi-2', 'taxi-3'],
+//   'bus': ['Bus-1', 'Bus-2'],
+//   'train': ['train-1', 'train-2'],
+//   'ship': ['ship-1', 'ship-2'],
+//   'drive': ['drive-1', 'drive-2'],
+//   'flight': ['flight-1'],
+//   'check-in': ['check-in-1', 'check-in-2'],
+//   'sightseeing': ['sightseeing-1'],
+//   'restaurant': ['restaurant-1', 'restaurant-2', 'restaurant-3'],
+// };
 
-export { DESCRIPTIONS, TITLES, WAYPOINT_TYPES, DESTINATIONS, typesWithOffers };
+export { DESCRIPTIONS, TITLES, WAYPOINT_TYPES };
