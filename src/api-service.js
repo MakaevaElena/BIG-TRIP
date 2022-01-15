@@ -89,8 +89,8 @@ export default class ApiService {
     const adaptedData = {
       ...data,
       'base_price': data.basePrice,
-      'date_from': data.dateFrom instanceof Date ? data.dateFrom.toISOString() : null,
-      'date_to': data.dateTo instanceof Date ? data.dateTo.toISOString() : null,
+      'date_from': data.dateFrom.toISOString(),
+      'date_to': data.dateTo.toISOString(),
       'is_favorite': data.isFavorite,
     };
 
