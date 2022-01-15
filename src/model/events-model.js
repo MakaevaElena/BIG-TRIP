@@ -26,7 +26,7 @@ import dayjs from 'dayjs';
 export default class EventsModel extends AbstractObservable {
   #events = [];
   #apiService = null;
-  #offers = {};
+  #offers = [];
   #destinations = [];
 
   constructor(apiService) {
@@ -42,19 +42,23 @@ export default class EventsModel extends AbstractObservable {
       this.#events = [];
     }
 
-    // try {
-    //   const offers = await this.#apiService.offers;
-    //   this.#offers = this.#adaptOffersToClient(offers);
-    // } catch (err) {
-    //   this.#offers = BlankPossibleOffers;
-    // }
+    try {
+      // this.#offers = await this.#apiService.offers;
+      const offers = await this.#apiService.offers;
+      this.#offers = this.#adaptOffersToClient(offers);
+    } catch (err) {
+      // this.#offers = BlankPossibleOffers;
+      this.#offers = [];
+    }
 
-    // try {
-    //   const destinations = await this.#apiService.destinations;
-    //   this.#destinations = destinations;
-    // } catch {
-    //   this.#destinations = getDestinationsFromEvents(this.points);
-    // }
+    try {
+      this.#destinations = await this.#apiService.destinations;
+      // const destinations = await this.#apiService.destinations;
+      // this.#destinations = destinations;
+    } catch {
+      // this.#destinations = getDestinationsFromEvents(this.points);
+      this.#destinations = [];
+    }
 
     this._notify(UpdateType.INIT);
   }
@@ -146,13 +150,13 @@ export default class EventsModel extends AbstractObservable {
     return adaptedEvent;
   }
 
-  // #adaptOffersToClient = (serverOffers) => {
-  //   const adaptedOffers = {};
-  //   serverOffers.forEach((serverOffer) => {
-  //     adaptedOffers[serverOffer.type] = serverOffer.offers;
-  //   });
+  #adaptOffersToClient = (serverOffers) => {
+    const adaptedOffers = {};
+    serverOffers.forEach((serverOffer) => {
+      adaptedOffers[serverOffer.type] = serverOffer.offers;
+    });
 
-  //   return adaptedOffers;
-  // }
+    return adaptedOffers;
+  }
 
 }

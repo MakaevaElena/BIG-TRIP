@@ -74,6 +74,8 @@ const createEditEventTemplate = (data) => {
     basePrice,
   } = data;
 
+  // console.log(offers);
+
   const isEditForm = {
     ROLLUP_BUTTON_CLASS: 'event__rollup-btn',
     RESET_BUTTON_NAME: 'Delete',
@@ -304,13 +306,18 @@ export default class EditEventView extends SmartView {
   #typeChangeHandler = (evt) => {
     evt.preventDefault();
 
+    // console.log(evt.target.value);
+    // console.log(this.#possibleOffers);
+
     this.updateData({
       type: evt.target.value,
-      offers: findObjectfromArray(this.#possibleOffers, evt.target.value),
+      // offers: findObjectfromArray(this.#possibleOffers, evt.target.value),
+      offers: this.#possibleOffers[evt.target.value],
     }
     );
   }
 
+  //!
   #offerChangeHandler = (evt) => {
     evt.preventDefault();
 
@@ -321,7 +328,7 @@ export default class EditEventView extends SmartView {
     }));
 
     this.updateData({
-      offers: checkedOffersValues,
+      offers: checkedOffersValues(),
     }, true);
   }
 
