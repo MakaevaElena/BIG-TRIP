@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
@@ -89,8 +91,8 @@ export default class ApiService {
     const adaptedData = {
       ...data,
       'base_price': data.basePrice,
-      'date_from': data.dateFrom.toISOString(),
-      'date_to': data.dateTo.toISOString(),
+      'date_from': dayjs(data.dateFrom).toISOString(),
+      'date_to': dayjs(data.dateTo).toISOString(),
       'is_favorite': data.isFavorite,
     };
 

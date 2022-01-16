@@ -1,6 +1,5 @@
 import AbstractObservable from '../utils/abstract-observable.js';
 import { UpdateType } from '../const.js';
-import dayjs from 'dayjs';
 
 export default class EventsModel extends AbstractObservable {
   #events = [];
@@ -82,7 +81,7 @@ export default class EventsModel extends AbstractObservable {
       this._notify(updateType, newEvent);
     }
     catch (err) {
-      throw new Error('Can\'t update event');
+      throw new Error('Can\'t add event');
     }
   }
 
@@ -110,8 +109,10 @@ export default class EventsModel extends AbstractObservable {
       event,
       {
         basePrice: event['base_price'],
-        dateFrom: dayjs(event['date_from']),
-        dateTo: dayjs(event['date_to']),
+        // dateFrom: dayjs(event['date_from']),
+        // dateTo: dayjs(event['date_to']),
+        dateFrom: new Date(event['date_from']),
+        dateTo: new Date(event['date_to']),
         isFavorite: event['is_favorite'],
       },
     );
