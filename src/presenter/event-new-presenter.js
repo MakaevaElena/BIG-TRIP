@@ -1,5 +1,4 @@
 import EditEventView from '../view/edit-event-view.js';
-import { nanoid } from 'nanoid';
 import { remove, render, RenderPosition } from '../utils/render.js';
 import { UserAction, UpdateType } from '../const.js';
 
@@ -13,11 +12,11 @@ export default class EventNewPresenter {
     this.#changeData = changeData;
   }
 
-  init = (event) => {
+  init = (event, offers, destinations) => {
     if (this.#eventEditComponent !== null) {
       return;
     }
-    this.#eventEditComponent = new EditEventView(event);
+    this.#eventEditComponent = new EditEventView(event, offers, destinations);
     this.#eventEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#eventEditComponent.setDeleteClickHandler(this.#handleDeleteClick);
 
@@ -40,9 +39,8 @@ export default class EventNewPresenter {
     this.#changeData(
       UserAction.ADD_EVENT,
       UpdateType.MAJOR,
-      { id: nanoid(), ...event },
+      event,
     );
-    this.destroy();
   }
 
   #handleDeleteClick = () => {
@@ -55,4 +53,24 @@ export default class EventNewPresenter {
       this.destroy();
     }
   }
+
+  setSaving = () => {
+    this.#eventEditComponent.updateData({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+  setAborting = () => {
+    const resetFormState = () => {
+      this.#eventEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#eventEditComponent.shake(resetFormState);
+  }
+
 }

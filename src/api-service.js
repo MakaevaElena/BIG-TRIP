@@ -14,22 +14,22 @@ export default class ApiService {
     this.#authorization = authorization;
   }
 
-  get data() {
+  get events() {
     return this.#load({ url: 'points' })
       .then(ApiService.parseResponse);
   }
 
-  async getDestinations() {
+  get destinations() {
     return this.#load({ url: 'destinations' })
       .then(ApiService.parseResponse);
   }
 
-  async getOffers() {
+  get offers() {
     return this.#load({ url: 'offers' })
       .then(ApiService.parseResponse);
   }
 
-  updateData = async (data) => {
+  updateEvent = async (data) => {
     const response = await this.#load({
       url: `points/${data.id}`,
       method: Method.PUT,
@@ -42,7 +42,7 @@ export default class ApiService {
     return parsedResponse;
   }
 
-  addData = async (data) => {
+  addEvent = async (data) => {
     const response = await this.#load({
       url: 'points',
       method: Method.POST,
@@ -55,7 +55,7 @@ export default class ApiService {
     return parsedResponse;
   }
 
-  deleteData = async (data) => {
+  deleteEvent = async (data) => {
     const response = await this.#load({
       url: `points/${data.id}`,
       method: Method.DELETE,
@@ -89,8 +89,8 @@ export default class ApiService {
     const adaptedData = {
       ...data,
       'base_price': data.basePrice,
-      'date_from': data.dateFrom instanceof Date ? data.dateFrom.toISOString() : null,
-      'date_to': data.dateTo instanceof Date ? data.dateTo.toISOString() : null,
+      'date_from': data.dateFrom.toISOString(),
+      'date_to': data.dateTo.toISOString(),
       'is_favorite': data.isFavorite,
     };
 

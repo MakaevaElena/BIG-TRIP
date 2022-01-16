@@ -8,11 +8,16 @@ const Mode = {
   EDITING: 'EDITING',
 };
 
+export const State = {
+  SAVING: 'SAVING',
+  DELETING: 'DELETING',
+  ABORTING: 'ABORTING',
+};
+
 export default class EventPresenter {
   #eventsListContainer = null;
   #changeData = null;
   #changeMode = null;
-
   #eventComponent = null;
   #editEventComponent = null;
 
@@ -30,7 +35,7 @@ export default class EventPresenter {
 
     const prevEventComponent = this.#eventComponent;
     const prevEditEventComponent = this.#editEventComponent;
-    this.#eventComponent = new EventView(event);
+    this.#eventComponent = new EventView(event, offers);
     this.#editEventComponent = new EditEventView(event, offers, destinations);
 
     this.#eventComponent.setEditClickHandler(this.#handleEditClick);
@@ -102,6 +107,7 @@ export default class EventPresenter {
       evt.preventDefault();
       this.#editEventComponent.reset(this.#event);
       this.#replaceFormToEvent();
+      document.removeEventListener('keydown', this.#onEscKeyDown);
     }
   };
 
@@ -118,7 +124,41 @@ export default class EventPresenter {
   }
 
   #handleCloseEditClick = () => {
+    this.#editEventComponent.reset(this.#event);
     this.#replaceFormToEvent();
+  }
+
+  setViewState = (state) => {
+    if (this.#mode === Mode.DEFAULT) {
+      return;
+    }
+
+    const resetFormState = () => {
+      this.#editEventComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    switch (state) {
+      case State.SAVING:
+        this.#editEventComponent.updateData({
+          isDisabled: true,
+          isSaving: true,
+        });
+        break;
+      case State.DELETING:
+        this.#editEventComponent.updateData({
+          isDisabled: true,
+          isDeleting: true,
+        });
+        break;
+      case State.ABORTING:
+        this.#eventComponent.shake(resetFormState);
+        this.#editEventComponent.shake(resetFormState);
+        break;
+    }
   }
 
 }

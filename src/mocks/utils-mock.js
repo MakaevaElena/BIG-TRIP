@@ -63,7 +63,6 @@ const generatePhotos = (max) => {
   return photos;
 };
 
-// Опции
 const generateOffers = (type, max) => {
   const offersCount = getRandomInteger(0, max);
 

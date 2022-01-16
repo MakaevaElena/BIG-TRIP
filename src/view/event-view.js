@@ -99,14 +99,16 @@ const createEventTemplate = (someEvent) => {
 
 export default class EventView extends AbstractView {
   #event = null;
+  #possibleOffers = null;
 
-  constructor(event) {
+  constructor(event, possibleOffers) {
     super();
     this.#event = event;
+    this.#possibleOffers = possibleOffers;
   }
 
   get template() {
-    return createEventTemplate(this.#event);
+    return createEventTemplate(this.#event, this.#possibleOffers);
   }
 
   setEditClickHandler = (callback) => {
