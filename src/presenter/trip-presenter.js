@@ -193,15 +193,17 @@ export default class TripPresenter {
     this.events.forEach((event) => this.#renderEvent(event));
   }
 
-  #renderPriceAndRoute = () => {
-
-  }
+  // #renderPriceAndRoute = () => {
+  //   const eventPresenter = new EventPresenter(this.#eventsListComponent, this.#handleEventChange, this.#handleModeChange);
+  //   eventPresenter.init(event);
+  //   this.#eventPresenter.set(event.id, eventPresenter);
+  // }
 
 
   #renderBoard = () => {
     const events = this.events;
     const eventsCount = events.length;
-    this.#renderPriceAndRoute();
+    // this.#renderPriceAndRoute();
     if (this.#isLoading) {
       this.#renderLoading();
     } else {

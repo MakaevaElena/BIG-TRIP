@@ -66,7 +66,7 @@ const createPhotosContainer = (destination) => {
 </div>`;
 };
 
-const createEditEventTemplate = (data, possibleOffers, possibleDestinations, isDisabled, isSaving, isDeleting) => {
+const createEditEventTemplate = (data, possibleDestinations) => {
   const {
     id,
     type,
@@ -75,7 +75,14 @@ const createEditEventTemplate = (data, possibleOffers, possibleDestinations, isD
     dateFrom,
     dateTo,
     basePrice,
+    isDisabled,
+    isSaving,
+    isDeleting
   } = data;
+
+  // console.log(isDisabled);
+  // console.log(isSaving);
+  // console.log(isDeleting);
 
   const isEditForm = {
     ROLLUP_BUTTON_CLASS: 'event__rollup-btn',
@@ -177,7 +184,8 @@ export default class EditEventView extends SmartView {
   }
 
   get template() {
-    return createEditEventTemplate(this._data, this.#possibleOffers, this.#possibleDestinations);
+    // return createEditEventTemplate(this._data, this.#possibleOffers, this.#possibleDestinations);
+    return createEditEventTemplate(this._data, this.#possibleDestinations);
   }
 
   restoreHandlers = () => {
@@ -348,8 +356,22 @@ export default class EditEventView extends SmartView {
     }, true);
   }
 
-  static parseEventToData = (event) => ({ ...event });
-  static parseDataToEvents = (data) => ({ ...data });
+  static parseEventToData = (event) => ({
+    ...event,
+    isDisabled: false,
+    isSaving: false,
+    isDeleting: false,
+  });
 
+  static parseDataToEvents = (data) => {
+    //!
+    const event = { ...data };
+
+    delete event.isDisabled;
+    delete event.isSaving;
+    delete event.isDeleting;
+
+    return event;
+  }
 }
 
