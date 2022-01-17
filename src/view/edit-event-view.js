@@ -80,20 +80,16 @@ const createEditEventTemplate = (data, possibleDestinations) => {
     isDeleting
   } = data;
 
-  // console.log(isDisabled);
-  // console.log(isSaving);
-  // console.log(isDeleting);
-
   const isEditForm = {
     ROLLUP_BUTTON_CLASS: 'event__rollup-btn',
     RESET_BUTTON_NAME: 'Delete',
-    ADD_FORM_CLASS: '',
+    // ADD_FORM_CLASS: '',
   };
 
   if (data.id === DEFAULT_EVENT.id) {
     isEditForm.ROLLUP_BUTTON_CLASS = 'visually-hidden';
     isEditForm.RESET_BUTTON_NAME = 'Cancel';
-    isEditForm.ADD_FORM_CLASS = '';
+    // isEditForm.ADD_FORM_CLASS = '';
   }
 
   return `<li class="trip-events__item ${isEditForm.ADD_FORM_CLASS}">
@@ -141,7 +137,7 @@ const createEditEventTemplate = (data, possibleDestinations) => {
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit"  ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
-      <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>
+      <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : isEditForm.RESET_BUTTON_NAME}</button>
       <button class="${isEditForm.ROLLUP_BUTTON_CLASS}" type="button"  ${isDisabled ? 'disabled' : ''}>
         <span class="visually-hidden">Open event</span>
       </button>
@@ -184,7 +180,6 @@ export default class EditEventView extends SmartView {
   }
 
   get template() {
-    // return createEditEventTemplate(this._data, this.#possibleOffers, this.#possibleDestinations);
     return createEditEventTemplate(this._data, this.#possibleDestinations);
   }
 
@@ -263,8 +258,6 @@ export default class EditEventView extends SmartView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    // this.#showSaving();
-    this.#showDisabled();
     this._callback.formSubmit(EditEventView.parseDataToEvents(this._data));
   }
 
@@ -275,10 +268,6 @@ export default class EditEventView extends SmartView {
       editRollupButton.addEventListener('click', this.#closeHandler);
     }
   }
-
-  // #showSaving = () => {
-  //   this.element.querySelector('.event__save-btn').textContent = 'Saving...';
-  // }
 
   #closeHandler = (evt) => {
     evt.preventDefault();
@@ -292,21 +281,7 @@ export default class EditEventView extends SmartView {
 
   #eventResetHandler = (evt) => {
     evt.preventDefault();
-    // this.#showDeleting();
-    this.#showDisabled();
     this._callback.eventReset(EditEventView.parseDataToEvents(this._data));
-  }
-
-  // #showDeleting = () => {
-  //   this.element.querySelector('.event__reset-btn').textContent = 'Deleting...';
-  // }
-
-  #showDisabled = () => {
-    this.element.querySelectorAll(
-      'fieldset, input:not(.visually-hidden), button, .event__offer-checkbox')
-      .forEach((element) => {
-        element.disabled = true;
-      });
   }
 
   #typeChangeHandler = (evt) => {
@@ -364,7 +339,6 @@ export default class EditEventView extends SmartView {
   });
 
   static parseDataToEvents = (data) => {
-    //!
     const event = { ...data };
 
     delete event.isDisabled;
