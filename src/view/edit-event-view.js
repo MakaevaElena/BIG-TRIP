@@ -80,6 +80,11 @@ const createEditEventTemplate = (data, possibleDestinations) => {
     isDeleting
   } = data;
 
+  // let isOffer = '';
+  // if (!offers) {
+  //   isOffer = 'visually-hidden';
+  // }
+
   const isEditForm = {
     ROLLUP_BUTTON_CLASS: 'event__rollup-btn',
     RESET_BUTTON_NAME: 'Delete',
@@ -204,6 +209,7 @@ export default class EditEventView extends SmartView {
         enableTime: true,
         defaultDate: dayjs(this._data.dateFrom).toISOString(),
         onChange: this.#dateStartChangeHandler,
+        maxDate: this._data.dateTo.toString(),
       },
     );
   }
@@ -221,6 +227,7 @@ export default class EditEventView extends SmartView {
         enableTime: true,
         defaultDate: dayjs(this._data.dateTo).toISOString(),
         onChange: this.#dateEndChangeHandler,
+        minDate: this._data.dateFrom.toString(),
       },
     );
   }

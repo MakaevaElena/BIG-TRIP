@@ -110,8 +110,6 @@ export default class EventsModel extends AbstractObservable {
       event,
       {
         basePrice: event['base_price'],
-        // dateFrom: dayjs(event['date_from']),
-        // dateTo: dayjs(event['date_to']),
         dateFrom: new Date(event['date_from']),
         dateTo: new Date(event['date_to']),
         isFavorite: event['is_favorite'],
