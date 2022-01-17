@@ -31,9 +31,9 @@ const createCityOptionsTemplate = (serverDestinations) => {
   return dataListContentTemplate;
 };
 
-const createEditOfferTemplate = (offer) => (
+const createEditOfferTemplate = (offer, isDisabled) => (
   `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${offer.id}" type="checkbox" name="event-offer-luggage" data-id="${offer.id}" data-title="${offer.title}" data-price="${offer.price}">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${offer.id}" type="checkbox" name="event-offer-luggage" data-id="${offer.id}" data-title="${offer.title}" data-price="${offer.price}" ${isDisabled ? 'disabled' : ''}>
       <label class="event__offer-label" for="event-offer-luggage-${offer.id}">
       <span class="event__offer-title">${offer.title}</span>
                           &plus;&euro;&nbsp;
@@ -42,7 +42,7 @@ const createEditOfferTemplate = (offer) => (
     </div>`
 );
 
-const createEditOffersTemplate = (offers) => offers.map((offer) => createEditOfferTemplate(offer)).join('');
+const createEditOffersTemplate = (offers, isDisabled) => offers.map((offer) => createEditOfferTemplate(offer, isDisabled)).join('');
 
 const createPhotosTemplate = (photos) => {
   let photosTemplate = '';
@@ -66,7 +66,7 @@ const createPhotosContainer = (destination) => {
 </div>`;
 };
 
-const createEditEventTemplate = (data, possibleOffers, possibleDestinations) => {
+const createEditEventTemplate = (data, possibleOffers, possibleDestinations, isDisabled, isSaving, isDeleting) => {
   const {
     id,
     type,
@@ -97,7 +97,7 @@ const createEditEventTemplate = (data, possibleOffers, possibleDestinations) => 
           <span class="visually-hidden">Choose event type</span>
           <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
         </label>
-        <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${id}" type="checkbox">
+        <input class="event__type-toggle  visually-hidden" id="event-type-toggle-${id}" type="checkbox"  ${isDisabled ? 'disabled' : ''}>
 
         <div class="event__type-list">
           <fieldset class="event__type-group">
@@ -111,7 +111,7 @@ const createEditEventTemplate = (data, possibleOffers, possibleDestinations) => 
         <label class="event__label  event__type-output" for="event-destination-${id}">
           ${type}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${he.encode(destination.name)}" list="destination-list-${id}">
+        <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${he.encode(destination.name)}" list="destination-list-${id}"  ${isDisabled ? 'disabled' : ''}>
         <datalist id="destination-list-${id}">
         ${createCityOptionsTemplate(possibleDestinations)}
         </datalist>
@@ -119,10 +119,10 @@ const createEditEventTemplate = (data, possibleOffers, possibleDestinations) => 
 
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-${id}">From</label>
-        <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${createDateTemplate(dateFrom, DATE_TIME_FORMAT,)}">
+        <input class="event__input  event__input--time" id="event-start-time-${id}" type="text" name="event-start-time" value="${createDateTemplate(dateFrom, DATE_TIME_FORMAT,)}" required ${isDisabled ? 'disabled' : ''}>
         &mdash;
         <label class="visually-hidden" for="event-end-time-${id}">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${createDateTemplate(dateTo, DATE_TIME_FORMAT,)}">
+        <input class="event__input  event__input--time" id="event-end-time-${id}" type="text" name="event-end-time" value="${createDateTemplate(dateTo, DATE_TIME_FORMAT,)}" required ${isDisabled ? 'disabled' : ''}>
       </div>
 
       <div class="event__field-group  event__field-group--price">
@@ -130,12 +130,12 @@ const createEditEventTemplate = (data, possibleOffers, possibleDestinations) => 
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-${id}" type="number" name="event-price" value="${basePrice}">
+        <input class="event__input  event__input--price" id="event-price-${id}" type="number" name="event-price" value="${basePrice}" required min="1" ${isDisabled ? 'disabled' : ''}>
       </div>
 
-      <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-      <button class="event__reset-btn" type="reset">${isEditForm.RESET_BUTTON_NAME}</button>
-      <button class="${isEditForm.ROLLUP_BUTTON_CLASS}" type="button">
+      <button class="event__save-btn  btn  btn--blue" type="submit"  ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
+      <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>
+      <button class="${isEditForm.ROLLUP_BUTTON_CLASS}" type="button"  ${isDisabled ? 'disabled' : ''}>
         <span class="visually-hidden">Open event</span>
       </button>
     </header>
@@ -144,7 +144,7 @@ const createEditEventTemplate = (data, possibleOffers, possibleDestinations) => 
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
         <div class="event__available-offers">
-        ${createEditOffersTemplate(offers)}
+        ${createEditOffersTemplate(offers, isDisabled)}
         </div>
       </section>
 
