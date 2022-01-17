@@ -255,7 +255,7 @@ export default class EditEventView extends SmartView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#showSaving();
+    // this.#showSaving();
     this.#showDisabled();
     this._callback.formSubmit(EditEventView.parseDataToEvents(this._data));
   }
@@ -268,9 +268,9 @@ export default class EditEventView extends SmartView {
     }
   }
 
-  #showSaving = () => {
-    this.element.querySelector('.event__save-btn').textContent = 'Saving...';
-  }
+  // #showSaving = () => {
+  //   this.element.querySelector('.event__save-btn').textContent = 'Saving...';
+  // }
 
   #closeHandler = (evt) => {
     evt.preventDefault();
@@ -284,14 +284,14 @@ export default class EditEventView extends SmartView {
 
   #eventResetHandler = (evt) => {
     evt.preventDefault();
-    this.#showDeleting();
+    // this.#showDeleting();
     this.#showDisabled();
     this._callback.eventReset(EditEventView.parseDataToEvents(this._data));
   }
 
-  #showDeleting = () => {
-    this.element.querySelector('.event__reset-btn').textContent = 'Deleting...';
-  }
+  // #showDeleting = () => {
+  //   this.element.querySelector('.event__reset-btn').textContent = 'Deleting...';
+  // }
 
   #showDisabled = () => {
     this.element.querySelectorAll(

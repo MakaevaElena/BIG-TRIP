@@ -15,6 +15,7 @@ export default class EventsModel extends AbstractObservable {
   init = async () => {
     try {
       const events = await this.#apiService.events;
+      // console.log(events);
       this.#events = events.map(this.#adaptEventsToClient);
     } catch (err) {
       this.#events = [];

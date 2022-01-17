@@ -1,5 +1,3 @@
-import dayjs from 'dayjs';
-
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
@@ -32,6 +30,7 @@ export default class ApiService {
   }
 
   updateEvent = async (data) => {
+
     const response = await this.#load({
       url: `points/${data.id}`,
       method: Method.PUT,
@@ -45,6 +44,7 @@ export default class ApiService {
   }
 
   addEvent = async (data) => {
+    // console.log(data);
     const response = await this.#load({
       url: 'points',
       method: Method.POST,
@@ -91,9 +91,10 @@ export default class ApiService {
     const adaptedData = {
       ...data,
       'base_price': data.basePrice,
-      'date_from': dayjs(data.dateFrom).toISOString(),
-      'date_to': dayjs(data.dateTo).toISOString(),
+      'date_from': data.dateFrom.toISOString(),
+      'date_to': data.dateTo.toISOString(),
       'is_favorite': data.isFavorite,
+      'id': String(data.id),
     };
 
     delete adaptedData.basePrice;
