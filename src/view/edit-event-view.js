@@ -1,5 +1,4 @@
 import { createDateTemplate } from '../utils/event-utils.js';
-// import { WAYPOINT_TYPES } from '../mocks/data-mock.js';
 import SmartView from './smart-view.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
@@ -32,18 +31,39 @@ const createCityOptionsTemplate = (serverDestinations) => {
   return dataListContentTemplate;
 };
 
-const createEditOfferTemplate = (offer, isDisabled) => (
-  `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${offer.id}" type="checkbox" name="event-offer-luggage" data-id="${offer.id}" data-title="${offer.title}" data-price="${offer.price}" ${isDisabled ? 'disabled' : ''}>
+const createEditOfferTemplate = (type, offer, possibleOffers, isDisabled) => {
+  // const result = Array.isArray(possibleOffers);
+  // console.log(result);
+  // console.log(possibleOffers);
+  // console.log(type);
+
+  let isSelectedPointOffer = false;
+  //! отфильтровать по типу
+  // const pointOffers = Array.from(possibleOffers).filter((curentOffer) => curentOffer.type === type);
+  // const pointOffers = possibleOffers[type].filter((curentOffer) => curentOffer.type === type);
+  const pointOffers = possibleOffers[type.type];
+
+  // console.log(pointOffers);
+
+  if (pointOffers) {
+    pointOffers.forEach((pointOffer) => {
+      if (offer.id === pointOffer.id) {
+        isSelectedPointOffer = true;
+      }
+    });
+  }
+
+  return `<div class="event__offer-selector">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${offer.id}" type="checkbox" name="event-offer-luggage" data-id="${offer.id}" data-title="${offer.title}" data-price="${offer.price}" ${isDisabled ? 'disabled' : ''}  ${isSelectedPointOffer ? 'checked' : ''}>
       <label class="event__offer-label" for="event-offer-luggage-${offer.id}">
       <span class="event__offer-title">${offer.title}</span>
                           &plus;&euro;&nbsp;
       <span class="event__offer-price">${offer.price}</span>
                         </label>
-    </div>`
-);
+    </div>`;
+};
 
-const createEditOffersTemplate = (offers, isDisabled) => offers.map((offer) => createEditOfferTemplate(offer, isDisabled)).join('');
+const createEditOffersTemplate = (type, offers, possibleOffers, isDisabled) => offers.map((offer) => createEditOfferTemplate(type, offer, possibleOffers, isDisabled)).join('');
 
 const createPhotosTemplate = (photos) => {
   let photosTemplate = '';
@@ -67,7 +87,7 @@ const createPhotosContainer = (destination) => {
 </div>`;
 };
 
-const createEditEventTemplate = (data, possibleDestinations) => {
+const createEditEventTemplate = (data, possibleOffers, possibleDestinations) => {
   const {
     id,
     type,
@@ -80,6 +100,8 @@ const createEditEventTemplate = (data, possibleDestinations) => {
     isSaving,
     isDeleting
   } = data;
+
+  // console.log(data);
 
   let isOffer = '';
   if (offers.length === 0) {
@@ -156,7 +178,7 @@ const createEditEventTemplate = (data, possibleDestinations) => {
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
         <div class="event__available-offers">
-        ${createEditOffersTemplate(offers, isDisabled)}
+        ${createEditOffersTemplate(type, offers, possibleOffers, isDisabled)}
         </div>
       </section>
 
@@ -189,7 +211,7 @@ export default class EditEventView extends SmartView {
   }
 
   get template() {
-    return createEditEventTemplate(this._data, this.#possibleDestinations);
+    return createEditEventTemplate(this._data, this.#possibleOffers, this.#possibleDestinations);
   }
 
   restoreHandlers = () => {
