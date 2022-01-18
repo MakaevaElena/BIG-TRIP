@@ -1,12 +1,12 @@
 import { createDateTemplate } from '../utils/event-utils.js';
-import { WAYPOINT_TYPES } from '../mocks/data-mock.js';
+// import { WAYPOINT_TYPES } from '../mocks/data-mock.js';
 import SmartView from './smart-view.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import he from 'he';
 import { DEFAULT_EVENT } from '../const.js';
 import dayjs from 'dayjs';
-import { addNewEventButton } from '../const.js';
+import { addNewEventButton, WAYPOINT_TYPES } from '../const.js';
 
 const DATE_TIME_FORMAT = 'DD/MM/YY HH:mm';
 

@@ -45,6 +45,18 @@ const DEFAULT_EVENT = {
   type: 'Flight',
 };
 
+const WAYPOINT_TYPES = [
+  'taxi',
+  'bus',
+  'train',
+  'ship',
+  'drive',
+  'flight',
+  'check-in',
+  'sightseeing',
+  'restaurant',
+];
+
 const addNewEventButton = document.querySelector('.trip-main__event-add-btn');
 
-export { SortType, UserAction, UpdateType, FilterType, MenuItem, DEFAULT_EVENT, addNewEventButton };
+export { SortType, UserAction, UpdateType, FilterType, MenuItem, DEFAULT_EVENT, addNewEventButton, WAYPOINT_TYPES };
