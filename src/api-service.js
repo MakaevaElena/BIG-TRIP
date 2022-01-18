@@ -44,7 +44,6 @@ export default class ApiService {
   }
 
   addEvent = async (data) => {
-    // console.log(data);
     const response = await this.#load({
       url: 'points',
       method: Method.POST,

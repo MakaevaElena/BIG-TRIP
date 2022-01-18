@@ -55,5 +55,15 @@ eventsModel.init().finally(() => {
 
 addNewEventButton.addEventListener('click', (evt) => {
   evt.preventDefault();
+
+  remove(statisticsComponent);
+  tripPresenter.destroy();
+  tripPresenter.init();
+  filterPresenter.destroy();
+  filterPresenter.init();
+  remove(siteMenuComponent);
+  render(menuElement, siteMenuComponent, RenderPosition.BEFOREEND);
+  siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+
   tripPresenter.createEvent();
 });
