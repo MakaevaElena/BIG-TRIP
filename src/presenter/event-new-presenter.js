@@ -16,6 +16,7 @@ export default class EventNewPresenter {
     if (this.#eventEditComponent !== null) {
       return;
     }
+    // this.#eventEditComponent = new EditEventView(event, offers, destinations);
     this.#eventEditComponent = new EditEventView(event, offers, destinations);
     this.#eventEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#eventEditComponent.setDeleteClickHandler(this.#handleDeleteClick);

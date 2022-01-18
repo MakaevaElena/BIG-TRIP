@@ -1,4 +1,5 @@
 import AbstractView from './abstract-view.js';
+import { addNewEventButton } from '../const.js';
 
 const createFilterItemTemplate = (filter, currentFilterType) => {
   const { type, name } = filter;
@@ -43,5 +44,6 @@ export default class FilterView extends AbstractView {
   #filterTypeChangeHandler = (evt) => {
     evt.preventDefault();
     this._callback.filterTypeChange(evt.target.value);
+    addNewEventButton.disabled = false;
   }
 }

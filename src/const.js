@@ -45,4 +45,6 @@ const DEFAULT_EVENT = {
   type: 'Flight',
 };
 
-export { SortType, UserAction, UpdateType, FilterType, MenuItem, DEFAULT_EVENT };
+const addNewEventButton = document.querySelector('.trip-main__event-add-btn');
+
+export { SortType, UserAction, UpdateType, FilterType, MenuItem, DEFAULT_EVENT, addNewEventButton };

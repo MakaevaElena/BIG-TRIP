@@ -6,6 +6,7 @@ import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import he from 'he';
 import { DEFAULT_EVENT } from '../const.js';
 import dayjs from 'dayjs';
+import { addNewEventButton } from '../const.js';
 
 const DATE_TIME_FORMAT = 'DD/MM/YY HH:mm';
 
@@ -80,22 +81,24 @@ const createEditEventTemplate = (data, possibleDestinations) => {
     isDeleting
   } = data;
 
-  //!
   let isOffer = '';
   if (offers.length === 0) {
     isOffer = 'visually-hidden';
   }
 
+  let isDestination = '';
+  if (destination.length === 0) {
+    isDestination = 'visually-hidden';
+  }
+
   const isEditForm = {
     ROLLUP_BUTTON_CLASS: 'event__rollup-btn',
     RESET_BUTTON_NAME: 'Delete',
-    // ADD_FORM_CLASS: '',
   };
 
   if (data.id === DEFAULT_EVENT.id) {
     isEditForm.ROLLUP_BUTTON_CLASS = 'visually-hidden';
     isEditForm.RESET_BUTTON_NAME = 'Cancel';
-    // isEditForm.ADD_FORM_CLASS = '';
   }
 
   return `<li class="trip-events__item ${isEditForm.ADD_FORM_CLASS}">
@@ -159,7 +162,7 @@ const createEditEventTemplate = (data, possibleDestinations) => {
 
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${destination.description}</p>
+        <p class="event__destination-description ${isDestination}">${destination.description}</p>
 
         ${createPhotosContainer(destination)}
 
@@ -267,6 +270,7 @@ export default class EditEventView extends SmartView {
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
     this._callback.formSubmit(EditEventView.parseDataToEvents(this._data));
+    addNewEventButton.disabled = false;
   }
 
   setCloseHandler = (callback) => {
@@ -274,6 +278,7 @@ export default class EditEventView extends SmartView {
     if (editRollupButton !== null) {
       this._callback.closeEdit = callback;
       editRollupButton.addEventListener('click', this.#closeHandler);
+      addNewEventButton.disabled = false;
     }
   }
 
