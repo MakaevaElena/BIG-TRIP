@@ -278,7 +278,7 @@ export default class EditEventView extends SmartView {
     if (editRollupButton !== null) {
       this._callback.closeEdit = callback;
       editRollupButton.addEventListener('click', this.#closeHandler);
-      addNewEventButton.disabled = false;
+
     }
   }
 
@@ -295,6 +295,7 @@ export default class EditEventView extends SmartView {
   #eventResetHandler = (evt) => {
     evt.preventDefault();
     this._callback.eventReset(EditEventView.parseDataToEvents(this._data));
+    addNewEventButton.disabled = false;
   }
 
   #typeChangeHandler = (evt) => {
