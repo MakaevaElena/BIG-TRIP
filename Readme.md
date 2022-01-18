@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Елена Mакаева](https://up.htmlacademy.ru/ecmascript/16/user/808541).
-* Наставник: [Сергей Рожков](https://htmlacademy.ru/profile/id1069033).
+* Наставник: [Артём Рудов](https://htmlacademy.ru/profile/artrudov).
 
 ---
 
