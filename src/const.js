@@ -31,18 +31,18 @@ const MenuItem = {
 };
 
 const DEFAULT_EVENT = {
-  basePrice: 2000,
+  basePrice: '',
   dateFrom: dayjs(),
   dateTo: dayjs().add(3, 'd'),
   destination: {
-    description: 'Description of New City',
-    name: 'Choose destination',
+    description: '',
+    name: '',
     pictures: [],
   },
   id: 80,
   isFavorite: true,
-  offers: [],
-  type: 'Flight',
+  // offers: [],
+  // type: 'taxi',
 };
 
 const WAYPOINT_TYPES = [

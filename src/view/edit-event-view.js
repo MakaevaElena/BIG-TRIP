@@ -31,39 +31,36 @@ const createCityOptionsTemplate = (serverDestinations) => {
   return dataListContentTemplate;
 };
 
-const createEditOfferTemplate = (type, offer, possibleOffers, isDisabled) => {
-  // const result = Array.isArray(possibleOffers);
-  // console.log(result);
-  // console.log(possibleOffers);
-  // console.log(type);
+const createEditOffersTemplate = (type, offer, possibleOffers, isDisabled) => {
 
-  let isSelectedPointOffer = false;
-  //! отфильтровать по типу
-  // const pointOffers = Array.from(possibleOffers).filter((curentOffer) => curentOffer.type === type);
-  // const pointOffers = possibleOffers[type].filter((curentOffer) => curentOffer.type === type);
-  const pointOffers = possibleOffers[type.type];
+  // 1. найти все опции по типу
+  const pointOffers = possibleOffers[type];
 
   // console.log(pointOffers);
 
+  // 2. вывести все опции типа, отметить выбранные
+  let isSelectedPointOffer = false;
   if (pointOffers) {
     pointOffers.forEach((pointOffer) => {
       if (offer.id === pointOffer.id) {
         isSelectedPointOffer = true;
       }
-    });
-  }
+      // console.log(pointOffer);
 
-  return `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${offer.id}" type="checkbox" name="event-offer-luggage" data-id="${offer.id}" data-title="${offer.title}" data-price="${offer.price}" ${isDisabled ? 'disabled' : ''}  ${isSelectedPointOffer ? 'checked' : ''}>
+      return `<div class="event__offer-selector">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${pointOffer.id}" type="checkbox" name="event-offer-luggage" data-id="${pointOffer.id}" data-title="${pointOffer.title}" data-price="${pointOffer.price}" ${isDisabled ? 'disabled' : ''}  ${isSelectedPointOffer ? 'checked' : ''}>
       <label class="event__offer-label" for="event-offer-luggage-${offer.id}">
-      <span class="event__offer-title">${offer.title}</span>
+      <span class="event__offer-title">${pointOffer.title}</span>
                           &plus;&euro;&nbsp;
-      <span class="event__offer-price">${offer.price}</span>
+      <span class="event__offer-price">${pointOffer.price}</span>
                         </label>
     </div>`;
+
+    });
+  }
 };
 
-const createEditOffersTemplate = (type, offers, possibleOffers, isDisabled) => offers.map((offer) => createEditOfferTemplate(type, offer, possibleOffers, isDisabled)).join('');
+// const createEditOffersTemplate = (type, offers, possibleOffers, isDisabled) => offers.map((offer) => createEditOfferTemplate(type, offer, possibleOffers, isDisabled)).join('');
 
 const createPhotosTemplate = (photos) => {
   let photosTemplate = '';
@@ -88,11 +85,12 @@ const createPhotosContainer = (destination) => {
 };
 
 const createEditEventTemplate = (data, possibleOffers, possibleDestinations) => {
+  const DEFAULT_TYPE = 'bus';
   const {
     id,
-    type,
-    offers,
-    destination,
+    type = DEFAULT_TYPE,
+    offers = possibleOffers[type],
+    destination = possibleDestinations[data.destination.name],
     dateFrom,
     dateTo,
     basePrice,
@@ -101,17 +99,23 @@ const createEditEventTemplate = (data, possibleOffers, possibleDestinations) => 
     isDeleting
   } = data;
 
-  // console.log(data);
+  // console.log(destination.name);
 
   let isOffer = '';
   if (offers.length === 0) {
     isOffer = 'visually-hidden';
+    // document.querySelector('.event__section--offers').setCustomValidity('Please choose type.');
+    // document.querySelector('.event__section--offers').reportValidity();
   }
 
+
   let isDestination = '';
-  if (destination.length === 0) {
+  if (destination.name.length === 0) {
     isDestination = 'visually-hidden';
+    // document.querySelector('.event__section--destination').setCustomValidity('Please choose destination.');
+    // document.querySelector('.event__section--destination').reportValidity();
   }
+
 
   const isEditForm = {
     ROLLUP_BUTTON_CLASS: 'event__rollup-btn',
@@ -145,7 +149,7 @@ const createEditEventTemplate = (data, possibleOffers, possibleDestinations) => 
         <label class="event__label  event__type-output" for="event-destination-${id}">
           ${type}
         </label>
-        <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${he.encode(destination.name)}" list="destination-list-${id}"  ${isDisabled ? 'disabled' : ''}>
+        <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${he.encode(destination.name)}" list="destination-list-${id}"  ${isDisabled ? 'disabled' : ''} required>
         <datalist id="destination-list-${id}">
         ${createCityOptionsTemplate(possibleDestinations)}
         </datalist>
@@ -182,9 +186,9 @@ const createEditEventTemplate = (data, possibleOffers, possibleDestinations) => 
         </div>
       </section>
 
-      <section class="event__section  event__section--destination">
+      <section class="event__section  event__section--destination ${isDestination}">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description ${isDestination}">${destination.description}</p>
+        <p class="event__destination-description ">${destination.description}</p>
 
         ${createPhotosContainer(destination)}
 
@@ -293,6 +297,12 @@ export default class EditEventView extends SmartView {
     evt.preventDefault();
     this._callback.formSubmit(EditEventView.parseDataToEvents(this._data));
     addNewEventButton.disabled = false;
+
+    // if (!this._data.destination || this._data.destination.name.length === 0) {
+    //   this.element.querySelector('.event__input--destination')
+    //     .setCustomValidity('Please choose the city from the list.');
+    //   this.element.querySelector('.event__input--destination').reportValidity();
+    // }
   }
 
   setCloseHandler = (callback) => {
@@ -300,13 +310,14 @@ export default class EditEventView extends SmartView {
     if (editRollupButton !== null) {
       this._callback.closeEdit = callback;
       editRollupButton.addEventListener('click', this.#closeHandler);
-
+      addNewEventButton.disabled = false;
     }
   }
 
   #closeHandler = (evt) => {
     evt.preventDefault();
     this._callback.closeEdit();
+
   }
 
   setDeleteClickHandler = (callback) => {
@@ -340,6 +351,7 @@ export default class EditEventView extends SmartView {
       price: Number(offer.dataset.price),
     }));
 
+
     this.updateData({
       offers: checkedOffersValues,
     }, true);
@@ -350,21 +362,33 @@ export default class EditEventView extends SmartView {
 
     const newDestination = this.#possibleDestinations.find((destination) => destination.name === evt.target.value);
 
-    this.updateData({
-      destination: {
-        description: newDestination.description,
-        name: newDestination.name,
-        pictures: newDestination.pictures,
-      },
-    });
-
+    if (newDestination) {
+      this.updateData({
+        destination: {
+          description: newDestination.description,
+          name: newDestination.name,
+          pictures: newDestination.pictures,
+        },
+      });
+    } else {
+      this.element.querySelector('.event__input--destination')
+        .setCustomValidity('Please choose the city from the list.');
+      this.element.querySelector('.event__input--destination').reportValidity();
+    }
   };
 
   #onPriceInput = (evt) => {
     evt.preventDefault();
-    this.updateData({
-      basePrice: Number(evt.target.value),
-    }, true);
+    if (evt.target.value.length) {
+
+      this.updateData({
+        basePrice: Number(evt.target.value),
+      }, true);
+    } else {
+      this.element.querySelector('.event__input--price')
+        .setCustomValidity('Please input the price.');
+      this.element.querySelector('.event__input--price').reportValidity();
+    }
   }
 
   static parseEventToData = (event) => ({
