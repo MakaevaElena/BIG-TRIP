@@ -57,6 +57,4 @@ const WAYPOINT_TYPES = [
   'restaurant',
 ];
 
-const addNewEventButton = document.querySelector('.trip-main__event-add-btn');
-
-export { SortType, UserAction, UpdateType, FilterType, MenuItem, DEFAULT_EVENT, addNewEventButton, WAYPOINT_TYPES };
+export { SortType, UserAction, UpdateType, FilterType, MenuItem, DEFAULT_EVENT, WAYPOINT_TYPES };

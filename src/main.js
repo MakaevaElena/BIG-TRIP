@@ -4,7 +4,7 @@ import EventsModel from './model/events-model.js';
 import FilterModel from './model/filter-model.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 import MenuView from './view/menu-view.js';
-import { MenuItem, addNewEventButton } from './const.js';
+import { MenuItem} from './const.js';
 import StatisticsView from './view/statistics-view.js';
 import ApiService from './api-service.js';
 
@@ -19,7 +19,8 @@ const tripMainElement = document.querySelector('.trip-main');
 const menuElement = document.querySelector('.trip-controls__navigation');
 const filterElement = document.querySelector('.trip-controls__filters');
 const tripEventsElement = document.querySelector('.trip-events');
-// const addNewEventButton = document.querySelector('.trip-main__event-add-btn');
+const addNewEventButton = document.querySelector('.trip-main__event-add-btn');
+// const activeMenuButton = document.querySelector('.trip-tabs__btn--active');
 
 const tripPresenter = new TripPresenter(tripMainElement, tripEventsElement, eventsModel, filterModel);
 const filterPresenter = new FilterPresenter(filterElement, filterModel, eventsModel);
@@ -34,6 +35,7 @@ const handleSiteMenuClick = (menuItem) => {
       remove(statisticsComponent);
       siteMenuComponent.setMenuItem(MenuItem.TABLE);
       addNewEventButton.disabled = false;
+      // activeMenuButton.disabled = true;
       break;
 
     case MenuItem.STATS:
@@ -43,6 +45,7 @@ const handleSiteMenuClick = (menuItem) => {
       render(tripEventsElement, statisticsComponent, RenderPosition.BEFOREEND);
       siteMenuComponent.setMenuItem(MenuItem.STATS);
       addNewEventButton.disabled = false;
+      // activeMenuButton.disabled = true;
       break;
   }
 };

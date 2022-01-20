@@ -5,10 +5,10 @@ import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import he from 'he';
 import { DEFAULT_EVENT } from '../const.js';
 import dayjs from 'dayjs';
-import { addNewEventButton, WAYPOINT_TYPES } from '../const.js';
+import { WAYPOINT_TYPES } from '../const.js';
 
 const DATE_TIME_FORMAT = 'DD/MM/YY HH:mm';
-
+const addNewEventButton = document.querySelector('.trip-main__event-add-btn');
 const createTypeTemplate = (id, type, currentType) => {
   const isChecked = currentType === type ? 'checked' : '';
 

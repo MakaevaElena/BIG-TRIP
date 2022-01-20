@@ -1,5 +1,6 @@
 import AbstractView from './abstract-view.js';
-import { addNewEventButton } from '../const.js';
+
+const addNewEventButton = document.querySelector('.trip-main__event-add-btn');
 
 const createFilterItemTemplate = (filter, currentFilterType) => {
   const { type, name } = filter;
