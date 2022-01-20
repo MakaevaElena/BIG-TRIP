@@ -3,8 +3,9 @@ import { remove, render, RenderPosition, } from './utils/render.js';
 import EventsModel from './model/events-model.js';
 import FilterModel from './model/filter-model.js';
 import FilterPresenter from './presenter/filter-presenter.js';
+import RoutePresenter from './presenter/route-date-price-presenter.js';
 import MenuView from './view/menu-view.js';
-import { MenuItem} from './const.js';
+import { MenuItem } from './const.js';
 import StatisticsView from './view/statistics-view.js';
 import ApiService from './api-service.js';
 
@@ -24,6 +25,7 @@ const addNewEventButton = document.querySelector('.trip-main__event-add-btn');
 
 const tripPresenter = new TripPresenter(tripMainElement, tripEventsElement, eventsModel, filterModel);
 const filterPresenter = new FilterPresenter(filterElement, filterModel, eventsModel);
+const routePresenter = new RoutePresenter(tripMainElement, eventsModel);
 
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
@@ -52,6 +54,7 @@ const handleSiteMenuClick = (menuItem) => {
 
 filterPresenter.init();
 tripPresenter.init();
+routePresenter.init();
 
 eventsModel.init().finally(() => {
   render(menuElement, siteMenuComponent, RenderPosition.BEFOREEND);
