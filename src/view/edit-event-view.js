@@ -31,36 +31,27 @@ const createCityOptionsTemplate = (serverDestinations) => {
   return dataListContentTemplate;
 };
 
-const createEditOffersTemplate = (type, offer, possibleOffers, isDisabled) => {
+const createEditOfferTemplate = (offers, pointOffer) => {
+  let isSelected = false;
+  const selectedPointOffer = offers.find((offer) => offer.id === pointOffer.id);
 
-  // 1. найти все опции по типу
-  const pointOffers = possibleOffers[type];
+  if (selectedPointOffer !== undefined) {
+    isSelected = true;
+  }
 
-  // console.log(pointOffers);
-
-  // 2. вывести все опции типа, отметить выбранные
-  let isSelectedPointOffer = false;
-  if (pointOffers) {
-    pointOffers.forEach((pointOffer) => {
-      if (offer.id === pointOffer.id) {
-        isSelectedPointOffer = true;
-      }
-      // console.log(pointOffer);
-
-      return `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${pointOffer.id}" type="checkbox" name="event-offer-luggage" data-id="${pointOffer.id}" data-title="${pointOffer.title}" data-price="${pointOffer.price}" ${isDisabled ? 'disabled' : ''}  ${isSelectedPointOffer ? 'checked' : ''}>
-      <label class="event__offer-label" for="event-offer-luggage-${offer.id}">
+  return (
+    `<div class="event__offer-selector">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${pointOffer.id}" type="checkbox" name="event-offer-luggage" data-id="${pointOffer.id}" data-title="${pointOffer.title}" data-price="${pointOffer.price}"  ${isSelected ? 'checked' : ''}>
+      <label class="event__offer-label" for="event-offer-luggage-${pointOffer.id}">
       <span class="event__offer-title">${pointOffer.title}</span>
                           &plus;&euro;&nbsp;
       <span class="event__offer-price">${pointOffer.price}</span>
                         </label>
-    </div>`;
-
-    });
-  }
+    </div>`
+  );
 };
 
-// const createEditOffersTemplate = (type, offers, possibleOffers, isDisabled) => offers.map((offer) => createEditOfferTemplate(type, offer, possibleOffers, isDisabled)).join('');
+const createEditOffersTemplate = (type, offers, possibleOffers) => possibleOffers[type].map((pointOffer) => createEditOfferTemplate(offers, pointOffer)).join('');
 
 const createPhotosTemplate = (photos) => {
   let photosTemplate = '';
@@ -85,29 +76,19 @@ const createPhotosContainer = (destination) => {
 };
 
 const createEditEventTemplate = (data, possibleOffers, possibleDestinations) => {
-  const DEFAULT_TYPE = 'bus';
   const {
     id,
-    type = DEFAULT_TYPE,
-    offers = possibleOffers[type],
-    destination = possibleDestinations[data.destination.name],
+    type,
+    offers,
+    destination,
     dateFrom,
     dateTo,
     basePrice,
     isDisabled,
     isSaving,
-    isDeleting
+    isDeleting,
+    isOffers,
   } = data;
-
-  // console.log(destination.name);
-
-  let isOffer = '';
-  if (offers.length === 0) {
-    isOffer = 'visually-hidden';
-    // document.querySelector('.event__section--offers').setCustomValidity('Please choose type.');
-    // document.querySelector('.event__section--offers').reportValidity();
-  }
-
 
   let isDestination = '';
   if (destination.name.length === 0) {
@@ -178,11 +159,11 @@ const createEditEventTemplate = (data, possibleOffers, possibleDestinations) => 
       </button>
     </header>
     <section class="event__details">
-      <section class="event__section  event__section--offers  ${isOffer}">
+      <section class="event__section  event__section--offers  ${isOffers ? '' : 'visually-hidden'}}">
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
         <div class="event__available-offers">
-        ${createEditOffersTemplate(type, offers, possibleOffers, isDisabled)}
+        ${createEditOffersTemplate(type, offers, possibleOffers)}
         </div>
       </section>
 
@@ -353,8 +334,9 @@ export default class EditEventView extends SmartView {
 
 
     this.updateData({
-      offers: checkedOffersValues,
-    }, true);
+      offers: [...checkedOffersValues],
+      isOffers: checkedOffersValues.length !== 0,
+    });
   }
 
   #destinationChangeHandler = (evt) => {

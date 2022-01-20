@@ -41,8 +41,8 @@ const DEFAULT_EVENT = {
   },
   id: 80,
   isFavorite: true,
-  // offers: [],
-  // type: 'taxi',
+  offers: [],
+  type: 'taxi',
 };
 
 const WAYPOINT_TYPES = [
