@@ -1,6 +1,6 @@
 import { render, remove, RenderPosition } from '../utils/render.js';
 import RouteView from '../view/trip-info-view.js';
-import PriceView from '../view/cost-view.js';
+import CostView from '../view/cost-view.js';
 
 export default class RoutePresenter {
   #routeContainer = null;
@@ -34,7 +34,7 @@ export default class RoutePresenter {
 
     if (events.length > 0) {
       this.#routeComponent = new RouteView(events);
-      this.#priceComponent = new PriceView(events);
+      this.#priceComponent = new CostView(events);
 
       render(this.#routeContainer, this.#routeComponent, RenderPosition.AFTERBEGIN);
 
@@ -42,10 +42,6 @@ export default class RoutePresenter {
       render(tripInfoElement, this.#priceComponent, RenderPosition.BEFOREEND);
     }
   }
-
-  // get events() {
-  //   return this.#eventsModel.events();
-  // }
 
   #handleModelEvent = () => {
     this.#removeRoute();

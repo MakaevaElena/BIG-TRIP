@@ -28,13 +28,15 @@ export default class MenuView extends AbstractView {
 
   #menuClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.menuClick(evt.target.ariaLabel);
+
 
     if (!evt.target.classList.contains('trip-tabs__btn--active')) {
       const prevActiveMenuOption = this.element.querySelector('.trip-tabs__btn--active');
 
       evt.target.classList.add('trip-tabs__btn--active');
       prevActiveMenuOption.classList.remove('trip-tabs__btn--active');
+
+      this._callback.menuClick(evt.target.ariaLabel);
     }
   }
 }

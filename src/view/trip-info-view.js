@@ -29,7 +29,7 @@ const createTripInfoTemplate = (sortedEvents) => (
   </section>`
 );
 
-export default class TripInfoView extends AbstractView {
+export default class RouteView extends AbstractView {
   #events = null;
 
   constructor(events) {

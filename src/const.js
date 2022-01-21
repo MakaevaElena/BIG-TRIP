@@ -33,7 +33,7 @@ const MenuItem = {
 const DEFAULT_EVENT = {
   basePrice: '',
   dateFrom: dayjs(),
-  dateTo: dayjs().add(3, 'd'),
+  dateTo: dayjs(),
   destination: {
     description: '',
     name: '',

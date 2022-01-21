@@ -1,4 +1,4 @@
-import AbstractObservable from '../utils/abstract-observable.js';
+import AbstractObservable from '../observable/abstract-observable.js';
 import { UpdateType } from '../const.js';
 
 export default class EventsModel extends AbstractObservable {
@@ -15,10 +15,10 @@ export default class EventsModel extends AbstractObservable {
   init = async () => {
     try {
       const events = await this.#apiService.events;
-      // console.log(events);
       this.#events = events.map(this.#adaptEventsToClient);
     } catch (err) {
       this.#events = [];
+      throw new Error('Can\'t receive events');
     }
 
     try {
@@ -26,12 +26,14 @@ export default class EventsModel extends AbstractObservable {
       this.#offers = this.#adaptOffersToClient(offers);
     } catch (err) {
       this.#offers = [];
+      throw new Error('Can\'t receive offers');
     }
 
     try {
       this.#destinations = await this.#apiService.destinations;
     } catch {
       this.#destinations = [];
+      throw new Error('Can\'t receive destinations');
     }
 
     this._notify(UpdateType.INIT);
@@ -49,15 +51,15 @@ export default class EventsModel extends AbstractObservable {
     return this.#destinations;
   }
 
-  updateEvent = async (updateType, update) => {
-    const index = this.#events.findIndex((event) => event.id === update.id);
+  updateEvent = async (updateType, newEvent) => {
+    const index = this.#events.findIndex((event) => event.id === newEvent.id);
 
     if (index === -1) {
       throw new Error('Can\'t update unexisting event');
     }
 
     try {
-      const response = await this.#apiService.updateEvent(update);
+      const response = await this.#apiService.updateEvent(newEvent);
       const updatedEvent = this.#adaptEventsToClient(response);
 
       this.#events = [
@@ -87,13 +89,11 @@ export default class EventsModel extends AbstractObservable {
   }
 
   deleteEvent = async (updateType, update) => {
-
     const index = this.#events.findIndex((event) => event.id === update.id);
 
     if (index === -1) {
       throw new Error('Can\'t delete unexisting event');
     }
-
     await this.#apiService.deleteEvent(update);
 
     this.#events = [
@@ -129,7 +129,6 @@ export default class EventsModel extends AbstractObservable {
     serverOffers.forEach((serverOffer) => {
       adaptedOffers[serverOffer.type] = serverOffer.offers;
     });
-
     return adaptedOffers;
   }
 
