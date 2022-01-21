@@ -22,7 +22,7 @@ export default class TripPresenter {
   #eventsListComponent = new EventsListView();
   #noEventsComponent = null;
   #eventPresenter = new Map();
-  #currentSortType = SortType.DEFAULT;
+  #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
   #eventNewPresenter = null;
   #isLoading = true;
@@ -52,11 +52,11 @@ export default class TripPresenter {
     this.#filterType = this.#filterModel.filter;
 
     switch (this.#currentSortType) {
-      case SortType.DEFAULT:
+      case SortType.DAY:
         return filteredEvents.sort(sortDateDown);
-      case SortType.DURATION_DOWN:
+      case SortType.TIME:
         return filteredEvents.sort(sortDurationDown);
-      case SortType.PRICE_DOWN:
+      case SortType.PRICE:
         return filteredEvents.sort(sortPriceDown);
     }
 
@@ -73,7 +73,7 @@ export default class TripPresenter {
   }
 
   createEvent = () => {
-    this.#currentSortType = SortType.DEFAULT;
+    this.#currentSortType = SortType.DAY;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
 
     if (!this.#tripEventsContainer.contains(this.#eventsListComponent.element)) {
@@ -101,6 +101,7 @@ export default class TripPresenter {
     this.#eventPresenter.clear();
 
     remove(this.#sortComponent);
+
     if (this.#noEventsComponent) {
       remove(this.#noEventsComponent);
     }
@@ -198,7 +199,7 @@ export default class TripPresenter {
         }
 
         {
-          this.#currentSortType = SortType.DEFAULT;
+          this.#currentSortType = SortType.DAY;
           this.#renderBoard();
         }
         break;
@@ -215,7 +216,9 @@ export default class TripPresenter {
     if (this.#currentSortType === sortType) {
       return;
     }
+
     this.#currentSortType = sortType;
+
     this.#clearBoard();
     this.#renderBoard();
   }

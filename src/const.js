@@ -6,10 +6,18 @@ const DateFormat = {
   DATE_TIME_FORMAT: 'DD/MM/YY HH:mm',
 };
 
+// const SortType = {
+//   DEFAULT: 'day-down',
+//   PRICE_DOWN: 'price-down',
+//   DURATION_DOWN: 'duration-down',
+// };
+
 const SortType = {
-  DEFAULT: 'day-down',
-  PRICE_DOWN: 'price-down',
-  DURATION_DOWN: 'duration-down',
+  DAY: 'day',
+  EVENT: 'event',
+  TIME: 'time',
+  PRICE: 'price',
+  OFFERS: 'offers',
 };
 
 const FilterType = {
