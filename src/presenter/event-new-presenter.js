@@ -37,25 +37,6 @@ export default class EventNewPresenter {
     document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
-  #handleFormSubmit = (event) => {
-    this.#changeData(
-      UserAction.ADD_EVENT,
-      UpdateType.MAJOR,
-      event,
-    );
-  }
-
-  #handleDeleteClick = () => {
-    this.destroy();
-  }
-
-  #escKeyDownHandler = (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
-      evt.preventDefault();
-      this.destroy();
-    }
-  }
-
   setSaving = () => {
     this.#eventEditComponent.updateData({
       isDisabled: true,
@@ -73,5 +54,24 @@ export default class EventNewPresenter {
     };
 
     this.#eventEditComponent.shake(resetFormState);
+  }
+
+  #handleFormSubmit = (event) => {
+    this.#changeData(
+      UserAction.ADD_EVENT,
+      UpdateType.MAJOR,
+      event,
+    );
+  }
+
+  #handleDeleteClick = () => {
+    this.destroy();
+  }
+
+  #escKeyDownHandler = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      this.destroy();
+    }
   }
 }

@@ -1,5 +1,11 @@
 import dayjs from 'dayjs';
 
+const DateFormat = {
+  EVENT_DATE_FORMAT: 'MMM D',
+  TIME_FORMAT: 'HH:mm',
+  DATE_TIME_FORMAT: 'DD/MM/YY HH:mm',
+};
+
 const SortType = {
   DEFAULT: 'day-down',
   PRICE_DOWN: 'price-down',
@@ -57,4 +63,4 @@ const WAYPOINT_TYPES = [
   'restaurant',
 ];
 
-export { SortType, UserAction, UpdateType, FilterType, MenuItem, DEFAULT_EVENT, WAYPOINT_TYPES };
+export { DateFormat, SortType, UserAction, UpdateType, FilterType, MenuItem, DEFAULT_EVENT, WAYPOINT_TYPES };

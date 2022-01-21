@@ -6,14 +6,14 @@ export default class RoutePresenter {
   #routeContainer = null;
   #eventsModel = null;
   #routeComponent = null;
-  #priceComponent = null;
+  #costComponent = null;
 
   constructor(routeBoard, eventsModel) {
     this.#routeContainer = routeBoard;
     this.#eventsModel = eventsModel;
 
     // this.#routeComponent = null;
-    // this.#priceComponent = null;
+    // this.#costComponent = null;
 
     this.#eventsModel.addObserver(this.#handleModelEvent);
   }
@@ -25,7 +25,7 @@ export default class RoutePresenter {
   #removeRoute = () => {
     if (this.#routeComponent !== null) {
       remove(this.#routeComponent);
-      remove(this.#priceComponent);
+      remove(this.#costComponent);
     }
   }
 
@@ -34,12 +34,12 @@ export default class RoutePresenter {
 
     if (events.length > 0) {
       this.#routeComponent = new RouteView(events);
-      this.#priceComponent = new CostView(events);
+      this.#costComponent = new CostView(events);
 
       render(this.#routeContainer, this.#routeComponent, RenderPosition.AFTERBEGIN);
 
       const tripInfoElement = document.querySelector('.trip-info');
-      render(tripInfoElement, this.#priceComponent, RenderPosition.BEFOREEND);
+      render(tripInfoElement, this.#costComponent, RenderPosition.BEFOREEND);
     }
   }
 

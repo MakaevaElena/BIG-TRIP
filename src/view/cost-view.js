@@ -9,6 +9,7 @@ const calculatePrice = (events) => {
     if (offers && offers.length > 0) {
       offersTotal = offers.reduce((sum, offer) => (sum += offer.price), 0);
     }
+
     total += basePrice + offersTotal;
     return total;
   }, 0);
@@ -16,10 +17,11 @@ const calculatePrice = (events) => {
   return priceTotal;
 };
 
-const createCostTemplate = (price) =>
+const createCostTemplate = (price) => (
   `<p class="trip-info__cost">
         Total: &euro;&nbsp;<span class="trip-info__cost-value">${price}</span>
-    </p>`;
+    </p>`
+);
 
 export default class CostView extends AbstractView {
   #price = null;

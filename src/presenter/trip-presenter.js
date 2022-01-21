@@ -85,6 +85,62 @@ export default class TripPresenter {
     remove(this.#noEventsComponent);
   }
 
+  #renderSort = () => {
+    this.#sortComponent = new SortView(this.#currentSortType);
+    this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
+    render(this.#tripEventsContainer, this.#sortComponent, RenderPosition.AFTERBEGIN);
+  }
+
+  #renderNoEvents = () => {
+    render(this.#tripEventsContainer, this.#noEventsComponent, RenderPosition.BEFOREEND);
+  }
+
+  #clearBoard = () => {
+    this.#eventNewPresenter.destroy();
+    this.#eventPresenter.forEach((presenter) => presenter.destroy());
+    this.#eventPresenter.clear();
+
+    remove(this.#sortComponent);
+    if (this.#noEventsComponent) {
+      remove(this.#noEventsComponent);
+    }
+  }
+
+  #renderListEvent = () => {
+    render(this.#tripEventsContainer, this.#eventsListComponent, RenderPosition.BEFOREEND);
+  }
+
+  #renderEvent = (event) => {
+    const eventPresenter = new EventPresenter(this.#eventsListComponent, this.#handleViewAction, this.#handleModeChange);
+    eventPresenter.init(event, this.#eventsModel.offers, this.#eventsModel.destinations);
+    this.#eventPresenter.set(event.id, eventPresenter);
+  }
+
+  #renderEvents = () => {
+    this.events.forEach((event) => this.#renderEvent(event));
+  }
+
+  #renderBoard = () => {
+    const events = this.events;
+    const eventsCount = events.length;
+    if (this.#isLoading) {
+      this.#renderLoading();
+    } else {
+      if (eventsCount.length === 0) {
+        this.#renderNoEvents();
+        return;
+      }
+
+      this.#renderSort();
+      this.#renderListEvent();
+      this.#renderEvents(events);
+    }
+  }
+
+  #renderLoading = () => {
+    render(this.#tripEventsContainer, this.#loadingComponent, RenderPosition.AFTERBEGIN);
+  }
+
   #handleModeChange = () => {
     this.#eventNewPresenter.destroy();
     this.#eventPresenter.forEach((presenter) => presenter.resetView());
@@ -162,61 +218,5 @@ export default class TripPresenter {
     this.#currentSortType = sortType;
     this.#clearBoard();
     this.#renderBoard();
-  }
-
-  #renderSort = () => {
-    this.#sortComponent = new SortView(this.#currentSortType);
-    this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
-    render(this.#tripEventsContainer, this.#sortComponent, RenderPosition.AFTERBEGIN);
-  }
-
-  #renderNoEvents = () => {
-    render(this.#tripEventsContainer, this.#noEventsComponent, RenderPosition.BEFOREEND);
-  }
-
-  #clearBoard = () => {
-    this.#eventNewPresenter.destroy();
-    this.#eventPresenter.forEach((presenter) => presenter.destroy());
-    this.#eventPresenter.clear();
-
-    remove(this.#sortComponent);
-    if (this.#noEventsComponent) {
-      remove(this.#noEventsComponent);
-    }
-  }
-
-  #renderListEvent = () => {
-    render(this.#tripEventsContainer, this.#eventsListComponent, RenderPosition.BEFOREEND);
-  }
-
-  #renderEvent = (event) => {
-    const eventPresenter = new EventPresenter(this.#eventsListComponent, this.#handleViewAction, this.#handleModeChange);
-    eventPresenter.init(event, this.#eventsModel.offers, this.#eventsModel.destinations);
-    this.#eventPresenter.set(event.id, eventPresenter);
-  }
-
-  #renderEvents = () => {
-    this.events.forEach((event) => this.#renderEvent(event));
-  }
-
-  #renderBoard = () => {
-    const events = this.events;
-    const eventsCount = events.length;
-    if (this.#isLoading) {
-      this.#renderLoading();
-    } else {
-      if (eventsCount.length === 0) {
-        this.#renderNoEvents();
-        return;
-      }
-
-      this.#renderSort();
-      this.#renderListEvent();
-      this.#renderEvents(events);
-    }
-  }
-
-  #renderLoading = () => {
-    render(this.#tripEventsContainer, this.#loadingComponent, RenderPosition.AFTERBEGIN);
   }
 }

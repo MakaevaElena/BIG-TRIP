@@ -2,9 +2,7 @@ import dayjs from 'dayjs';
 import { createDateTemplate, eventDurationFormat } from '../utils/event-utils.js';
 import AbstractView from './abstract-view.js';
 import he from 'he';
-
-const EVENT_DATE_FORMAT = 'MMM D';
-const TIME_FORMAT = 'HH:mm';
+import { DateFormat } from '../const.js';
 
 const createTypeIconTemplate = (type) =>
   `<div class="event__type">
@@ -14,8 +12,8 @@ const createTypeIconTemplate = (type) =>
 const createTitleTemplate = (type, destination) => `<h3 class="event__title">${type} ${he.encode(destination.name)}</h3>`;
 
 const createScheduleTemplate = (dateFrom, dateTo) => {
-  const startTimeFormat = dayjs(dateFrom).format(TIME_FORMAT);
-  const endTimeFormat = dayjs(dateTo).format(TIME_FORMAT);
+  const startTimeFormat = dayjs(dateFrom).format(DateFormat.TIME_FORMAT);
+  const endTimeFormat = dayjs(dateTo).format(DateFormat.TIME_FORMAT);
   const duration = dayjs(dateTo).diff(dayjs(dateFrom), 'm');
 
   return ` <div class="event__schedule">
@@ -71,7 +69,7 @@ const createEventTemplate = (someEvent) => {
   return `<li class="trip-events__item">
   <div class="event">
 
-    <time class="event__date" datetime="${dateFrom}">${createDateTemplate(dateFrom, EVENT_DATE_FORMAT)}</time>
+    <time class="event__date" datetime="${dateFrom}">${createDateTemplate(dateFrom, DateFormat.EVENT_DATE_FORMAT)}</time>
 
     ${createTypeIconTemplate(type)}
 

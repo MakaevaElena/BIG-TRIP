@@ -74,6 +74,39 @@ export default class EventPresenter {
     }
   }
 
+  setViewState = (state) => {
+    if (this.#mode === Mode.DEFAULT) {
+      return;
+    }
+
+    const resetFormState = () => {
+      this.#editEventComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    switch (state) {
+      case State.SAVING:
+        this.#editEventComponent.updateData({
+          isDisabled: true,
+          isSaving: true,
+        });
+        break;
+      case State.DELETING:
+        this.#editEventComponent.updateData({
+          isDisabled: true,
+          isDeleting: true,
+        });
+        break;
+      case State.ABORTING:
+        this.#eventComponent.shake(resetFormState);
+        this.#editEventComponent.shake(resetFormState);
+        break;
+    }
+  }
+
   #handleDeleteEvent = (event) => {
     this.#changeData(
       UserAction.DELETE_EVENT,
@@ -128,39 +161,5 @@ export default class EventPresenter {
     this.#editEventComponent.reset(this.#event);
     this.#replaceFormToEvent();
   }
-
-  setViewState = (state) => {
-    if (this.#mode === Mode.DEFAULT) {
-      return;
-    }
-
-    const resetFormState = () => {
-      this.#editEventComponent.updateData({
-        isDisabled: false,
-        isSaving: false,
-        isDeleting: false,
-      });
-    };
-
-    switch (state) {
-      case State.SAVING:
-        this.#editEventComponent.updateData({
-          isDisabled: true,
-          isSaving: true,
-        });
-        break;
-      case State.DELETING:
-        this.#editEventComponent.updateData({
-          isDisabled: true,
-          isDeleting: true,
-        });
-        break;
-      case State.ABORTING:
-        this.#eventComponent.shake(resetFormState);
-        this.#editEventComponent.shake(resetFormState);
-        break;
-    }
-  }
-
 }
 

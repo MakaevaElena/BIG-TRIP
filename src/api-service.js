@@ -30,7 +30,6 @@ export default class ApiService {
   }
 
   updateEvent = async (data) => {
-
     const response = await this.#load({
       url: `points/${data.id}`,
       method: Method.PUT,
@@ -38,9 +37,7 @@ export default class ApiService {
       headers: new Headers({ 'Content-Type': 'application/json' }),
     });
 
-    const parsedResponse = await ApiService.parseResponse(response);
-
-    return parsedResponse;
+    return await ApiService.parseResponse(response);
   }
 
   addEvent = async (data) => {
@@ -51,9 +48,7 @@ export default class ApiService {
       headers: new Headers({ 'Content-Type': 'application/json' }),
     });
 
-    const parsedResponse = await ApiService.parseResponse(response);
-
-    return parsedResponse;
+    return await ApiService.parseResponse(response);
   }
 
   deleteEvent = async (data) => {

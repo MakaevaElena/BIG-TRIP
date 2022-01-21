@@ -13,17 +13,17 @@ export default class MenuView extends AbstractView {
     return createMenuTemplate();
   }
 
-  setMenuClickHandler = (callback) => {
-    this._callback.menuClick = callback;
-    this.element.addEventListener('click', this.#menuClickHandler);
-  }
-
   setMenuItem = (menuItem) => {
     const item = this.element.querySelector(`[aria-label=${menuItem}]`);
 
     if (item !== null) {
       item.checked = true;
     }
+  }
+
+  setMenuClickHandler = (callback) => {
+    this._callback.menuClick = callback;
+    this.element.addEventListener('click', this.#menuClickHandler);
   }
 
   #menuClickHandler = (evt) => {
