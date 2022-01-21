@@ -70,7 +70,8 @@ const createEventTemplate = (someEvent) => {
     basePrice,
   } = someEvent;
 
-  return `<li class="trip-events__item">
+  return (
+    `<li class="trip-events__item">
   <div class="event">
 
     <time class="event__date" datetime="${dateFrom}">${createDateTemplate(dateFrom, DateFormat.EVENT_DATE_FORMAT)}</time>
@@ -96,7 +97,8 @@ const createEventTemplate = (someEvent) => {
       <span class="visually-hidden">Open event</span>
     </button>
   </div>
-</li>`;
+</li>`
+  );
 };
 
 export default class EventView extends AbstractView {

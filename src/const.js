@@ -1,5 +1,17 @@
 import dayjs from 'dayjs';
 
+const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
+};
+
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
+
 const DateFormat = {
   EVENT_DATE_FORMAT: 'MMM D',
   TIME_FORMAT: 'HH:mm',
@@ -65,4 +77,4 @@ const WAYPOINT_TYPES = [
   'restaurant',
 ];
 
-export { DateFormat, SortType, UserAction, UpdateType, FilterType, MenuItem, DEFAULT_EVENT, WAYPOINT_TYPES };
+export { Method, Mode, DateFormat, SortType, UserAction, UpdateType, FilterType, MenuItem, DEFAULT_EVENT, WAYPOINT_TYPES };

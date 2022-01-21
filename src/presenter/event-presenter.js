@@ -1,14 +1,9 @@
 import EventView from '../view/event-view.js';
 import EditEventView from '../view/edit-event-view.js';
 
-import { UserAction, UpdateType } from '../const.js';
+import { UserAction, UpdateType, Mode } from '../const.js';
 
 import { render, RenderPosition, replace, remove } from '../utils/render.js';
-
-const Mode = {
-  DEFAULT: 'DEFAULT',
-  EDITING: 'EDITING',
-};
 
 export const State = {
   SAVING: 'SAVING',

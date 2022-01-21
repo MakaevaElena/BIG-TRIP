@@ -278,7 +278,8 @@ const renderTimeChart = (timeCtx, events) => {
 };
 
 
-const createStatisticsTemplate = () => `<section class="statistics">
+const createStatisticsTemplate = () => (
+  `<section class="statistics">
           <h2 class="visually-hidden">Trip statistics</h2>
 
           <div class="statistics__item">
@@ -292,7 +293,8 @@ const createStatisticsTemplate = () => `<section class="statistics">
           <div class="statistics__item">
             <canvas class="statistics__chart" id="time" width="900"></canvas>
           </div>
-        </section>`;
+        </section>`
+);
 
 export default class StatisticsView extends SmartView {
   #moneyChart = null;

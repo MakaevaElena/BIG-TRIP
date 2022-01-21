@@ -5,10 +5,12 @@ const addNewEventButton = document.querySelector('.trip-main__event-add-btn');
 const createFilterItemTemplate = (filter, currentFilterType) => {
   const { type, name } = filter;
 
-  return `<div class="trip-filters__filter">
+  return (
+    `<div class="trip-filters__filter">
     <input id="filter-${type}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${type}"  ${type === currentFilterType ? 'checked' : ''}>
     <label class ="trip-filters__filter-label" for="filter-${type}">${name}</label>
-  </div>`;
+  </div>`
+  );
 };
 
 const createFiltersTemplate = (filterItems, currentFilterType) => {
@@ -16,11 +18,13 @@ const createFiltersTemplate = (filterItems, currentFilterType) => {
     .map((filter) => createFilterItemTemplate(filter, currentFilterType))
     .join('');
 
-  return `<form class="trip-filters" action="#" method="get">
+  return (
+    `<form class="trip-filters" action="#" method="get">
   ${filterItemsTemplate}
 
   <button class="visually-hidden" type="submit">Accept filter</button>
-</form > `;
+</form > `
+  );
 };
 
 export default class FilterView extends AbstractView {

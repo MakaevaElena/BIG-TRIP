@@ -16,8 +16,10 @@ const showStartEndEvents = (sortedEvents) => {
 
   const routeDates = `${startEventDate}&nbsp;&mdash;&nbsp;${endEventDate}`;
 
-  return `<h1 class="trip-info__title">${routeMessage}</h1>
-          <p class="trip-info__dates">${routeDates}</p>`;
+  return (
+    `<h1 class="trip-info__title">${routeMessage}</h1>
+          <p class="trip-info__dates">${routeDates}</p>`
+  );
 };
 
 const createTripInfoTemplate = (sortedEvents) => (
