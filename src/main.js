@@ -1,13 +1,18 @@
 import ApiService from './api-service.js';
+
 import TripPresenter from './presenter/trip-presenter.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 import RoutePresenter from './presenter/route-date-price-presenter.js';
+
 import EventsModel from './model/events-model.js';
 import FilterModel from './model/filter-model.js';
+
 import MenuView from './view/menu-view.js';
 import StatisticsView from './view/statistics-view.js';
-import { remove, render, RenderPosition, } from './utils/render.js';
+
 import { MenuItem } from './const.js';
+
+import { remove, render, RenderPosition, } from './utils/render.js';
 
 const AUTHORIZATION = 'Basic koshkakartoshka';
 const END_POINT = 'https://16.ecmascript.pages.academy/big-trip';

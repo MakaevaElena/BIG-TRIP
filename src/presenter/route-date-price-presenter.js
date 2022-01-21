@@ -1,6 +1,7 @@
-import { render, remove, RenderPosition } from '../utils/render.js';
 import RouteView from '../view/trip-info-view.js';
 import CostView from '../view/cost-view.js';
+
+import { render, remove, RenderPosition } from '../utils/render.js';
 
 export default class RoutePresenter {
   #routeContainer = null;

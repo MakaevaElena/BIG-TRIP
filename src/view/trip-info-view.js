@@ -1,4 +1,5 @@
 import AbstractView from './abstract-view.js';
+
 import { sortByDate } from '../utils/event-utils.js';
 import { createDateTemplate } from '../utils/event-utils.js';
 

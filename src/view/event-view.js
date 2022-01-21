@@ -1,8 +1,12 @@
-import dayjs from 'dayjs';
-import { createDateTemplate, eventDurationFormat } from '../utils/event-utils.js';
 import AbstractView from './abstract-view.js';
-import he from 'he';
+
 import { DateFormat } from '../const.js';
+
+import { createDateTemplate, eventDurationFormat } from '../utils/event-utils.js';
+
+import he from 'he';
+import dayjs from 'dayjs';
+
 
 const createTypeIconTemplate = (type) =>
   `<div class="event__type">

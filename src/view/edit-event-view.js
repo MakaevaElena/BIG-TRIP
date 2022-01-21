@@ -1,11 +1,14 @@
-import { createDateTemplate } from '../utils/event-utils.js';
 import SmartView from './smart-view.js';
-import flatpickr from 'flatpickr';
-import '../../node_modules/flatpickr/dist/flatpickr.min.css';
-import he from 'he';
+
 import { DEFAULT_EVENT, DateFormat } from '../const.js';
-import dayjs from 'dayjs';
 import { WAYPOINT_TYPES } from '../const.js';
+
+import { createDateTemplate } from '../utils/event-utils.js';
+
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+import flatpickr from 'flatpickr';
+import dayjs from 'dayjs';
+import he from 'he';
 
 const addNewEventButton = document.querySelector('.trip-main__event-add-btn');
 const createTypeTemplate = (id, type, currentType) => {
