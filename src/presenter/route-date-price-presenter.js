@@ -13,9 +13,6 @@ export default class RoutePresenter {
     this.#routeContainer = routeBoard;
     this.#eventsModel = eventsModel;
 
-    // this.#routeComponent = null;
-    // this.#costComponent = null;
-
     this.#eventsModel.addObserver(this.#handleModelEvent);
   }
 
