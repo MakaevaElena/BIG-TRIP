@@ -4,6 +4,7 @@ import EditEventView from '../view/edit-event-view.js';
 import { UserAction, UpdateType, Mode } from '../const.js';
 
 import { render, RenderPosition, replace, remove } from '../utils/render.js';
+import { isEscapeEvent } from '../utils/event-utils.js';
 
 export const State = {
   SAVING: 'SAVING',
@@ -134,7 +135,7 @@ export default class EventPresenter {
   };
 
   #onEscKeyDown = (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
+    if (isEscapeEvent(evt)) {
       evt.preventDefault();
       this.#editEventComponent.reset(this.#event);
       this.#replaceFormToEvent();

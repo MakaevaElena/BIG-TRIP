@@ -23,4 +23,6 @@ const eventDurationFormat = (duration) => {
   return daysDuration + hoursDuration + minutesDuration;
 };
 
-export { createDateTemplate, sortDateDown, sortDurationDown, sortPriceDown, eventDurationFormat, sortByDate };
+const isEscapeEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
+
+export { createDateTemplate, sortDateDown, sortDurationDown, sortPriceDown, eventDurationFormat, sortByDate, isEscapeEvent };

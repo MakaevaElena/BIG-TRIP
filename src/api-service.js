@@ -46,14 +46,10 @@ export default class ApiService {
     return await ApiService.parseResponse(response);
   }
 
-  deleteEvent = async (data) => {
-    const response = await this.#load({
-      url: `points/${data.id}`,
-      method: Method.DELETE,
-    });
-
-    return response;
-  }
+  deleteEvent = async (data) => await this.#load({
+    url: `points/${data.id}`,
+    method: Method.DELETE,
+  });
 
   #load = async ({
     url,
