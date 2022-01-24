@@ -12,7 +12,7 @@ import StatisticsView from './view/statistics-view.js';
 
 import { MenuItem } from './const.js';
 
-import { remove, render, RenderPosition, } from './utils/render.js';
+import { remove, render, RenderPosition } from './utils/render.js';
 
 const AUTHORIZATION = 'Basic koshkakartoshka';
 const END_POINT = 'https://16.ecmascript.pages.academy/big-trip';
