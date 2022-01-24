@@ -1,4 +1,5 @@
 import AbstractView from './abstract-view.js';
+
 import { sortByDate } from '../utils/event-utils.js';
 import { createDateTemplate } from '../utils/event-utils.js';
 
@@ -15,8 +16,10 @@ const showStartEndEvents = (sortedEvents) => {
 
   const routeDates = `${startEventDate}&nbsp;&mdash;&nbsp;${endEventDate}`;
 
-  return `<h1 class="trip-info__title">${routeMessage}</h1>
-          <p class="trip-info__dates">${routeDates}</p>`;
+  return (
+    `<h1 class="trip-info__title">${routeMessage}</h1>
+          <p class="trip-info__dates">${routeDates}</p>`
+  );
 };
 
 const createTripInfoTemplate = (sortedEvents) => (
@@ -29,7 +32,7 @@ const createTripInfoTemplate = (sortedEvents) => (
   </section>`
 );
 
-export default class TripInfoView extends AbstractView {
+export default class RouteView extends AbstractView {
   #events = null;
 
   constructor(events) {

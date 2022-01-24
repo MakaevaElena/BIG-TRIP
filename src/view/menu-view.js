@@ -13,11 +13,6 @@ export default class MenuView extends AbstractView {
     return createMenuTemplate();
   }
 
-  setMenuClickHandler = (callback) => {
-    this._callback.menuClick = callback;
-    this.element.addEventListener('click', this.#menuClickHandler);
-  }
-
   setMenuItem = (menuItem) => {
     const item = this.element.querySelector(`[aria-label=${menuItem}]`);
 
@@ -26,8 +21,22 @@ export default class MenuView extends AbstractView {
     }
   }
 
+  setMenuClickHandler = (callback) => {
+    this._callback.menuClick = callback;
+    this.element.addEventListener('click', this.#menuClickHandler);
+  }
+
   #menuClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.menuClick(evt.target.ariaLabel);
+
+
+    if (!evt.target.classList.contains('trip-tabs__btn--active')) {
+      const prevActiveMenuOption = this.element.querySelector('.trip-tabs__btn--active');
+
+      evt.target.classList.add('trip-tabs__btn--active');
+      prevActiveMenuOption.classList.remove('trip-tabs__btn--active');
+
+      this._callback.menuClick(evt.target.ariaLabel);
+    }
   }
 }

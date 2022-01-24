@@ -1,9 +1,4 @@
-const Method = {
-  GET: 'GET',
-  PUT: 'PUT',
-  POST: 'POST',
-  DELETE: 'DELETE',
-};
+import { Method } from './const.js';
 
 export default class ApiService {
   #endPoint = null;
@@ -37,9 +32,7 @@ export default class ApiService {
       headers: new Headers({ 'Content-Type': 'application/json' }),
     });
 
-    const parsedResponse = await ApiService.parseResponse(response);
-
-    return parsedResponse;
+    return await ApiService.parseResponse(response);
   }
 
   addEvent = async (data) => {
@@ -50,9 +43,7 @@ export default class ApiService {
       headers: new Headers({ 'Content-Type': 'application/json' }),
     });
 
-    const parsedResponse = await ApiService.parseResponse(response);
-
-    return parsedResponse;
+    return await ApiService.parseResponse(response);
   }
 
   deleteEvent = async (data) => {
@@ -92,6 +83,7 @@ export default class ApiService {
       'date_from': data.dateFrom.toISOString(),
       'date_to': data.dateTo.toISOString(),
       'is_favorite': data.isFavorite,
+      'id': String(data.id),
     };
 
     delete adaptedData.basePrice;

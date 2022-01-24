@@ -10,18 +10,15 @@ const RenderPosition = {
 const render = (container, element, place) => {
   const parent = container instanceof AbstractView ? container.element : container;
   const child = element instanceof AbstractView ? element.element : element;
+
   switch (place) {
-    case RenderPosition.BEFOREBEGIN:
-      parent.before(child);
+    case RenderPosition.BEFOREBEGIN: parent.before(child);
       break;
-    case RenderPosition.AFTERBEGIN:
-      parent.prepend(child);
+    case RenderPosition.AFTERBEGIN: parent.prepend(child);
       break;
-    case RenderPosition.BEFOREEND:
-      parent.append(child);
+    case RenderPosition.BEFOREEND: parent.append(child);
       break;
-    case RenderPosition.AFTEREND:
-      parent.after(child);
+    case RenderPosition.AFTEREND: parent.after(child);
       break;
   }
 };
@@ -39,7 +36,6 @@ const replace = (newElement, oldElement) => {
 
   const newChild = newElement instanceof AbstractView ? newElement.element : newElement;
   const oldChild = oldElement instanceof AbstractView ? oldElement.element : oldElement;
-
   const parent = oldChild.parentElement;
 
   if (parent === null) {

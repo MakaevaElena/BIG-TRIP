@@ -1,6 +1,6 @@
 import FilterView from '../view/filter-view.js';
-import { render, RenderPosition, replace, remove } from '../utils/render.js';
 import { FilterType, UpdateType } from '../const.js';
+import { render, RenderPosition, replace, remove } from '../utils/render.js';
 
 export default class FilterPresenter {
   #filterContainer = null;
@@ -70,6 +70,7 @@ export default class FilterPresenter {
     if (this.#filterModel.filter === filterType) {
       return;
     }
+
     this.#filterModel.setFilter(UpdateType.MINOR, filterType);
   }
 }

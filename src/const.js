@@ -1,9 +1,29 @@
 import dayjs from 'dayjs';
 
+const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
+};
+
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
+
+const DateFormat = {
+  EVENT_DATE_FORMAT: 'MMM D',
+  TIME_FORMAT: 'HH:mm',
+  DATE_TIME_FORMAT: 'DD/MM/YY HH:mm',
+};
+
 const SortType = {
-  DEFAULT: 'day-down',
-  PRICE_DOWN: 'price-down',
-  DURATION_DOWN: 'duration-down',
+  DAY: 'day',
+  EVENT: 'event',
+  TIME: 'time',
+  PRICE: 'price',
+  OFFERS: 'offers',
 };
 
 const FilterType = {
@@ -31,18 +51,30 @@ const MenuItem = {
 };
 
 const DEFAULT_EVENT = {
-  basePrice: 2000,
+  basePrice: '',
   dateFrom: dayjs(),
-  dateTo: dayjs().add(3, 'd'),
+  dateTo: dayjs(),
   destination: {
-    description: 'Description of New City',
+    description: '',
     name: '',
     pictures: [],
   },
   id: 80,
   isFavorite: true,
   offers: [],
-  type: 'Flight',
+  type: 'taxi',
 };
 
-export { SortType, UserAction, UpdateType, FilterType, MenuItem, DEFAULT_EVENT };
+const WAYPOINT_TYPES = [
+  'taxi',
+  'bus',
+  'train',
+  'ship',
+  'drive',
+  'flight',
+  'check-in',
+  'sightseeing',
+  'restaurant',
+];
+
+export { Method, Mode, DateFormat, SortType, UserAction, UpdateType, FilterType, MenuItem, DEFAULT_EVENT, WAYPOINT_TYPES };
