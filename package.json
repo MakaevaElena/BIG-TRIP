@@ -9,7 +9,7 @@
     "test": "npm run eslint",
     "build": "webpack --mode development",
     "start": "webpack serve --mode development --open",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -d public",
     "predeploy": "npm run build"
   },
   "devDependencies": {
