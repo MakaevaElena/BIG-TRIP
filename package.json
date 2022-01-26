@@ -2,7 +2,7 @@
   "name": "big-trip",
   "version": "16.0.0",
   "private": true,
-  "homepage": "https://makaevaelena.github.io/808541-big-trip-16/",
+  "homepage": "",
   "description": "Проект «Большое путешествие» от HTML Academy",
   "scripts": {
     "eslint": "eslint src/",
